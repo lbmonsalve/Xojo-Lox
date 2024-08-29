@@ -6,12 +6,21 @@ Lox language implementation in Xojo. Taken from the [Crafting Interpreters](http
 
 
 ```
-program ->  block
+program        → statement* EOF ;
 
-BASIC   ->  'int' | 'float' | 'char' | 'bool'
-ID      ->  [a-zA-Z0-9_]+
-NUM     ->  DIGIT+
-REAL    ->  DIGIT+ '.' DIGIT*
-CHAR    ->  '"' (.)*? '"'
-DIGIT   ->  [0-9]
+statement      → exprStmt
+               | printStmt ;
+
+exprStmt       → expression ";" ;
+printStmt      → "print" expression ";" ;
+
+expression     → equality ;
+equality       → comparison ( ( "!=" | "==" ) comparison )* ;
+comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+term           → factor ( ( "-" | "+" ) factor )* ;
+factor         → unary ( ( "/" | "*" ) unary )* ;
+unary          → ( "!" | "-" ) unary
+               | primary ;
+primary        → NUMBER | STRING | "true" | "false" | "nil"
+               | "(" expression ")" ;
 ```

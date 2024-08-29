@@ -1,6 +1,34 @@
 #tag Class
-Protected Class Scanner
-Inherits Lox.Lexical.Scanner
+Protected Class ClassStmt
+Inherits Lox.Ast.Stmt
+	#tag Method, Flags = &h0
+		Function Accept(visitor As IStmtVisitor) As Variant
+		  Return visitor.Visit(Self)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1000
+		Sub Constructor(name As Lox.Lexical.Token, superClass As Lox.Ast.Variable, methods() As FunctionStmt)
+		  Self.Name= name
+		  Self.SuperClass= superClass
+		  Self.Methods= methods
+		End Sub
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h0
+		Methods() As FunctionStmt
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Name As Lox.Lexical.Token
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		SuperClass As Lox.Ast.Variable
+	#tag EndProperty
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

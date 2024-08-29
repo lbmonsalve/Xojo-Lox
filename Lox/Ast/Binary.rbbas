@@ -1,6 +1,34 @@
 #tag Class
-Protected Class Scanner
-Inherits Lox.Lexical.Scanner
+Protected Class Binary
+Inherits Lox.Ast.Expr
+	#tag Method, Flags = &h0
+		Function Accept(visitor As IExprVisitor) As Variant
+		  Return visitor.Visit(Self)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1000
+		Sub Constructor(left As Expr, operator As Lox.Lexical.Token, right As Expr)
+		  Self.Left= left
+		  Self.Operator= operator
+		  Self.Right= right
+		End Sub
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h0
+		Left As Expr
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Operator As Lox.Lexical.Token
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Right As Expr
+	#tag EndProperty
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"
@@ -13,7 +41,6 @@ Inherits Lox.Lexical.Scanner
 			Name="Left"
 			Visible=true
 			Group="Position"
-			InitialValue="0"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty

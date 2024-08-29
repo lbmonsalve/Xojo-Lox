@@ -1,6 +1,5 @@
-#tag Class
-Protected Class Scanner
-Inherits Lox.Lexical.Scanner
+#tag Module
+Protected Module Ast
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"
@@ -36,5 +35,5 @@ Inherits Lox.Lexical.Scanner
 			InheritedFrom="Object"
 		#tag EndViewProperty
 	#tag EndViewBehavior
-End Class
-#tag EndClass
+End Module
+#tag EndModule

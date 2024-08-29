@@ -1,6 +1,34 @@
 #tag Class
-Protected Class Scanner
-Inherits Lox.Lexical.Scanner
+Protected Class CallExpr
+Inherits Lox.Ast.Expr
+	#tag Method, Flags = &h0
+		Function Accept(visitor As IExprVisitor) As Variant
+		  Return visitor.Visit(Self)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1000
+		Sub Constructor(callee As Expr, paren As Lox.Lexical.Token, args() As Expr)
+		  Self.Callee= callee
+		  Self.Paren= paren
+		  Self.Arguments= args
+		End Sub
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h0
+		Arguments() As Expr
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Callee As Expr
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Paren As Lox.Lexical.Token
+	#tag EndProperty
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"
@@ -13,7 +41,6 @@ Inherits Lox.Lexical.Scanner
 			Name="Left"
 			Visible=true
 			Group="Position"
-			InitialValue="0"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty

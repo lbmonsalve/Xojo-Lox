@@ -1,7 +1,27 @@
 #tag Class
-Protected Class Scanner
-Inherits Lox.Lexical.Scanner
+Protected Class RuntimeError
+Inherits RuntimeException
+	#tag Method, Flags = &h1000
+		Sub Constructor(token As Lox.Lexical.Token, message As String)
+		  Self.Token= token
+		  Self.Message= message
+		End Sub
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h0
+		Token As Lox.Lexical.Token
+	#tag EndProperty
+
+
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="ErrorNumber"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
+			InheritedFrom="RuntimeException"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
@@ -15,6 +35,13 @@ Inherits Lox.Lexical.Scanner
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Message"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+			InheritedFrom="RuntimeException"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
