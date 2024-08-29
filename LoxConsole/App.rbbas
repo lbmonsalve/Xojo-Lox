@@ -22,19 +22,15 @@ Inherits ConsoleApplication
 		  Dim scanner As New Lox.Scanner(source)
 		  Dim tokens() As Lox.Lexical.Token= scanner.Scan
 		  
-		  'For Each token As Lox.Lexical.Token In tokens
-		  'Print token.ToString
-		  'Next
-		  
 		  Dim parser As New Lox.Parser(tokens)
-		  Dim expr As Lox.Ast.Expr= parser.Parse
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
 		  
-		  If Lox.HadError Then Return // Stop if there was a syntax error.
+		  'If Lox.HadError Then Return // Stop if there was a syntax error.
 		  
 		  'Dim printer As New Lox.Ast.AstPrinter
 		  'Print printer.Print(expr)
 		  
-		  Lox.Interpreter.Interpret(expr)
+		  Lox.Interpreter.Interpret(statements)
 		End Sub
 	#tag EndMethod
 

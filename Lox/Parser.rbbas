@@ -8,6 +8,41 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function assignment() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= equality
+		  
+		  If Match(Lox.TokenType.EQUAL) Then
+		    Dim equals As Lox.Lexical.Token= Previous
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Lox.Lexical.Token= Lox.Ast.Variable(value).Name
+		      
+		      Return New Lox.Ast.Assign(name, value)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		  End If
+		  
+		  Return expr
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function Block() As Lox.Ast.Stmt()
+		  Dim statements() As Lox.Ast.Stmt
+		  
+		  While (Not Check(Lox.TokenType.RIGHT_BRACE)) And (Not IsAtEnd)
+		    statements.Append declaration
+		  Wend
+		  
+		  Call consume Lox.TokenType.RIGHT_BRACE, "Expect '}' after block."
+		  
+		  Return statements
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function Check(type As Lox.TokenType) As Boolean
 		  If IsAtEnd Then Return False
 		  
@@ -40,6 +75,22 @@ Protected Class Parser
 		  If Check(type) Then Return Advance
 		  
 		  Raise Error(Peek, message)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function declaration() As Lox.Ast.Stmt
+		  Try
+		    #pragma BreakOnExceptions Off
+		    
+		    If Match(Lox.TokenType.VAR_) Then Return varDeclaration
+		    
+		    Return statement
+		    #pragma BreakOnExceptions Default
+		  Catch exc As ParseError
+		    Synchronize
+		    Return Nil
+		  End Try
 		End Function
 	#tag EndMethod
 
@@ -77,7 +128,16 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function expression() As Lox.Ast.Expr
-		  Return equality
+		  Return assignment
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function expressionStatement() As Lox.Ast.Stmt
+		  Dim expr As Lox.Ast.Expr= expression
+		  Call consume Lox.TokenType.SEMICOLON, "Expect ';' after expression."
+		  
+		  Return New Lox.Ast.Expression(expr)
 		End Function
 	#tag EndMethod
 
@@ -115,14 +175,13 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Parse() As Lox.Ast.Expr
-		  Try
-		    #pragma BreakOnExceptions Off
-		    Return expression
-		    #pragma BreakOnExceptions Default
-		  Catch exc As ParseError
-		    Return Nil
-		  End Try
+		Function Parse() As Lox.Ast.Stmt()
+		  Dim statements() As Lox.Ast.Stmt
+		  While Not IsAtEnd
+		    statements.Append declaration
+		  Wend
+		  
+		  Return statements
 		End Function
 	#tag EndMethod
 
@@ -146,6 +205,8 @@ Protected Class Parser
 		  
 		  If Match(Lox.TokenType.NUMBER, Lox.TokenType.STRING_) Then Return New Lox.Ast.Literal(previous.Literal)
 		  
+		  If Match(Lox.TokenType.IDENTIFIER) Then Return New Lox.Ast.Variable(Previous)
+		  
 		  If Match(Lox.TokenType.LEFT_PAREN) Then
 		    Dim expr As Lox.Ast.Expr= expression
 		    Call consume(Lox.TokenType.RIGHT_PAREN, "Expect ')' after expression.")
@@ -153,6 +214,24 @@ Protected Class Parser
 		  End If
 		  
 		  Raise Error(Peek, "Expect expression.")
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function printStatement() As Lox.Ast.Stmt
+		  Dim value As Lox.Ast.Expr= expression
+		  Call consume Lox.TokenType.SEMICOLON, "Expect ';' after value."
+		  
+		  Return New Lox.Ast.Print(value)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function statement() As Lox.Ast.Stmt
+		  If Match(Lox.TokenType.PRINT_) Then Return printStatement
+		  If Match(Lox.TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(Block)
+		  
+		  Return expressionStatement
 		End Function
 	#tag EndMethod
 
@@ -198,6 +277,18 @@ Protected Class Parser
 		  End If
 		  
 		  Return primary
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function varDeclaration() As Lox.Ast.Stmt
+		  Dim name As Lox.Lexical.Token= consume(Lox.TokenType.IDENTIFIER, "Expect variable name.")
+		  
+		  Dim initializer As Lox.Ast.Expr
+		  If Match(Lox.TokenType.EQUAL) Then initializer= expression
+		  
+		  Call consume(Lox.TokenType.SEMICOLON, "Expect ';' after variable declaration.")
+		  Return New Lox.Ast.VarStmt(name, initializer)
 		End Function
 	#tag EndMethod
 

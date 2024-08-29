@@ -1,6 +1,6 @@
 #tag Class
 Protected Class Interpreter
-Implements IExprVisitor,IStmtVisitor
+Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Sub CheckNumberOperand(operator As Lox.Lexical.Token, operand As Variant)
 		  If operand.IsNumber Then Return
@@ -26,6 +26,22 @@ Implements IExprVisitor,IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Sub execute(stmt As Lox.Ast.Stmt)
 		  Call stmt.Accept Self
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub executeBlock(statements() As Lox.Ast.Stmt, environ As Environment)
+		  Dim previous As Environment= Self.Environment
+		  
+		  Try
+		    Self.Environment= environ
+		    
+		    For Each statement As Lox.Ast.Stmt In statements
+		      execute statement
+		    Next
+		  Finally
+		    Self.Environment= previous
+		  End Try
 		End Sub
 	#tag EndMethod
 
@@ -72,13 +88,15 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Assign) As Variant
-		  
+		Function Visit(expr As Lox.Ast.Assign) As Variant
+		  Dim value As Variant= Evaluate(expr.Value)
+		  Environment.Assign expr.Name, value
+		  Return value
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Binary) As Variant
+		Function Visit(expr As Lox.Ast.Binary) As Variant
 		  Dim left As Variant= Evaluate(expr.Left)
 		  Dim right As Variant= Evaluate(expr.Right)
 		  
@@ -137,25 +155,27 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Block) As Variant
+		Function Visit(stmt As Lox.Ast.Block) As Variant
+		  executeBlock stmt.Statements, New Environment(Environment)
+		  
+		  Return Nil
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Visit(expr As Lox.Ast.CallExpr) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As CallExpr) As Variant
+		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As ClassStmt) As Variant
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Visit(stmt As Expression) As Variant
+		Function Visit(stmt As Lox.Ast.Expression) As Variant
 		  Call Evaluate stmt.Expression
 		  
 		  Return Nil
@@ -163,43 +183,43 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As FunctionStmt) As Variant
+		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Get) As Variant
+		Function Visit(expr As Lox.Ast.Get) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Grouping) As Variant
+		Function Visit(expr As Lox.Ast.Grouping) As Variant
 		  Return Evaluate(expr.Expression)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As IfStmt) As Variant
+		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Literal) As Variant
+		Function Visit(expr As Lox.Ast.Literal) As Variant
 		  Return expr.Value
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Logical) As Variant
+		Function Visit(expr As Lox.Ast.Logical) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Print) As Variant
+		Function Visit(stmt As Lox.Ast.Print) As Variant
 		  Dim value As Variant= Evaluate(stmt.Expression)
 		  StdOut.WriteLine Stringify(value)
 		  
@@ -208,31 +228,31 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As ReturnStmt) As Variant
+		Function Visit(stmt As Lox.Ast.ReturnStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Set) As Variant
+		Function Visit(expr As Lox.Ast.Set) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As SuperExpr) As Variant
+		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As This) As Variant
+		Function Visit(expr As Lox.Ast.This) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Unary) As Variant
+		Function Visit(expr As Lox.Ast.Unary) As Variant
 		  Dim right As Variant= Evaluate(expr.Right)
 		  
 		  Select Case expr.Operator.TypeToken
@@ -251,22 +271,49 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Variable) As Variant
-		  
+		Function Visit(expr As Lox.Ast.Variable) As Variant
+		  Return Environment.Get(expr.Name)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As VarStmt) As Variant
+		Function Visit(stmt As Lox.Ast.VarStmt) As Variant
+		  Dim value As Variant
+		  If Not (stmt.Initializer Is Nil) Then
+		    value= Evaluate(stmt.Initializer)
+		  End If
 		  
+		  Environment.Define stmt.Name.Lexeme, value
+		  Return Nil
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As WhileStmt) As Variant
+		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
+
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  If mEnvironment Is Nil Then mEnvironment= New Environment
+			  
+			  return mEnvironment
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mEnvironment= value
+			End Set
+		#tag EndSetter
+		Environment As Environment
+	#tag EndComputedProperty
+
+	#tag Property, Flags = &h21
+		Private mEnvironment As Environment
+	#tag EndProperty
 
 
 	#tag ViewBehavior

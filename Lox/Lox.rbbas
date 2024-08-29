@@ -186,16 +186,16 @@ Protected Module Lox
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mInterpreter Is Nil Then mInterpreter= New Lox.Ast.Interpreter
+			  If mInterpreter Is Nil Then mInterpreter= New Lox.Inter.Interpreter
 			  
 			  return mInterpreter
 			End Get
 		#tag EndGetter
-		Interpreter As Lox.Ast.Interpreter
+		Interpreter As Lox.Inter.Interpreter
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private mInterpreter As Lox.Ast.Interpreter
+		Private mInterpreter As Lox.Inter.Interpreter
 	#tag EndProperty
 
 

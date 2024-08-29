@@ -1,73 +1,73 @@
 #tag Interface
 Protected Interface IExprVisitor
 	#tag Method, Flags = &h0
-		Function Visit(expr As Assign) As Variant
+		Function Visit(expr As Lox.Ast.Assign) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Binary) As Variant
+		Function Visit(expr As Lox.Ast.Binary) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As CallExpr) As Variant
+		Function Visit(expr As Lox.Ast.CallExpr) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Get) As Variant
+		Function Visit(expr As Lox.Ast.Get) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Grouping) As Variant
+		Function Visit(expr As Lox.Ast.Grouping) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Literal) As Variant
+		Function Visit(expr As Lox.Ast.Literal) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Logical) As Variant
+		Function Visit(expr As Lox.Ast.Logical) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Set) As Variant
+		Function Visit(expr As Lox.Ast.Set) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As SuperExpr) As Variant
+		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As This) As Variant
+		Function Visit(expr As Lox.Ast.This) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Unary) As Variant
+		Function Visit(expr As Lox.Ast.Unary) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Variable) As Variant
+		Function Visit(expr As Lox.Ast.Variable) As Variant
 		  
 		End Function
 	#tag EndMethod

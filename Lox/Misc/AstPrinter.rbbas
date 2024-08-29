@@ -1,6 +1,6 @@
 #tag Class
 Protected Class AstPrinter
-Implements IExprVisitor,IStmtVisitor
+Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Function Parenthesize(name As String, ParamArray exprs As Lox.Ast.Expr) As String
 		  Dim sb() As String
@@ -62,24 +62,24 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Assign) As Variant
+		Function Visit(expr As Lox.Ast.Assign) As Variant
 		  Return Parenthesize2("=", expr.Name.Lexeme, expr.Value)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Binary) As Variant
+		Function Visit(expr As Lox.Ast.Binary) As Variant
 		  Return Parenthesize(expr.Operator.Lexeme, expr.Left, expr.Right)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Block) As Variant
+		Function Visit(stmt As Lox.Ast.Block) As Variant
 		  Dim sb() As String
 		  
 		  sb.Append "(block "
 		  
-		  For Each statement As Stmt In stmt.Statements
+		  For Each statement As Lox.Ast.Stmt In stmt.Statements
 		    sb.Append statement.Accept(Self)
 		  Next
 		  
@@ -90,13 +90,13 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As CallExpr) As Variant
+		Function Visit(expr As Lox.Ast.CallExpr) As Variant
 		  Return Parenthesize2("call", expr.Callee, expr.Arguments)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As ClassStmt) As Variant
+		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
 		  Dim sb() As String
 		  
 		  sb.Append "(class "+ stmt.Name.Lexeme
@@ -105,7 +105,7 @@ Implements IExprVisitor,IStmtVisitor
 		    sb.Append " < "+ Print(stmt.SuperClass)
 		  End If
 		  
-		  For Each method As FunctionStmt In stmt.Methods
+		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
 		    sb.Append " "+ Print(method)
 		  Next
 		  
@@ -116,13 +116,13 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Expression) As Variant
+		Function Visit(stmt As Lox.Ast.Expression) As Variant
 		  Return Parenthesize(";", stmt.Expression)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As FunctionStmt) As Variant
+		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
 		  Dim sb() As String
 		  
 		  sb.Append "(fun "+ stmt.Name.Lexeme+ "("
@@ -134,7 +134,7 @@ Implements IExprVisitor,IStmtVisitor
 		  
 		  sb.Append ") "
 		  
-		  For Each body As Stmt In stmt.Body
+		  For Each body As Lox.Ast.Stmt In stmt.Body
 		    sb.Append body.Accept(Self)
 		  Next
 		  
@@ -145,19 +145,19 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Get) As Variant
+		Function Visit(expr As Lox.Ast.Get) As Variant
 		  Return Parenthesize2(".", expr.Obj, expr.Name.Lexeme)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Grouping) As Variant
+		Function Visit(expr As Lox.Ast.Grouping) As Variant
 		  Return Parenthesize("group", expr.Expression)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As IfStmt) As Variant
+		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
 		  If stmt.ElseBranch Is Nil Then
 		    Return Parenthesize2("if", stmt.Condition, stmt.ThenBranch)
 		  End If
@@ -167,7 +167,7 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Literal) As Variant
+		Function Visit(expr As Lox.Ast.Literal) As Variant
 		  If expr.Value.IsNull Then Return "nil"
 		  
 		  Return expr.Value.ToString
@@ -175,19 +175,19 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Logical) As Variant
+		Function Visit(expr As Lox.Ast.Logical) As Variant
 		  Return Parenthesize(expr.Operator.Lexeme, expr.Left, expr.Right)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Print) As Variant
+		Function Visit(stmt As Lox.Ast.Print) As Variant
 		  Return Parenthesize("print", stmt.Expression)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As ReturnStmt) As Variant
+		Function Visit(stmt As Lox.Ast.ReturnStmt) As Variant
 		  If stmt.Value Is Nil Then Return "(return)"
 		  
 		  Return Parenthesize("return", stmt.Value)
@@ -195,37 +195,37 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Set) As Variant
+		Function Visit(expr As Lox.Ast.Set) As Variant
 		  Return Parenthesize2("=", expr.Obj, expr.Name.Lexeme, expr.Value)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As SuperExpr) As Variant
+		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
 		  Return Parenthesize2("super", expr.Method)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As This) As Variant
+		Function Visit(expr As Lox.Ast.This) As Variant
 		  Return "this"
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Unary) As Variant
+		Function Visit(expr As Lox.Ast.Unary) As Variant
 		  Return Parenthesize(expr.Operator.Lexeme, expr.Right)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Variable) As Variant
+		Function Visit(expr As Lox.Ast.Variable) As Variant
 		  Return expr.Name.Lexeme
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As VarStmt) As Variant
+		Function Visit(stmt As Lox.Ast.VarStmt) As Variant
 		  If stmt.Initializer Is Nil Then Return Parenthesize2("var", stmt.Name)
 		  
 		  Return Parenthesize2("var", stmt.Name, "=", stmt.Initializer)
@@ -233,7 +233,7 @@ Implements IExprVisitor,IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As WhileStmt) As Variant
+		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
 		  Return Parenthesize2("while", stmt.Condition, stmt.Body)
 		End Function
 	#tag EndMethod

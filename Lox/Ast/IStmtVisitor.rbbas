@@ -1,55 +1,55 @@
 #tag Interface
 Protected Interface IStmtVisitor
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Block) As Variant
+		Function Visit(stmt As Lox.Ast.Block) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As ClassStmt) As Variant
+		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Expression) As Variant
+		Function Visit(stmt As Lox.Ast.Expression) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As FunctionStmt) As Variant
+		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As IfStmt) As Variant
+		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Print) As Variant
+		Function Visit(stmt As Lox.Ast.Print) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As ReturnStmt) As Variant
+		Function Visit(stmt As Lox.Ast.ReturnStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As VarStmt) As Variant
+		Function Visit(stmt As Lox.Ast.VarStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As WhileStmt) As Variant
+		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
