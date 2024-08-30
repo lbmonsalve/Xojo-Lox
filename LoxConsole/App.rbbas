@@ -20,7 +20,7 @@ Inherits ConsoleApplication
 	#tag Method, Flags = &h21
 		Private Sub Run(source As String)
 		  Dim scanner As New Lox.Scanner(source)
-		  Dim tokens() As Lox.Lexical.Token= scanner.Scan
+		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
 		  Dim statements() As Lox.Ast.Stmt= parser.Parse

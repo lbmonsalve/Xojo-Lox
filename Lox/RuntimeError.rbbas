@@ -2,7 +2,7 @@
 Protected Class RuntimeError
 Inherits RuntimeException
 	#tag Method, Flags = &h1000
-		Sub Constructor(token As Lox.Lexical.Token, message As String)
+		Sub Constructor(token As Lox.Token, message As String)
 		  Self.Token= token
 		  Self.Message= message
 		End Sub
@@ -10,7 +10,7 @@ Inherits RuntimeException
 
 
 	#tag Property, Flags = &h0
-		Token As Lox.Lexical.Token
+		Token As Lox.Token
 	#tag EndProperty
 
 

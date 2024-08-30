@@ -8,7 +8,7 @@ Inherits Lox.Ast.Expr
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor(obj As Expr, name As Lox.Lexical.Token, value As Expr)
+		Sub Constructor(obj As Expr, name As Lox.Token, value As Expr)
 		  Self.Obj= obj
 		  Self.Name= name
 		  Self.Value= value
@@ -17,7 +17,7 @@ Inherits Lox.Ast.Expr
 
 
 	#tag Property, Flags = &h0
-		Name As Lox.Lexical.Token
+		Name As Lox.Token
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

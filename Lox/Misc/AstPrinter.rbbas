@@ -52,7 +52,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    sb.Append " "
 		    If part IsA Lox.Ast.Expr Then
 		      Break
-		    ElseIf part IsA Lox.Lexical.Token Then
+		    ElseIf part IsA Lox.Token Then
 		      Break
 		    Else
 		      sb.Append part.StringValue
@@ -127,7 +127,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  sb.Append "(fun "+ stmt.Name.Lexeme+ "("
 		  
-		  For Each param As Lox.Lexical.Token In stmt.Params
+		  For Each param As Lox.Token In stmt.Params
 		    If param<> stmt.Params(0) Then sb.Append(" ")
 		    sb.Append param.Lexeme
 		  Next

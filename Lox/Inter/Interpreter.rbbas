@@ -2,7 +2,7 @@
 Protected Class Interpreter
 Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
-		Private Sub CheckNumberOperand(operator As Lox.Lexical.Token, operand As Variant)
+		Private Sub CheckNumberOperand(operator As Lox.Token, operand As Variant)
 		  If operand.IsNumber Then Return
 		  
 		  Raise New RuntimeError(operator, "Operand must be a number.")
@@ -10,7 +10,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub CheckNumberOperands(operator As Lox.Lexical.Token, left As Variant, right As Variant)
+		Private Sub CheckNumberOperands(operator As Lox.Token, left As Variant, right As Variant)
 		  If left.IsNumeric And right.IsNumeric Then Return
 		  
 		  Raise New RuntimeError(operator, "Operands must be numbers.")
@@ -30,17 +30,17 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub executeBlock(statements() As Lox.Ast.Stmt, environ As Environment)
-		  Dim previous As Environment= Self.Environment
+		Private Sub executeBlock(statements() As Lox.Ast.Stmt, env As Environment)
+		  Dim previous As Environment= Self.Env
 		  
 		  Try
-		    Self.Environment= environ
+		    Self.Env= env
 		    
 		    For Each statement As Lox.Ast.Stmt In statements
 		      execute statement
 		    Next
 		  Finally
-		    Self.Environment= previous
+		    Self.Env= previous
 		  End Try
 		End Sub
 	#tag EndMethod
@@ -90,7 +90,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Assign) As Variant
 		  Dim value As Variant= Evaluate(expr.Value)
-		  Environment.Assign expr.Name, value
+		  Env.Assign expr.Name, value
 		  Return value
 		End Function
 	#tag EndMethod
@@ -101,35 +101,35 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Dim right As Variant= Evaluate(expr.Right)
 		  
 		  Select Case expr.Operator.TypeToken
-		  Case Lox.TokenType.GREATER
+		  Case TokenType.GREATER
 		    
 		    CheckNumberOperands expr.Operator, left, right
 		    Return left.DoubleValue> right.DoubleValue
-		  Case Lox.TokenType.GREATER_EQUAL
+		  Case TokenType.GREATER_EQUAL
 		    
 		    CheckNumberOperands expr.Operator, left, right
 		    If left.DoubleValue> right.DoubleValue Then Return True
 		    Return AreEqual(left.DoubleValue, right.DoubleValue)
-		  Case Lox.TokenType.LESS
+		  Case TokenType.LESS
 		    
 		    CheckNumberOperands expr.Operator, left, right
 		    Return left.DoubleValue< right.DoubleValue
-		  Case Lox.TokenType.LESS_EQUAL
+		  Case TokenType.LESS_EQUAL
 		    
 		    CheckNumberOperands expr.Operator, left, right
 		    If left.DoubleValue< right.DoubleValue Then Return True
 		    Return AreEqual(left.DoubleValue, right.DoubleValue)
-		  Case Lox.TokenType.BANG_EQUAL
+		  Case TokenType.BANG_EQUAL
 		    
 		    Return Not IsEqual(left, right)
-		  Case Lox.TokenType.EQUAL_EQUAL
+		  Case TokenType.EQUAL_EQUAL
 		    
 		    Return IsEqual(left, right)
-		  Case Lox.TokenType.MINUS
+		  Case TokenType.MINUS
 		    
 		    CheckNumberOperands expr.Operator, left, right
 		    Return left.DoubleValue- right.DoubleValue
-		  Case Lox.TokenType.PLUS
+		  Case TokenType.PLUS
 		    
 		    If left.IsNumeric And right.IsNumeric Then
 		      Return left.DoubleValue+ right.DoubleValue
@@ -139,11 +139,11 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    End If
 		    
 		    Raise New RuntimeError(expr.Operator, "Operands must be two numbers or two strings.")
-		  Case Lox.TokenType.SLASH
+		  Case TokenType.SLASH
 		    
 		    CheckNumberOperands expr.Operator, left, right
 		    Return left.DoubleValue/ right.DoubleValue
-		  Case Lox.TokenType.STAR
+		  Case TokenType.STAR
 		    
 		    CheckNumberOperands expr.Operator, left, right
 		    Return left.DoubleValue* right.DoubleValue
@@ -156,7 +156,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Block) As Variant
-		  executeBlock stmt.Statements, New Environment(Environment)
+		  executeBlock stmt.Statements, New Environment(Env)
 		  
 		  Return Nil
 		End Function
@@ -256,10 +256,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Dim right As Variant= Evaluate(expr.Right)
 		  
 		  Select Case expr.Operator.TypeToken
-		  Case lox.TokenType.BANG
+		  Case TokenType.BANG
 		    
 		    Return Not IsTruthy(right)
-		  Case Lox.TokenType.MINUS
+		  Case TokenType.MINUS
 		    
 		    CheckNumberOperand expr.Operator, right
 		    Return -right.DoubleValue
@@ -272,7 +272,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Variable) As Variant
-		  Return Environment.Get(expr.Name)
+		  Return Env.Get(expr.Name)
 		End Function
 	#tag EndMethod
 
@@ -283,7 +283,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    value= Evaluate(stmt.Initializer)
 		  End If
 		  
-		  Environment.Define stmt.Name.Lexeme, value
+		  Env.Define stmt.Name.Lexeme, value
 		  Return Nil
 		End Function
 	#tag EndMethod
@@ -298,21 +298,21 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mEnvironment Is Nil Then mEnvironment= New Environment
+			  If mEnv Is Nil Then mEnv= New Environment
 			  
-			  return mEnvironment
+			  return mEnv
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
-			  mEnvironment= value
+			  mEnv= value
 			End Set
 		#tag EndSetter
-		Environment As Environment
+		Env As Environment
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private mEnvironment As Environment
+		Private mEnv As Environment
 	#tag EndProperty
 
 

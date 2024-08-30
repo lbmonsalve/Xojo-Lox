@@ -8,7 +8,7 @@ Inherits Lox.Ast.Expr
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor(callee As Expr, paren As Lox.Lexical.Token, args() As Expr)
+		Sub Constructor(callee As Expr, paren As Lox.Token, args() As Expr)
 		  Self.Callee= callee
 		  Self.Paren= paren
 		  Self.Arguments= args
@@ -25,7 +25,7 @@ Inherits Lox.Ast.Expr
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		Paren As Lox.Lexical.Token
+		Paren As Lox.Token
 	#tag EndProperty
 
 

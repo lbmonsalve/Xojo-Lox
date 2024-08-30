@@ -1,7 +1,7 @@
 #tag Class
 Protected Class Environment
 	#tag Method, Flags = &h0
-		Sub Assign(name As Lox.Lexical.Token, value As Variant)
+		Sub Assign(name As Lox.Token, value As Variant)
 		  If Values.HasKey(name.Lexeme) Then
 		    Values.Value(name.Lexeme)= value
 		    
@@ -37,7 +37,7 @@ Protected Class Environment
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Get(name As Lox.Lexical.Token) As Variant
+		Function Get(name As Lox.Token) As Variant
 		  If Values.HasKey(name.Lexeme) Then Return Values.Value(name.Lexeme)
 		  
 		  If Not (Enclosing Is Nil) Then Return Enclosing.Get(name)

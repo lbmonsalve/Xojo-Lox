@@ -8,7 +8,7 @@ Inherits Lox.Ast.Stmt
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor(keyword As Lox.Lexical.Token, value As Expr)
+		Sub Constructor(keyword As Lox.Token, value As Expr)
 		  Self.Keyword= keyword
 		  Self.Value= value
 		End Sub
@@ -16,7 +16,7 @@ Inherits Lox.Ast.Stmt
 
 
 	#tag Property, Flags = &h0
-		Keyword As Lox.Lexical.Token
+		Keyword As Lox.Token
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

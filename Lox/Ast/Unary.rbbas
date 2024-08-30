@@ -8,7 +8,7 @@ Inherits Lox.Ast.Expr
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor(operator As Lox.Lexical.Token, right As Expr)
+		Sub Constructor(operator As Lox.Token, right As Expr)
 		  Self.Operator= operator
 		  Self.Right= right
 		End Sub
@@ -16,7 +16,7 @@ Inherits Lox.Ast.Expr
 
 
 	#tag Property, Flags = &h0
-		Operator As Lox.Lexical.Token
+		Operator As Lox.Token
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

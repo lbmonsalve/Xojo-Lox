@@ -73,83 +73,83 @@ Protected Module Lox
 	#tag Method, Flags = &h0
 		Function ToString(Extends tok As Lox.TokenType) As String
 		  Select Case tok
-		  Case Lox.TokenType.LEFT_PAREN
+		  Case TokenType.LEFT_PAREN
 		    Return "LEFT_PAREN"
-		  Case Lox.TokenType.RIGHT_PAREN
+		  Case TokenType.RIGHT_PAREN
 		    Return "RIGHT_PAREN"
-		  Case Lox.TokenType.LEFT_BRACE
+		  Case TokenType.LEFT_BRACE
 		    Return "LEFT_BRACE"
-		  Case Lox.TokenType.RIGHT_BRACE
+		  Case TokenType.RIGHT_BRACE
 		    Return "RIGHT_BRACE"
-		  Case Lox.TokenType.COMMA
+		  Case TokenType.COMMA
 		    Return "COMMA"
-		  Case Lox.TokenType.DOT
+		  Case TokenType.DOT
 		    Return "DOT"
-		  Case Lox.TokenType.MINUS
+		  Case TokenType.MINUS
 		    Return "MINUS"
-		  Case Lox.TokenType.PLUS
+		  Case TokenType.PLUS
 		    Return "PLUS"
-		  Case Lox.TokenType.SEMICOLON
+		  Case TokenType.SEMICOLON
 		    Return "SEMICOLON"
-		  Case Lox.TokenType.SLASH
+		  Case TokenType.SLASH
 		    Return "SLASH"
-		  Case Lox.TokenType.STAR
+		  Case TokenType.STAR
 		    Return "STAR"
-		  Case Lox.TokenType.BANG
+		  Case TokenType.BANG
 		    Return "BANG"
-		  Case Lox.TokenType.BANG_EQUAL
+		  Case TokenType.BANG_EQUAL
 		    Return "BANG_EQUAL"
-		  Case Lox.TokenType.EQUAL
+		  Case TokenType.EQUAL
 		    Return "EQUAL"
-		  Case Lox.TokenType.EQUAL_EQUAL
+		  Case TokenType.EQUAL_EQUAL
 		    Return "EQUAL_EQUAL"
-		  Case Lox.TokenType.GREATER
+		  Case TokenType.GREATER
 		    Return "GREATER"
-		  Case Lox.TokenType.GREATER_EQUAL
+		  Case TokenType.GREATER_EQUAL
 		    Return "GREATER_EQUAL"
-		  Case Lox.TokenType.LESS
+		  Case TokenType.LESS
 		    Return "LESS"
-		  Case Lox.TokenType.LESS_EQUAL
+		  Case TokenType.LESS_EQUAL
 		    Return "LESS_EQUAL"
-		  Case Lox.TokenType.IDENTIFIER
+		  Case TokenType.IDENTIFIER
 		    Return "IDENTIFIER"
-		  Case Lox.TokenType.STRING_
+		  Case TokenType.STRING_
 		    Return "STRING"
-		  Case Lox.TokenType.NUMBER
+		  Case TokenType.NUMBER
 		    Return "NUMBER"
-		  Case Lox.TokenType.AND_
+		  Case TokenType.AND_
 		    Return "AND"
-		  Case Lox.TokenType.CLASS_
+		  Case TokenType.CLASS_
 		    Return "CLASS"
-		  Case Lox.TokenType.ELSE_
+		  Case TokenType.ELSE_
 		    Return "ELSE"
-		  Case Lox.TokenType.FALSE_
+		  Case TokenType.FALSE_
 		    Return "FALSE"
-		  Case Lox.TokenType.FUN
+		  Case TokenType.FUN
 		    Return "LEFT_PAREN"
-		  Case Lox.TokenType.FOR_
+		  Case TokenType.FOR_
 		    Return "FUN"
-		  Case Lox.TokenType.IF_
+		  Case TokenType.IF_
 		    Return "IF"
-		  Case Lox.TokenType.NIL_
+		  Case TokenType.NIL_
 		    Return "NIL"
-		  Case Lox.TokenType.OR_
+		  Case TokenType.OR_
 		    Return "OR"
-		  Case Lox.TokenType.PRINT_
+		  Case TokenType.PRINT_
 		    Return "PRINT"
-		  Case Lox.TokenType.RETURN_
+		  Case TokenType.RETURN_
 		    Return "RETURN"
-		  Case Lox.TokenType.SUPER_
+		  Case TokenType.SUPER_
 		    Return "SUPER"
-		  Case Lox.TokenType.THIS
+		  Case TokenType.THIS
 		    Return "THIS"
-		  Case Lox.TokenType.TRUE_
+		  Case TokenType.TRUE_
 		    Return "TRUE"
-		  Case Lox.TokenType.VAR_
+		  Case TokenType.VAR_
 		    Return "VAR"
-		  Case Lox.TokenType.WHILE_
+		  Case TokenType.WHILE_
 		    Return "WHILE"
-		  Case Lox.TokenType.EOF
+		  Case TokenType.EOF
 		    Return "EOF"
 		  Case Else
 		    Return ""
