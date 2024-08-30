@@ -202,7 +202,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
+		  If isTruthy(Evaluate(stmt.Condition)) Then
+		    execute stmt.ThenBranch
+		  ElseIf Not (stmt.ElseBranch Is Nil) Then
+		    execute stmt.ElseBranch
+		  End If
 		  
+		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -214,7 +220,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Logical) As Variant
+		  Dim left As Variant= evaluate(expr.Left)
 		  
+		  If expr.Operator.TypeToken= TokenType.OR_ Then
+		    If IsTruthy(left) Then Return left
+		  Else
+		    If Not IsTruthy(left) Then Return left
+		  End If
+		  
+		  Return Evaluate(expr.Right)
 		End Function
 	#tag EndMethod
 
@@ -290,7 +304,9 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
-		  
+		  While IsTruthy(Evaluate(stmt.Condition))
+		    execute stmt.Body
+		  Wend
 		End Function
 	#tag EndMethod
 

@@ -8,8 +8,22 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function assignment() As Lox.Ast.Expr
+		Private Function and_() As Lox.Ast.Expr
 		  Dim expr As Lox.Ast.Expr= equality
+		  
+		  While Match(TokenType.AND_)
+		    Dim operator As Token= Previous
+		    Dim right As Lox.Ast.Expr= equality
+		    expr= New Lox.Ast.Logical(expr, operator, right)
+		  Wend
+		  
+		  Return expr
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function assignment() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= or_
 		  
 		  If Match(TokenType.EQUAL) Then
 		    Dim equals As Token= Previous
@@ -156,6 +170,49 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function forStatement() As Lox.Ast.Stmt
+		  Call consume TokenType.LEFT_PAREN, "Expect '(' after 'for'."
+		  
+		  Dim initializer As Lox.Ast.Stmt
+		  If Match(TokenType.SEMICOLON) Then
+		  ElseIf Match(TokenType.VAR_) Then
+		    initializer= varDeclaration
+		  Else
+		    initializer= expressionStatement
+		  End If
+		  
+		  Dim condition As Lox.Ast.Expr
+		  If Not Check(TokenType.SEMICOLON) Then condition= expression
+		  Call consume TokenType.SEMICOLON, "Expect ';' after loop condition."
+		  
+		  Dim increment As Lox.Ast.Expr
+		  If Not Check(TokenType.RIGHT_PAREN) Then increment= expression
+		  Call consume TokenType.RIGHT_PAREN, "Expect ')' after for clauses."
+		  
+		  Dim body As Lox.Ast.Stmt= statement
+		  
+		  If Not (increment IS Nil) Then
+		    Dim stmts() As Lox.Ast.Stmt
+		    stmts.Append body
+		    stmts.Append New Lox.Ast.Expression(increment)
+		    body= New Lox.Ast.Block(stmts)
+		  End If
+		  
+		  If condition Is Nil Then condition= New Lox.Ast.Literal(True)
+		  body= New Lox.Ast.WhileStmt(condition, body)
+		  
+		  If Not (initializer Is Nil) Then
+		    Dim stmts() As Lox.Ast.Stmt
+		    stmts.Append initializer
+		    stmts.Append body
+		    body= New Lox.Ast.Block(stmts)
+		  End If
+		  
+		  Return body
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function ifStatement() As Lox.Ast.Stmt
 		  Call consume TokenType.LEFT_PAREN, "Expect '(' after 'if'."
 		  Dim condition As Lox.Ast.Expr= expression
@@ -185,6 +242,20 @@ Protected Class Parser
 		  Next
 		  
 		  Return False
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function or_() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= and_
+		  
+		  While Match(TokenType.OR_)
+		    Dim operator As Token= Previous
+		    Dim right As Lox.Ast.Expr= and_
+		    expr= New Lox.Ast.Logical(expr, operator, right)
+		  Wend
+		  
+		  Return expr
 		End Function
 	#tag EndMethod
 
@@ -242,6 +313,7 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function statement() As Lox.Ast.Stmt
+		  If Match(TokenType.FOR_) Then Return forStatement
 		  If Match(TokenType.IF_) Then Return ifStatement
 		  If Match(TokenType.PRINT_) Then Return printStatement
 		  If Match(TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(Block)
