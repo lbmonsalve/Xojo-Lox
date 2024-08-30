@@ -43,7 +43,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function Block() As Lox.Ast.Stmt()
+		Private Function block() As Lox.Ast.Stmt()
 		  Dim statements() As Lox.Ast.Stmt
 		  
 		  While (Not Check(TokenType.RIGHT_BRACE)) And (Not IsAtEnd)
@@ -53,6 +53,22 @@ Protected Class Parser
 		  Call consume TokenType.RIGHT_BRACE, "Expect '}' after block."
 		  
 		  Return statements
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function call_() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= primary
+		  
+		  While True
+		    If Match(TokenType.LEFT_PAREN) Then
+		      expr= finishCall(expr)
+		    Else
+		      Exit
+		    End If
+		  Wend
+		  
+		  Return expr
 		End Function
 	#tag EndMethod
 
@@ -95,12 +111,10 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function declaration() As Lox.Ast.Stmt
 		  Try
-		    #pragma BreakOnExceptions Off
-		    
+		    If Match(TokenType.FUN) Then Return function_("function")
 		    If Match(TokenType.VAR_) Then Return varDeclaration
 		    
 		    Return statement
-		    #pragma BreakOnExceptions Default
 		  Catch exc As ParseError
 		    Synchronize
 		    Return Nil
@@ -170,6 +184,22 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function finishCall(callee As Lox.Ast.Expr) As Lox.Ast.Expr
+		  Dim arguments() As Lox.Ast.Expr
+		  If Not (check(TokenType.RIGHT_PAREN)) Then
+		    Do
+		      If arguments.Ubound>= 254 Then Error(Peek, "Can't have more than 255 arguments.")
+		      arguments.Append expression
+		    Loop Until Not Match(TokenType.COMMA)
+		  End If
+		  
+		  Dim paren As Token= consume(TokenType.RIGHT_PAREN, "Expect ')' after arguments.")
+		  
+		  Return New Lox.Ast.CallExpr(callee, paren, arguments)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function forStatement() As Lox.Ast.Stmt
 		  Call consume TokenType.LEFT_PAREN, "Expect '(' after 'for'."
 		  
@@ -209,6 +239,30 @@ Protected Class Parser
 		  End If
 		  
 		  Return body
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function function_(kind As String) As Lox.Ast.FunctionStmt
+		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect "+ kind+ " name.")
+		  
+		  Call consume TokenType.LEFT_PAREN, "Expect '(' after "+ kind+ " name."
+		  Dim parameters() As Token
+		  If Not Check(TokenType.RIGHT_PAREN) Then
+		    Do
+		      If parameters.Count>= 255 Then
+		        Error Peek, "Can't have more than 255 parameters."
+		      End If
+		      
+		      parameters.Append consume(TokenType.IDENTIFIER, "Expect parameter name.")
+		    Loop Until Not Match(TokenType.COMMA)
+		  End If
+		  Call consume TokenType.RIGHT_PAREN, "Expect ')' after parameters."
+		  
+		  Call consume TokenType.LEFT_BRACE, "Expect '{' before "+ kind+ " body."
+		  Dim body() As Lox.Ast.Stmt= block
+		  
+		  Return New Lox.Ast.FunctionStmt(name, parameters, body)
 		End Function
 	#tag EndMethod
 
@@ -312,11 +366,25 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function returnStatement() As Lox.Ast.Stmt
+		  Dim keyword As Token= Previous
+		  Dim value As Lox.Ast.Expr
+		  If Not Check(TokenType.SEMICOLON) Then value= expression
+		  
+		  Call consume TokenType.SEMICOLON, "Expect ';' after return value."
+		  
+		  Return New Lox.Ast.ReturnStmt(keyword, value)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function statement() As Lox.Ast.Stmt
 		  If Match(TokenType.FOR_) Then Return forStatement
 		  If Match(TokenType.IF_) Then Return ifStatement
 		  If Match(TokenType.PRINT_) Then Return printStatement
-		  If Match(TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(Block)
+		  If Match(TokenType.RETURN_) Then Return returnStatement
+		  If Match(TokenType.WHILE_) Then Return whileStatement
+		  If Match(TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(block)
 		  
 		  Return expressionStatement
 		End Function
@@ -363,7 +431,7 @@ Protected Class Parser
 		    Return New Lox.Ast.Unary(operator, right)
 		  End If
 		  
-		  Return primary
+		  Return call_
 		End Function
 	#tag EndMethod
 
@@ -376,6 +444,17 @@ Protected Class Parser
 		  
 		  Call consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.")
 		  Return New Lox.Ast.VarStmt(name, initializer)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function whileStatement() As Lox.Ast.Stmt
+		  Call consume TokenType.LEFT_PAREN, "Expect '(' after 'while'."
+		  Dim condition As Lox.Ast.Expr= expression
+		  Call consume TokenType.RIGHT_PAREN, "Expect ')' after condition."
+		  Dim body As Lox.Ast.Stmt= statement
+		  
+		  Return New Lox.Ast.WhileStmt(condition, body)
 		End Function
 	#tag EndMethod
 

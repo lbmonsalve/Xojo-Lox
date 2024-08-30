@@ -12,6 +12,18 @@ Protected Module Lox
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function Count(Extends obj() As Token) As Integer
+		  Return obj.Ubound+ 1
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Count(Extends obj() As Variant) As Integer
+		  Return obj.Ubound+ 1
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Sub Error(line As Integer, message As String)
 		  Report line, "", message
@@ -65,14 +77,14 @@ Protected Module Lox
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Substring(Extends txt As String, startIndex As Integer, endIndex As Integer) As String
-		  Return txt.Mid(startIndex, endIndex- startIndex)
+		Function Substring(Extends obj As String, startIndex As Integer, endIndex As Integer) As String
+		  Return obj.Mid(startIndex, endIndex- startIndex)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function ToString(Extends tok As Lox.TokenType) As String
-		  Select Case tok
+		Function ToString(Extends obj As Lox.TokenType) As String
+		  Select Case obj
 		  Case TokenType.LEFT_PAREN
 		    Return "LEFT_PAREN"
 		  Case TokenType.RIGHT_PAREN
@@ -158,16 +170,26 @@ Protected Module Lox
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function ToString(Extends vart As Variant) As String
-		  Select Case vart.Type
+		Function ToString(Extends obj As Variant) As String
+		  Select Case obj.Type
 		  Case 0
 		    Return ""
 		  Case 2, 3, 4, 5, 6
-		    Return Str(vart.DoubleValue) // TODO: "-###########0.0#######"
-		  Case 8, 11, 16
-		    Return vart.StringValue
+		    Return Str(obj.DoubleValue) // TODO: "-###########0.0#######"
 		  Case 7 // date
-		    Return vart.DateValue.SQLDateTime
+		    Return obj.DateValue.SQLDateTime
+		  Case 8, 11, 16
+		    Return obj.StringValue
+		  Case 9 // obj 
+		    Dim ti As Introspection.TypeInfo= Introspection.GetType(obj)
+		    Dim methods() As Introspection.MethodInfo= ti.GetMethods
+		    For Each method As Introspection.MethodInfo In methods
+		      If method.Name.Lowercase= "tostring" Then
+		        Dim params() As Variant
+		        Return method.Invoke(obj, params)
+		      End If
+		    Next
+		    Return ti.FullName
 		  Case Else
 		    Return "other"
 		  End Select

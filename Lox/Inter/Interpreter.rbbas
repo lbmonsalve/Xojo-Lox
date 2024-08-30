@@ -17,6 +17,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub Constructor()
+		  mGlobals= New Environment
+		  mGlobals.Define("clock", New LoxClock)
+		  
+		  mEnv= mGlobals
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function Evaluate(expr As Lox.Ast.Expr) As Variant
 		  Return expr.Accept(Self)
@@ -29,8 +38,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Sub executeBlock(statements() As Lox.Ast.Stmt, env As Environment)
+	#tag Method, Flags = &h0
+		Sub ExecuteBlock(statements() As Lox.Ast.Stmt, env As Environment)
 		  Dim previous As Environment= Self.Env
 		  
 		  Try
@@ -48,13 +57,9 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Sub Interpret(statements() As Lox.Ast.Stmt)
 		  Try
-		    #pragma BreakOnExceptions Off
-		    
 		    For Each statement As Lox.Ast.Stmt In statements
 		      execute statement
 		    Next
-		    
-		    #pragma BreakOnExceptions Default
 		  Catch exc As RuntimeError
 		    Lox.RuntimeError exc
 		  End Try
@@ -156,7 +161,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Block) As Variant
-		  executeBlock stmt.Statements, New Environment(Env)
+		  ExecuteBlock stmt.Statements, New Environment(Env)
 		  
 		  Return Nil
 		End Function
@@ -164,7 +169,25 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.CallExpr) As Variant
+		  Dim callee As Variant= Evaluate(expr.Callee)
 		  
+		  Dim arguments() As Variant
+		  For Each argument As Variant In expr.Arguments
+		    arguments.Append Evaluate(argument)
+		  Next
+		  
+		  If Not (callee IsA ICallable) Then Raise New RuntimeError(expr.Paren, _
+		  "Can only call functions and classes.")
+		  
+		  Dim func As ICallable= ICallable(callee)
+		  
+		  If arguments.Count<> func.Arity Then
+		    Raise New RuntimeError(expr.Paren, "Expected "+ _
+		    Str(func.Arity)+ " arguments but got "+ Str(arguments.Count) + ".")
+		  End If
+		  
+		  
+		  Return func.Call_(Self, arguments)
 		End Function
 	#tag EndMethod
 
@@ -184,7 +207,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
+		  Dim func As New LoxFunction(stmt, mEnv)
+		  Env.Define(stmt.Name.Lexeme, func)
 		  
+		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -243,7 +269,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ReturnStmt) As Variant
+		  Dim value As Variant
+		  If Not (stmt.Value Is Nil) Then value= Evaluate(stmt.Value)
 		  
+		  Raise New ReturnExc(value)
 		End Function
 	#tag EndMethod
 
@@ -307,6 +336,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  While IsTruthy(Evaluate(stmt.Condition))
 		    execute stmt.Body
 		  Wend
+		  
+		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -314,8 +345,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mEnv Is Nil Then mEnv= New Environment
-			  
 			  return mEnv
 			End Get
 		#tag EndGetter
@@ -327,8 +356,21 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Env As Environment
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Return mGlobals
+			End Get
+		#tag EndGetter
+		Globals As Environment
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h21
 		Private mEnv As Environment
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mGlobals As Environment
 	#tag EndProperty
 
 
