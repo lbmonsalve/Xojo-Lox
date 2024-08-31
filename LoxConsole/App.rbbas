@@ -19,6 +19,8 @@ Inherits ConsoleApplication
 
 	#tag Method, Flags = &h21
 		Private Function LoadFile(path As String) As String
+		  If path.Len= 0 Then Return ""
+		  
 		  Try
 		    #pragma BreakOnExceptions Off
 		    Dim ti As TextInputStream= TextInputStream.Open(GetFolderItem(path))
@@ -103,9 +105,10 @@ Inherits ConsoleApplication
 		    Case ".clear"
 		      source= ""
 		    Case Else
-		      If line.InStr(".save")> 0 Then
+		      Dim comm As String= line.Left(5)
+		      If comm= ".save" Then
 		        SaveFile line.Mid(6).Trim, source
-		      ElseIf line.InStr(".load")> 0 Then
+		      ElseIf comm= ".load" Then
 		        source= LoadFile(line.Mid(6).Trim)
 		      ElseIf multiLine Then
 		        source= source+ line+ EndOfLine
@@ -120,6 +123,8 @@ Inherits ConsoleApplication
 
 	#tag Method, Flags = &h21
 		Private Sub SaveFile(path As String, source As String)
+		  If path.Len= 0 Then Return
+		  
 		  Try
 		    #pragma BreakOnExceptions Off
 		    Dim tt As TextOutputStream= TextOutputStream.Create(GetFolderItem(path))
