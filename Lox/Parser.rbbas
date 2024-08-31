@@ -104,6 +104,7 @@ Protected Class Parser
 		Private Function consume(type As TokenType, message As String) As Token
 		  If Check(type) Then Return Advance
 		  
+		  #pragma BreakOnExceptions Off
 		  Raise Error(Peek, message)
 		End Function
 	#tag EndMethod
@@ -334,6 +335,7 @@ Protected Class Parser
 		    Return New Lox.Ast.Grouping(expr)
 		  End If
 		  
+		  #pragma BreakOnExceptions Off
 		  Raise Error(Peek, "Expect expression.")
 		End Function
 	#tag EndMethod

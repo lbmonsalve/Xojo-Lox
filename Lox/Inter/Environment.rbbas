@@ -24,6 +24,7 @@ Protected Class Environment
 		    Return
 		  End If
 		  
+		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(name, "Undefined variable '" + name.lexeme + "'.")
 		End Sub
 	#tag EndMethod
@@ -58,6 +59,7 @@ Protected Class Environment
 		  
 		  If Not (Enclosing Is Nil) Then Return Enclosing.Get(name)
 		  
+		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(name, "Undefined variable '" + name.lexeme + "'.")
 		End Function
 	#tag EndMethod

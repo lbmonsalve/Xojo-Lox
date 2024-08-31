@@ -80,7 +80,8 @@ Protected Module Lox
 		Private Sub Report(line As Integer, where As String, message As String)
 		  Dim txt As String= "[line "+ Str(line)+ "] error"+ where+ ": "+ message
 		  
-		  System.DebugLog txt
+		  // TODO: add logging system 
+		  System.DebugLog CurrentMethodName+ " "+ txt
 		  StdErr.WriteLine txt
 		  
 		  HadError= True
@@ -193,12 +194,12 @@ Protected Module Lox
 		  Case 0
 		    Return ""
 		  Case 2, 3, 4, 5, 6
-		    Return Str(obj.DoubleValue) // TODO: "-###########0.0#######"
+		    Return Str(obj.DoubleValue) // TODO: "-###########0.0#####"
 		  Case 7 // date
 		    Return obj.DateValue.SQLDateTime
 		  Case 8, 11, 16
 		    Return obj.StringValue
-		  Case 9 // obj
+		  Case 9 // obj TODO: cache methods
 		    Dim ti As Introspection.TypeInfo= Introspection.GetType(obj)
 		    Dim methods() As Introspection.MethodInfo= ti.GetMethods
 		    For Each method As Introspection.MethodInfo In methods

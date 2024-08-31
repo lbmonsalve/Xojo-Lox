@@ -5,6 +5,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Sub CheckNumberOperand(operator As Lox.Token, operand As Variant)
 		  If operand.IsNumber Then Return
 		  
+		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(operator, "Operand must be a number.")
 		End Sub
 	#tag EndMethod
@@ -13,6 +14,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Sub CheckNumberOperands(operator As Lox.Token, left As Variant, right As Variant)
 		  If left.IsNumeric And right.IsNumeric Then Return
 		  
+		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(operator, "Operands must be numbers.")
 		End Sub
 	#tag EndMethod
@@ -177,6 +179,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		      Return left.StringValue+ right.StringValue
 		    End If
 		    
+		    #pragma BreakOnExceptions Off
 		    Raise New RuntimeError(expr.Operator, "Operands must be two numbers or two strings.")
 		  Case TokenType.SLASH
 		    
@@ -188,16 +191,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return left.DoubleValue* right.DoubleValue
 		    
 		  End Select
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Block) As Variant
 		  ExecuteBlock stmt.Statements, New Environment(Env)
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -210,6 +209,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    arguments.Append Evaluate(argument)
 		  Next
 		  
+		  #pragma BreakOnExceptions Off
 		  If Not (callee IsA ICallable) Then Raise New RuntimeError(expr.Paren, _
 		  "Can only call functions and classes.")
 		  
@@ -234,8 +234,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Expression) As Variant
 		  Call Evaluate stmt.Expression
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -243,8 +241,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
 		  Dim func As New LoxFunction(stmt, mEnv)
 		  Env.Define(stmt.Name.Lexeme, func)
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -267,8 +263,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  ElseIf Not (stmt.ElseBranch Is Nil) Then
 		    execute stmt.ElseBranch
 		  End If
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -296,8 +290,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function Visit(stmt As Lox.Ast.Print) As Variant
 		  Dim value As Variant= Evaluate(stmt.Expression)
 		  StdOut.WriteLine Stringify(value)
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -306,6 +298,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Dim value As Variant
 		  If Not (stmt.Value Is Nil) Then value= Evaluate(stmt.Value)
 		  
+		  #pragma BreakOnExceptions Off
 		  Raise New ReturnExc(value)
 		End Function
 	#tag EndMethod
@@ -342,8 +335,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return -right.DoubleValue
 		    
 		  End Select
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -361,7 +352,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  End If
 		  
 		  Env.Define stmt.Name.Lexeme, value
-		  Return Nil
 		End Function
 	#tag EndMethod
 
@@ -370,8 +360,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  While IsTruthy(Evaluate(stmt.Condition))
 		    execute stmt.Body
 		  Wend
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 

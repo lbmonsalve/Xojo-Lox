@@ -45,9 +45,19 @@ Protected Class Scanner
 		Private Function IsAlpha(c As String) As Boolean
 		  Dim cAsc As Integer= c.Asc
 		  
-		  Return (cAsc>= Asc("a") And cAsc<= Asc("z")) Or _
-		  (cAsc>= Asc("A") And cAsc<= Asc("Z")) Or _
-		  cAsc= Asc("_")
+		  If cAsc>= Asc("a") And cAsc<= Asc("z") Then
+		    Return True
+		  ElseIf cAsc>= Asc("A") And cAsc<= Asc("Z") Then
+		    Return True
+		  ElseIf cAsc= Asc("_") Then
+		    Return True
+		  ElseIf cAsc>= &h00c0 And cAsc<= &h00d6 Then
+		    Return True
+		  ElseIf cAsc>= &h00d8 And cAsc<= &h00f6 Then
+		    Return True
+		  End If
+		  
+		  Return False
 		End Function
 	#tag EndMethod
 

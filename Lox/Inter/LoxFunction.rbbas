@@ -20,8 +20,6 @@ Implements ICallable
 		  Catch exc As ReturnExc
 		    Return exc.Value
 		  End Try
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 

@@ -68,7 +68,7 @@ Inherits ConsoleApplication
 		    Run ti.ReadAll(Encodings.UTF8)
 		    #pragma BreakOnExceptions Default
 		  Catch exc As IOException
-		    System.DebugLog "IOException: "+ path
+		    System.DebugLog CurrentMethodName+ " IOException: "+ path
 		  End Try
 		  
 		  If Lox.HadError Then Quit(65)
@@ -84,7 +84,12 @@ Inherits ConsoleApplication
 		  While True
 		    If Not multiLine Then StdOut.Write "> "
 		    
-		    Dim line As String= Input // TODO: encodings?
+		    #if TargetWin32
+		      Dim line As String= Input.DefineEncoding(Encodings.DOSLatin1)._
+		      ConvertEncoding(Encodings.UTF8)
+		    #else
+		      Dim line As String= Input
+		    #endif
 		    If line.Len= 0 Then Continue
 		    
 		    Select Case line
