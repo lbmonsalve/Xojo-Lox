@@ -53,8 +53,8 @@ Inherits ConsoleApplication
 		  
 		  If Lox.HadError Then Return // Stop if there was a syntax error.
 		  
-		  'Dim printer As New Lox.Ast.AstPrinter
-		  'Print printer.Print(expr)
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
 		  
 		  Lox.Interpreter.Interpret(statements)
 		End Sub
@@ -93,6 +93,8 @@ Inherits ConsoleApplication
 		    Case ".run", ".r"
 		      run source
 		      Lox.HadError= False
+		    Case ".version", ".ver"
+		      PrintText Lox.Version
 		    Case ".multi"
 		      multiLine= True
 		    Case ".reset"
@@ -105,10 +107,10 @@ Inherits ConsoleApplication
 		    Case ".clear"
 		      source= ""
 		    Case Else
-		      Dim comm As String= line.Left(5)
-		      If comm= ".save" Then
+		      Dim cmd As String= line.Left(5)
+		      If cmd= ".save" Then
 		        SaveFile line.Mid(6).Trim, source
-		      ElseIf comm= ".load" Then
+		      ElseIf cmd= ".load" Then
 		        source= LoadFile(line.Mid(6).Trim)
 		      ElseIf multiLine Then
 		        source= source+ line+ EndOfLine
@@ -138,7 +140,7 @@ Inherits ConsoleApplication
 	#tag EndMethod
 
 
-	#tag Constant, Name = kHelp, Type = String, Dynamic = False, Default = \"Commands and special keys:\r\r  .multi\tenable multi-line\r\r  .run\t\trun multi-line buffer (or .r)\r\r  .reset\tREPL to default\r\r  .source\tshows multi-line buffer\r\r  .clear\tclear multi-line buffer\r\r  .load\t\tload file to buffer >.load file/to/load.lox\r\r  .save\t\tsave buffer to file >.save file/to/save.lox\r\r  .help\t\tthis info\r\r  .quit\t\tquit (or .q)\r", Scope = Private
+	#tag Constant, Name = kHelp, Type = String, Dynamic = False, Default = \"Commands and special keys:\r\r  .multi\tenable multi-line\r\r  .run\t\trun multi-line buffer (or .r)\r\r  .reset\tREPL to default\r\r  .source\tshows multi-line buffer\r\r  .clear\tclear multi-line buffer\r\r  .load\t\tload file to buffer >.load file/to/load.lox\r\r  .save\t\tsave buffer to file >.save file/to/save.lox\r\r  .help\t\tthis info\r\r  .ver\t\tshows core version (or .version)\r\r  .quit\t\tquit (or .q)\r", Scope = Private
 	#tag EndConstant
 
 

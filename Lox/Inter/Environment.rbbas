@@ -1,6 +1,16 @@
 #tag Class
 Protected Class Environment
 	#tag Method, Flags = &h0
+		Function Ancestor(distance As Integer) As Environment
+		  Dim env As Environment= Self
+		  For i As Integer= 0 To distance- 1
+		    env= env.Enclosing
+		  Next
+		  Return env
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Assign(name As Lox.Token, value As Variant)
 		  If Values.HasKey(name.Lexeme) Then
 		    Values.Value(name.Lexeme)= value
@@ -15,6 +25,12 @@ Protected Class Environment
 		  End If
 		  
 		  Raise New RuntimeError(name, "Undefined variable '" + name.lexeme + "'.")
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub AssignAt(distance As Integer, name As Lox.Token, value As Variant)
+		  Ancestor(distance).Values.Value(name.Lexeme)= value
 		End Sub
 	#tag EndMethod
 
@@ -43,6 +59,12 @@ Protected Class Environment
 		  If Not (Enclosing Is Nil) Then Return Enclosing.Get(name)
 		  
 		  Raise New RuntimeError(name, "Undefined variable '" + name.lexeme + "'.")
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetAt(distance As Integer, name As String) As Variant
+		  Return Ancestor(distance).Values.Value(name)
 		End Function
 	#tag EndMethod
 

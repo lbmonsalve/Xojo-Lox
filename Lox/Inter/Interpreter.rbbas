@@ -58,7 +58,9 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		      execute statement
 		    Next
 		  Catch exc As RuntimeError
-		    Lox.RuntimeError exc
+		    RuntimeError exc
+		  Catch exc As RuntimeException
+		    System.DebugLog CurrentMethodName+ " unexpected error"
 		  End Try
 		End Sub
 	#tag EndMethod
@@ -81,12 +83,31 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function lookUpVariable(name As Token, expr As Lox.Ast.Expr) As Variant
+		  If mLocals.HasKey(expr) Then
+		    Dim distance As Integer= mLocals.Value(expr).IntegerValue
+		    Return Env.GetAt(distance, name.Lexeme)
+		  Else
+		    Return Globals.Get(name)
+		  End If
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub Reset()
 		  mGlobals= New Environment
 		  mGlobals.Define("clock", New LoxClock)
 		  
 		  mEnv= mGlobals
+		  
+		  mLocals= New Dictionary
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Resolve(expr As Lox.Ast.Expr, depth As Integer)
+		  mLocals.Value(expr)= depth
 		End Sub
 	#tag EndMethod
 
@@ -101,7 +122,14 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Assign) As Variant
 		  Dim value As Variant= Evaluate(expr.Value)
-		  Env.Assign expr.Name, value
+		  
+		  If mLocals.HasKey(expr) Then
+		    Dim distance As Integer= mLocals.Value(expr).IntegerValue
+		    Env.AssignAt(distance, expr.Name, value)
+		  Else
+		    Globals.Assign(expr.Name, value)
+		  End If
+		  
 		  Return value
 		End Function
 	#tag EndMethod
@@ -321,7 +349,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Variable) As Variant
-		  Return Env.Get(expr.Name)
+		  Return lookUpVariable(expr.Name, expr)
 		End Function
 	#tag EndMethod
 
@@ -377,6 +405,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Property, Flags = &h21
 		Private mGlobals As Environment
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mLocals As Dictionary
 	#tag EndProperty
 
 
