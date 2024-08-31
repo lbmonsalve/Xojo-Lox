@@ -44,6 +44,7 @@ Class=AstPrinter;../Lox/Misc/AstPrinter.rbbas;&h70EA97FF;&h51ABAFFF;false
 Class=LoxClock;../Lox/Inter/LoxClock.rbbas;&h6BF7B7FF;&h5F544FFF;false
 Class=LoxFunction;../Lox/Inter/LoxFunction.rbbas;&hFA71FFF;&h5F544FFF;false
 Class=ReturnExc;../Lox/Inter/ReturnExc.rbbas;&h6F0B77FF;&h5F544FFF;false
+Class=Resolver;../Lox/Inter/Resolver.rbbas;&h3B2B7FF;&h5F544FFF;false
 MajorVersion=1
 MinorVersion=0
 SubVersion=0

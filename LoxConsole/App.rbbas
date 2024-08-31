@@ -18,6 +18,30 @@ Inherits ConsoleApplication
 
 
 	#tag Method, Flags = &h21
+		Private Function LoadFile(path As String) As String
+		  Try
+		    #pragma BreakOnExceptions Off
+		    Dim ti As TextInputStream= TextInputStream.Open(GetFolderItem(path))
+		    Return ti.ReadAll(Encodings.UTF8)
+		    #pragma BreakOnExceptions Default
+		  Catch exc As IOException
+		    PrintText "Error ("+ Str(exc.ErrorNumber)+ ") loading "+ path
+		  End Try
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub PrintText(txt As String)
+		  Dim buff As String= ReplaceLineEndings(txt, EndOfLine.UNIX)
+		  Dim lines() As String= buff.Split(EndOfLine.UNIX)
+		  For Each line As String In lines
+		    If line.Len= 0 Then line= " " //+ EndOfLine
+		    StdOut.WriteLine line
+		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub Run(source As String)
 		  Dim scanner As New Lox.Scanner(source)
 		  Dim tokens() As Lox.Token= scanner.Scan
@@ -25,7 +49,7 @@ Inherits ConsoleApplication
 		  Dim parser As New Lox.Parser(tokens)
 		  Dim statements() As Lox.Ast.Stmt= parser.Parse
 		  
-		  'If Lox.HadError Then Return // Stop if there was a syntax error.
+		  If Lox.HadError Then Return // Stop if there was a syntax error.
 		  
 		  'Dim printer As New Lox.Ast.AstPrinter
 		  'Print printer.Print(expr)
@@ -52,14 +76,65 @@ Inherits ConsoleApplication
 
 	#tag Method, Flags = &h21
 		Private Sub RunPrompt()
+		  Dim multiLine As Boolean
+		  Dim source As String
+		  
 		  While True
-		    StdOut.Write "> "
+		    If Not multiLine Then StdOut.Write "> "
+		    
 		    Dim line As String= Input // TODO: encodings?
-		    run line
-		    Lox.HadError= False
+		    If line.Len= 0 Then Continue
+		    
+		    Select Case line
+		    Case ".quit", ".q"
+		      Exit
+		    Case ".run", ".r"
+		      run source
+		      Lox.HadError= False
+		    Case ".multi"
+		      multiLine= True
+		    Case ".reset"
+		      multiLine= False
+		      Lox.Interpreter.Reset
+		    Case ".help"
+		      PrintText kHelp
+		    Case ".source"
+		      PrintText source
+		    Case ".clear"
+		      source= ""
+		    Case Else
+		      If line.InStr(".save")> 0 Then
+		        SaveFile line.Mid(6).Trim, source
+		      ElseIf line.InStr(".load")> 0 Then
+		        source= LoadFile(line.Mid(6).Trim)
+		      ElseIf multiLine Then
+		        source= source+ line+ EndOfLine
+		      Else
+		        run line
+		        Lox.HadError= False
+		      End If
+		    End Select
 		  Wend
 		End Sub
 	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub SaveFile(path As String, source As String)
+		  Try
+		    #pragma BreakOnExceptions Off
+		    Dim tt As TextOutputStream= TextOutputStream.Create(GetFolderItem(path))
+		    tt.Write source
+		    tt.Close
+		    #pragma BreakOnExceptions Default
+		  Catch exc As IOException
+		    PrintText "Error ("+ Str(exc.ErrorNumber)+ ") saving "+ path
+		  End Try
+		End Sub
+	#tag EndMethod
+
+
+	#tag Constant, Name = kHelp, Type = String, Dynamic = False, Default = \"Commands and special keys:\r\r  .multi\tenable multi-line\r\r  .run\t\trun multi-line buffer (or .r)\r\r  .reset\tREPL to default\r\r  .source\tshows multi-line buffer\r\r  .clear\tclear multi-line buffer\r\r  .load\t\tload file to buffer >.load file/to/load.lox\r\r  .save\t\tsave buffer to file >.save file/to/save.lox\r\r  .help\t\tthis info\r\r  .quit\t\tquit (or .q)\r", Scope = Private
+	#tag EndConstant
 
 
 	#tag ViewBehavior

@@ -19,10 +19,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Sub Constructor()
-		  mGlobals= New Environment
-		  mGlobals.Define("clock", New LoxClock)
-		  
-		  mEnv= mGlobals
+		  Reset
 		End Sub
 	#tag EndMethod
 
@@ -82,6 +79,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  Return True
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Reset()
+		  mGlobals= New Environment
+		  mGlobals.Define("clock", New LoxClock)
+		  
+		  mEnv= mGlobals
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
