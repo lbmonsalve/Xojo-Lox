@@ -10,6 +10,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Sub Constructor(interp As Interpreter)
 		  mInterpreter= interp
+		  mCurrentFunction= FunctionType.NONE
 		End Sub
 	#tag EndMethod
 
@@ -18,6 +19,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  If mScopes.Ubound= -1 Then Return
 		  
 		  Dim scope As Dictionary= mScopes(0)
+		  If scope.HasKey(name.Lexeme) Then
+		    Error name, "Already a variable with this name in this scope."
+		  End If
+		  
 		  scope.Value(name.Lexeme)= False
 		End Sub
 	#tag EndMethod
@@ -57,11 +62,28 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub resolveFunction(func As Lox.Ast.FunctionStmt, type As FunctionType)
+		  Dim enclosingFunction As FunctionType= mCurrentFunction
+		  mCurrentFunction= type
+		  
+		  beginScope
+		  For Each param As Token In func.Params
+		    declare_ param
+		    define param
+		  Next
+		  resolve func.Body
+		  endScope
+		  
+		  mCurrentFunction= enclosingFunction
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub resolveLocal(expr As Lox.Ast.Expr, name As Lox.Token)
 		  For i As Integer= mScopes.Ubound To 0 Step -1
 		    Dim scope As Dictionary= mScopes(i)
 		    If scope.HasKey(name.Lexeme) Then
-		      'mInterpreter.Resolve(expr, mScopes.Ubound- i)
+		      mInterpreter.Resolve(expr, mScopes.Ubound- i)
 		      Return
 		    End If
 		  Next
@@ -70,17 +92,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Assign) As Variant
-		  // Parte de la interfaz Lox.Ast.IExprVisitor.
-		  
-		  
+		  resolve expr.Value
+		  resolveLocal expr, expr.Name
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Binary) As Variant
-		  // Parte de la interfaz Lox.Ast.IExprVisitor.
-		  
-		  
+		  resolve expr.Left
+		  resolve expr.Right
 		End Function
 	#tag EndMethod
 
@@ -94,9 +114,11 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.CallExpr) As Variant
-		  // Parte de la interfaz Lox.Ast.IExprVisitor.
+		  resolve expr.Callee
 		  
-		  
+		  For Each arg As Lox.Ast.Expr In expr.Arguments
+		    resolve arg
+		  Next
 		End Function
 	#tag EndMethod
 
@@ -110,17 +132,16 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Expression) As Variant
-		  // Parte de la interfaz Lox.Ast.IStmtVisitor.
-		  
-		  
+		  resolve stmt.Expression
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
-		  // Parte de la interfaz Lox.Ast.IStmtVisitor.
+		  declare_ stmt.Name
+		  define stmt.Name
 		  
-		  
+		  resolveFunction stmt, FunctionType.FUNC
 		End Function
 	#tag EndMethod
 
@@ -134,17 +155,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Grouping) As Variant
-		  // Parte de la interfaz Lox.Ast.IExprVisitor.
-		  
-		  
+		  resolve expr.Expression
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
-		  // Parte de la interfaz Lox.Ast.IStmtVisitor.
-		  
-		  
+		  resolve stmt.Condition
+		  resolve stmt.ThenBranch
+		  If Not (stmt.ElseBranch Is Nil ) Then resolve stmt.ElseBranch
 		End Function
 	#tag EndMethod
 
@@ -158,25 +177,24 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Logical) As Variant
-		  // Parte de la interfaz Lox.Ast.IExprVisitor.
-		  
-		  
+		  resolve expr.Left
+		  resolve expr.Right
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Print) As Variant
-		  // Parte de la interfaz Lox.Ast.IStmtVisitor.
-		  
-		  
+		  resolve stmt.Expression
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ReturnStmt) As Variant
-		  // Parte de la interfaz Lox.Ast.IStmtVisitor.
+		  If mCurrentFunction= FunctionType.NONE Then
+		    Error stmt.Keyword, "Can't return from top-level code."
+		  End If
 		  
-		  
+		  If Not (stmt.Value Is Nil) Then resolve stmt.Value
 		End Function
 	#tag EndMethod
 
@@ -206,9 +224,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Unary) As Variant
-		  // Parte de la interfaz Lox.Ast.IExprVisitor.
-		  
-		  
+		  resolve expr.Right
 		End Function
 	#tag EndMethod
 
@@ -217,7 +233,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  If mScopes.Ubound> -1 Then
 		    Dim scope As Dictionary= mScopes(0)
 		    If scope.Value(expr.Name.Lexeme).BooleanValue= False Then
-		      'Lox.Error expr.Name, "Can't read local variable in its own initializer."
+		      Error expr.Name, "Can't read local variable in its own initializer."
 		    End If
 		  End If
 		  
@@ -235,12 +251,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
-		  // Parte de la interfaz Lox.Ast.IStmtVisitor.
-		  
-		  
+		  resolve stmt.Condition
+		  resolve stmt.Body
 		End Function
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h21
+		Private mCurrentFunction As FunctionType
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private mInterpreter As Interpreter
@@ -249,6 +268,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Property, Flags = &h21
 		Private mScopes() As Dictionary
 	#tag EndProperty
+
+
+	#tag Enum, Name = FunctionType, Type = Integer, Flags = &h21
+		NONE
+		FUNC
+	#tag EndEnum
 
 
 	#tag ViewBehavior

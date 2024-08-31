@@ -30,6 +30,24 @@ Protected Module Lox
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Sub Error(token As Token, message As String)
+		  If token.TypeToken= TokenType.EOF Then
+		    Report token.Line, " at end", message
+		  Else
+		    Report token.Line, " at '"+ token.Lexeme+ "'", message
+		  End If
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function Error(token As Token, message As String) As ParseError
+		  Error token, message
+		  
+		  Return New ParseError
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function IIf(stmt As Boolean, ifTrue As TokenType, ifFalse As TokenType) As TokenType
 		  If stmt Then Return ifTrue Else Return ifFalse
@@ -180,7 +198,7 @@ Protected Module Lox
 		    Return obj.DateValue.SQLDateTime
 		  Case 8, 11, 16
 		    Return obj.StringValue
-		  Case 9 // obj 
+		  Case 9 // obj
 		    Dim ti As Introspection.TypeInfo= Introspection.GetType(obj)
 		    Dim methods() As Introspection.MethodInfo= ti.GetMethods
 		    For Each method As Introspection.MethodInfo In methods
@@ -219,6 +237,10 @@ Protected Module Lox
 	#tag Property, Flags = &h21
 		Private mInterpreter As Lox.Inter.Interpreter
 	#tag EndProperty
+
+
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240831", Scope = Public
+	#tag EndConstant
 
 
 	#tag Enum, Name = TokenType, Type = Integer, Flags = &h1

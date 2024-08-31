@@ -137,24 +137,6 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub Error(token As Token, message As String)
-		  If token.TypeToken= TokenType.EOF Then
-		    Report token.Line, " at end", message
-		  Else
-		    Report token.Line, " at '"+ token.Lexeme+ "'", message
-		  End If
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function Error(token As Token, message As String) As ParseError
-		  Error token, message
-		  
-		  Return New ParseError
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
 		Private Function expression() As Lox.Ast.Expr
 		  Return assignment
 		End Function
