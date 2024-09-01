@@ -11,7 +11,7 @@ Protected Class Token
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  Return TypeToken.ToString+ " "+ Lexeme+ " "+ Literal.ToString
+		  Return TypeToken.ToString+ " "+ Lexeme+ " "+ Literal.ToStringLox
 		End Function
 	#tag EndMethod
 

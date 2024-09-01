@@ -8,7 +8,7 @@ A dynamic typing, automatic memory management, 'first class' functions and objec
 [The Lox Language](https://craftinginterpreters.com/the-lox-language.html)
 
 Example:
-```fsharp
+```cpp
 // Your first Lox program!
 print "Hello, world!";
 

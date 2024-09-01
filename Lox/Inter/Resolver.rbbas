@@ -126,7 +126,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
 		  Dim enclosingClass As ClassType= mCurrentClass
-		  enclosingClass= ClassType.CLASS_
+		  mCurrentClass= ClassType.CLASS_
 		  
 		  declare_ stmt.Name
 		  define stmt.Name

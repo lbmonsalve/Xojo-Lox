@@ -244,7 +244,7 @@ Protected Module Lox
 	#tag EndProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240831", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240901", Scope = Public
 	#tag EndConstant
 
 
