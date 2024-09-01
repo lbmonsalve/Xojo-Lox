@@ -11,7 +11,7 @@ Implements ICallable
 		Function Bind(instance As LoxInstance) As LoxFunction
 		  Dim env As Environment= New Environment(mClosure)
 		  env.Define "this", instance
-		  Return New LoxFunction(mDeclaration, env)
+		  Return New LoxFunction(mDeclaration, env, mIsInitializer)
 		End Function
 	#tag EndMethod
 
@@ -26,15 +26,19 @@ Implements ICallable
 		  Try
 		    inter.ExecuteBlock(mDeclaration.Body, env)
 		  Catch exc As ReturnExc
+		    If mIsInitializer Then Return mClosure.GetAt(0, "this")
 		    Return exc.Value
 		  End Try
+		  
+		  If mIsInitializer Then Return mClosure.GetAt(0, "this")
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(declaration As Lox.Ast.FunctionStmt, closure As Environment)
+		Sub Constructor(declaration As Lox.Ast.FunctionStmt, closure As Environment, isInitializer As Boolean)
 		  mDeclaration= declaration
 		  mClosure= closure
+		  mIsInitializer= isInitializer
 		End Sub
 	#tag EndMethod
 
@@ -51,6 +55,10 @@ Implements ICallable
 
 	#tag Property, Flags = &h21
 		Private mDeclaration As Lox.Ast.FunctionStmt
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mIsInitializer As Boolean
 	#tag EndProperty
 
 

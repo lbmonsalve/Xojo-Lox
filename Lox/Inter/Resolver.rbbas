@@ -11,6 +11,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Sub Constructor(interp As Interpreter)
 		  mInterpreter= interp
 		  mCurrentFunction= FunctionType.NONE
+		  mCurrentClass= ClassType.NONE
 		End Sub
 	#tag EndMethod
 
@@ -124,6 +125,9 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
+		  Dim enclosingClass As ClassType= mCurrentClass
+		  enclosingClass= ClassType.CLASS_
+		  
 		  declare_ stmt.Name
 		  define stmt.Name
 		  
@@ -132,10 +136,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
 		    Dim declaration As FunctionType= FunctionType.METHOD
+		    If method.Name.Lexeme= "init" Then declaration= FunctionType.INITIALIZER
 		    resolveFunction method, declaration
 		  Next
 		  
 		  endScope
+		  
+		  mCurrentClass= enclosingClass
 		End Function
 	#tag EndMethod
 
@@ -199,7 +206,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Error stmt.Keyword, "Can't return from top-level code."
 		  End If
 		  
-		  If Not (stmt.Value Is Nil) Then resolve stmt.Value
+		  If Not (stmt.Value Is Nil) Then
+		    If mCurrentFunction= FunctionType.INITIALIZER Then
+		      Error stmt.Keyword, "Can't return a value from an initializer."
+		    End If
+		    
+		    resolve stmt.Value
+		  End If
 		End Function
 	#tag EndMethod
 
@@ -218,6 +231,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.This) As Variant
+		  If mCurrentClass= ClassType.NONE Then
+		    Error expr.Keyword, "Can't use 'this' outside of a class."
+		  End If
+		  
 		  resolveLocal expr, expr.Keyword
 		End Function
 	#tag EndMethod
@@ -259,6 +276,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 
 	#tag Property, Flags = &h21
+		Private mCurrentClass As ClassType
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mCurrentFunction As FunctionType
 	#tag EndProperty
 
@@ -271,9 +292,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndProperty
 
 
+	#tag Enum, Name = ClassType, Type = Integer, Flags = &h21
+		NONE
+		CLASS_
+	#tag EndEnum
+
 	#tag Enum, Name = FunctionType, Type = Integer, Flags = &h21
 		NONE
 		  FUNC
+		  INITIALIZER
 		METHOD
 	#tag EndEnum
 

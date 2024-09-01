@@ -17,6 +17,15 @@ Inherits ConsoleApplication
 
 
 	#tag Method, Flags = &h21
+		Private Function ChkExpression(line As String) As String
+		  Dim rightChar As String= line.Right(1)
+		  If rightChar= ";" Or rightChar= "}" Then Return line
+		  
+		  Return "print "+ line+ ";"
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function LoadFile(path As String) As String
 		  If path.Len= 0 Then Return ""
 		  
@@ -128,8 +137,8 @@ Inherits ConsoleApplication
 		        source= LoadFile(line.Mid(6).Trim)
 		      ElseIf multiLine Then
 		        source= source+ line+ EndOfLine
-		      Else
-		        run line
+		      Else // line:
+		        run ChkExpression(line)
 		        Lox.HadError= False
 		      End If
 		    End Select

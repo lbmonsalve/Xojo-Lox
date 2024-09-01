@@ -3,13 +3,22 @@ Protected Class LoxClass
 Implements ICallable
 	#tag Method, Flags = &h0
 		Function Arity() As Integer
-		  Return 0
+		  Dim initializer As LoxFunction= FindMethod("init")
+		  If initializer Is Nil Then Return 0
+		  
+		  Return initializer.Arity
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
 		  Dim instance As New LoxInstance(Self)
+		  
+		  Dim initializer As LoxFunction= FindMethod("init")
+		  If Not (initializer Is Nil) Then
+		    Call initializer.Bind(instance).Call_(inter, args)
+		  End If
+		  
 		  Return instance
 		End Function
 	#tag EndMethod

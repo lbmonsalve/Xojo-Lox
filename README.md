@@ -3,12 +3,12 @@ Lox language implementation in Xojo. Taken from the [Crafting Interpreters](http
 
 ## The Language
 
-A dynamic typing, automatic memory management, 'first class' funtions and object-oriented scripting language.
+A dynamic typing, automatic memory management, 'first class' functions and object-oriented scripting language.
 
 [The Lox Language](https://craftinginterpreters.com/the-lox-language.html)
 
 Example:
-```
+```lox
 // Your first Lox program!
 print "Hello, world!";
 
@@ -70,7 +70,7 @@ breakfast.bread = "sourdough";
 
 [grammar](https://craftinginterpreters.com/appendix-i.html)
 
-```
+```antlr
 // syntax grammar:
 program        → declaration* EOF ;
 
