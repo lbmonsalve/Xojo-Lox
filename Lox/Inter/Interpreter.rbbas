@@ -3,7 +3,7 @@ Protected Class Interpreter
 Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Sub CheckNumberOperand(operator As Lox.Token, operand As Variant)
-		  If operand.IsNumber Then Return
+		  If operand.IsNumberLox Then Return
 		  
 		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(operator, "Operand must be a number.")
@@ -117,7 +117,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Function Stringify(obj As Variant) As String
 		  If obj.IsNull Then Return "nil"
 		  
-		  Return obj.ToString
+		  Return obj.ToStringLox
 		End Function
 	#tag EndMethod
 
@@ -175,7 +175,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    If left.IsNumeric And right.IsNumeric Then
 		      Return left.DoubleValue+ right.DoubleValue
 		    End If
-		    If left.IsString And right.IsString Then
+		    If left.IsStringLox And right.IsStringLox Then
 		      Return left.StringValue+ right.StringValue
 		    End If
 		    
@@ -215,9 +215,9 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  Dim func As ICallable= ICallable(callee)
 		  
-		  If arguments.Count<> func.Arity Then
+		  If arguments.CountLox<> func.Arity Then
 		    Raise New RuntimeError(expr.Paren, "Expected "+ _
-		    Str(func.Arity)+ " arguments but got "+ Str(arguments.Count) + ".")
+		    Str(func.Arity)+ " arguments but got "+ Str(arguments.CountLox) + ".")
 		  End If
 		  
 		  
@@ -227,7 +227,16 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
+		  Env.Define(stmt.Name.Lexeme, Nil)
 		  
+		  Dim methods As New Dictionary
+		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
+		    Dim func As LoxFunction= New LoxFunction(method, Env)
+		    methods.Value(method.Name.Lexeme)= func
+		  Next
+		  
+		  Dim klass As New LoxClass(stmt.Name.Lexeme, methods)
+		  Env.Assign(stmt.Name, klass)
 		End Function
 	#tag EndMethod
 
@@ -246,7 +255,14 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Get) As Variant
+		  Dim obj As Variant= Evaluate(expr.Obj)
+		  If obj IsA LoxInstance Then
+		    Dim objInstance As LoxInstance= LoxInstance(obj)
+		    Return objInstance.Get(expr.Name)
+		  End If
 		  
+		  #pragma BreakOnExceptions Off
+		  Raise New RuntimeError(expr.Name, "Only instances have properties.")
 		End Function
 	#tag EndMethod
 
@@ -305,7 +321,18 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Set) As Variant
+		  Dim obj As Variant= Evaluate(expr.Obj)
 		  
+		  If Not (obj IsA LoxInstance) Then
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(expr.Name, "Only instances have fields.")
+		  End If
+		  
+		  Dim value As Variant= Evaluate(expr.Value)
+		  Dim objInstance As LoxInstance= LoxInstance(obj)
+		  objInstance.Set(expr.Name, value)
+		  
+		  Return value
 		End Function
 	#tag EndMethod
 

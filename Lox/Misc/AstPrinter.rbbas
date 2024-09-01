@@ -170,7 +170,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function Visit(expr As Lox.Ast.Literal) As Variant
 		  If expr.Value.IsNull Then Return "nil"
 		  
-		  Return expr.Value.ToString
+		  Return expr.Value.ToStringLox
 		End Function
 	#tag EndMethod
 

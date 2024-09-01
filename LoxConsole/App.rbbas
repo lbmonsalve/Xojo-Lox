@@ -92,7 +92,7 @@ Inherits ConsoleApplication
 		    #endif
 		    If line.Len= 0 Then Continue
 		    
-		    Select Case line
+		    Select Case line.Trim
 		    Case ".quit", ".q"
 		      Exit
 		    Case ".run", ".r"

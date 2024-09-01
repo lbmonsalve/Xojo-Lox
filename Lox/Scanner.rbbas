@@ -8,7 +8,7 @@ Protected Class Scanner
 
 	#tag Method, Flags = &h21
 		Private Sub AddToken(type As TokenType, literal As Variant)
-		  Dim text As String= mSource.Substring(mStart, mCurrent)
+		  Dim text As String= mSource.SubstringLox(mStart, mCurrent)
 		  mTokens.Append New Token(type, text, literal, mLine)
 		End Sub
 	#tag EndMethod
@@ -34,7 +34,7 @@ Protected Class Scanner
 		    Call Advance
 		  Wend
 		  
-		  Dim text As String= mSource.Substring(mStart, mCurrent)
+		  Dim text As String= mSource.SubstringLox(mStart, mCurrent)
 		  Dim type As TokenType= Keywords.Lookup(text, TokenType.IDENTIFIER)
 		  
 		  AddToken type
@@ -55,6 +55,31 @@ Protected Class Scanner
 		    Return True
 		  ElseIf cAsc>= &h00d8 And cAsc<= &h00f6 Then
 		    Return True
+		    
+		    // antlr4 https://github.com/antlr/grammars-v4/blob/master/antlr/antlr4/LexBasic.g4:
+		  ElseIf cAsc>= &h0370 And cAsc<= &h037d Then
+		    Return True
+		  ElseIf cAsc>= &h037f And cAsc<= &h1fff Then
+		    Return True
+		  ElseIf cAsc>= &h200c And cAsc<= &h200d Then
+		    Return True
+		  ElseIf cAsc>= &h2070 And cAsc<= &h218f Then
+		    Return True
+		  ElseIf cAsc>= &h2c00 And cAsc<= &h2fef Then
+		    Return True
+		  ElseIf cAsc>= &h3001 And cAsc<= &hd7ff Then
+		    Return True
+		  ElseIf cAsc>= &hf900 And cAsc<= &hfdcf Then
+		    Return True
+		  ElseIf cAsc>= &hfdf0 And cAsc<= &hfffd Then
+		    Return True
+		    // antlr4
+		    
+		    // emojis https://en.wikipedia.org/wiki/Emoticons_(Unicode_block)
+		  ElseIf cAsc>= &h1f600 And cAsc<= &h1f64f Then
+		    Return True
+		    // emojis
+		    
 		  End If
 		  
 		  Return False
@@ -115,9 +140,9 @@ Protected Class Scanner
 		  'Break
 		  
 		  #if TargetConsole And RBVersion< 2011.044 // chk: weird!
-		    Dim value As Double= mSource.Substring(mStart, mCurrent).Replace(".", ",").Val
+		    Dim value As Double= mSource.SubstringLox(mStart, mCurrent).Replace(".", ",").Val
 		  #else
-		    Dim value As Double= mSource.Substring(mStart, mCurrent).Val
+		    Dim value As Double= mSource.SubstringLox(mStart, mCurrent).Val
 		  #endif
 		  
 		  AddToken TokenType.NUMBER, value
@@ -249,14 +274,8 @@ Protected Class Scanner
 		  
 		  Call Advance
 		  
-		  AddToken TokenType.STRING_, mSource.Substring(mStart+ 1, mCurrent- 1)
+		  AddToken TokenType.STRING_, mSource.SubstringLox(mStart+ 1, mCurrent- 1)
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Tokens() As Token()
-		  Return mTokens
-		End Function
 	#tag EndMethod
 
 

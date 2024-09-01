@@ -124,7 +124,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
+		  declare_ stmt.Name
+		  define stmt.Name
 		  
+		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
+		    Dim declaration As FunctionType= FunctionType.METHOD
+		    resolveFunction method, declaration
+		  Next
 		End Function
 	#tag EndMethod
 
@@ -145,7 +151,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Get) As Variant
-		  
+		  resolve expr.Obj
 		End Function
 	#tag EndMethod
 
@@ -194,7 +200,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Set) As Variant
-		  
+		  resolve expr.Value
+		  resolve expr.Obj
 		End Function
 	#tag EndMethod
 
@@ -261,7 +268,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Enum, Name = FunctionType, Type = Integer, Flags = &h21
 		NONE
-		FUNC
+		  FUNC
+		METHOD
 	#tag EndEnum
 
 

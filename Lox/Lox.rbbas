@@ -19,7 +19,7 @@ Protected Module Lox
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Count(Extends obj() As Variant) As Integer
+		Function CountLox(Extends obj() As Variant) As Integer
 		  Return obj.Ubound+ 1
 		End Function
 	#tag EndMethod
@@ -55,7 +55,7 @@ Protected Module Lox
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function IsNumber(Extends vart As Variant) As Boolean
+		Function IsNumberLox(Extends vart As Variant) As Boolean
 		  Select Case vart.Type
 		  Case 2, 3, 4, 5, 6
 		    Return True
@@ -66,7 +66,7 @@ Protected Module Lox
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function IsString(Extends vart As Variant) As Boolean
+		Function IsStringLox(Extends vart As Variant) As Boolean
 		  Select Case vart.Type
 		  Case 8, 11, 16
 		    Return True
@@ -80,7 +80,7 @@ Protected Module Lox
 		Private Sub Report(line As Integer, where As String, message As String)
 		  Dim txt As String= "[line "+ Str(line)+ "] error"+ where+ ": "+ message
 		  
-		  // TODO: add logging system 
+		  // TODO: add logging system
 		  System.DebugLog CurrentMethodName+ " "+ txt
 		  StdErr.WriteLine txt
 		  
@@ -96,7 +96,7 @@ Protected Module Lox
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Substring(Extends obj As String, startIndex As Integer, endIndex As Integer) As String
+		Function SubstringLox(Extends obj As String, startIndex As Integer, endIndex As Integer) As String
 		  Return obj.Mid(startIndex, endIndex- startIndex)
 		End Function
 	#tag EndMethod
@@ -189,7 +189,7 @@ Protected Module Lox
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function ToString(Extends obj As Variant) As String
+		Function ToStringLox(Extends obj As Variant) As String
 		  Select Case obj.Type
 		  Case 0
 		    Return ""
@@ -203,7 +203,11 @@ Protected Module Lox
 		    Dim ti As Introspection.TypeInfo= Introspection.GetType(obj)
 		    Dim methods() As Introspection.MethodInfo= ti.GetMethods
 		    For Each method As Introspection.MethodInfo In methods
-		      If method.Name.Lowercase= "tostring" Then
+		      If method.ReturnType Is Nil Then Continue
+		      Dim mathodParams() As Introspection.ParameterInfo= method.GetParameters
+		      If method.Name.Lowercase= "tostring" And _
+		        method.ReturnType.Name.Lowercase= "string" And _
+		        mathodParams.Ubound= -1 Then
 		        Dim params() As Variant
 		        Return method.Invoke(obj, params)
 		      End If

@@ -33,6 +33,9 @@ Protected Class Parser
 		      Dim name As Token= Lox.Ast.Variable(expr).Name
 		      
 		      Return New Lox.Ast.Assign(name, value)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -63,6 +66,9 @@ Protected Class Parser
 		  While True
 		    If Match(TokenType.LEFT_PAREN) Then
 		      expr= finishCall(expr)
+		    ElseIf Match(TokenType.DOT) Then
+		      Dim name As Token= consume(TokenType.IDENTIFIER, "Expect property name after '.'.")
+		      expr= New Lox.Ast.Get(name, expr)
 		    Else
 		      Exit
 		    End If
@@ -77,6 +83,22 @@ Protected Class Parser
 		  If IsAtEnd Then Return False
 		  
 		  Return Peek.TypeToken= type
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function classDeclaration() As Lox.Ast.Stmt
+		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect class name.")
+		  Call consume TokenType.LEFT_BRACE, "Expect '{' before class body."
+		  
+		  Dim methods() As Lox.Ast.FunctionStmt
+		  While Not Check(TokenType.RIGHT_BRACE) And Not IsAtEnd
+		    methods.Append function_("method")
+		  Wend
+		  
+		  Call consume TokenType.RIGHT_BRACE, "Expect '}' after class body."
+		  
+		  Return New Lox.Ast.ClassStmt(name, Nil, methods)
 		End Function
 	#tag EndMethod
 
@@ -112,6 +134,7 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function declaration() As Lox.Ast.Stmt
 		  Try
+		    If Match(TokenType.CLASS_) Then Return classDeclaration
 		    If Match(TokenType.FUN) Then Return function_("function")
 		    If Match(TokenType.VAR_) Then Return varDeclaration
 		    
