@@ -347,9 +347,10 @@ Protected Class Parser
 		  If Match(TokenType.FALSE_) Then Return New Lox.Ast.Literal(False)
 		  If Match(TokenType.TRUE_) Then Return New Lox.Ast.Literal(True)
 		  If Match(TokenType.NIL_) Then Return New Lox.Ast.Literal(Nil)
+		  If Match(TokenType.THIS) Then Return New Lox.Ast.This(Previous)
 		  
 		  If Match(TokenType.NUMBER, TokenType.STRING_) Then Return New Lox.Ast.Literal(previous.Literal)
-		  
+		  // TODO: match STRING
 		  If Match(TokenType.IDENTIFIER) Then Return New Lox.Ast.Variable(Previous)
 		  
 		  If Match(TokenType.LEFT_PAREN) Then

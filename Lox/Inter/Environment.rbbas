@@ -14,13 +14,11 @@ Protected Class Environment
 		Sub Assign(name As Lox.Token, value As Variant)
 		  If Values.HasKey(name.Lexeme) Then
 		    Values.Value(name.Lexeme)= value
-		    
 		    Return
 		  End If
 		  
 		  If Not (Enclosing Is Nil) Then
 		    Enclosing.Assign name, value
-		    
 		    Return
 		  End If
 		  
@@ -66,6 +64,12 @@ Protected Class Environment
 
 	#tag Method, Flags = &h0
 		Function GetAt(distance As Integer, name As String) As Variant
+		  'Dim dict As Dictionary= Ancestor(distance).Values
+		  'Dim keys() As Variant= dict.Keys
+		  'If dict.HasKey(name) Then
+		  'Break
+		  'End If
+		  
 		  Return Ancestor(distance).Values.Value(name)
 		End Function
 	#tag EndMethod

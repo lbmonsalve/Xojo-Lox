@@ -18,7 +18,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Sub declare_(name As Lox.Token)
 		  If mScopes.Ubound= -1 Then Return
 		  
-		  Dim scope As Dictionary= mScopes(0)
+		  Dim scope As Dictionary= mScopes(mScopes.Ubound)
 		  If scope.HasKey(name.Lexeme) Then
 		    Error name, "Already a variable with this name in this scope."
 		  End If
@@ -30,7 +30,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Sub define(name As Lox.Token)
 		  If mScopes.Ubound= -1 Then Return
-		  Dim scope As Dictionary= mScopes(0)
+		  Dim scope As Dictionary= mScopes(mScopes.Ubound)
 		  scope.Value(name.Lexeme)= True
 		End Sub
 	#tag EndMethod
@@ -127,10 +127,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  declare_ stmt.Name
 		  define stmt.Name
 		  
+		  beginScope
+		  mScopes(mScopes.Ubound).Value("this")= True
+		  
 		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
 		    Dim declaration As FunctionType= FunctionType.METHOD
 		    resolveFunction method, declaration
 		  Next
+		  
+		  endScope
 		End Function
 	#tag EndMethod
 
@@ -213,7 +218,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.This) As Variant
-		  
+		  resolveLocal expr, expr.Keyword
 		End Function
 	#tag EndMethod
 
@@ -226,7 +231,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Variable) As Variant
 		  If mScopes.Ubound> -1 Then
-		    Dim scope As Dictionary= mScopes(0)
+		    Dim scope As Dictionary= mScopes(mScopes.Ubound)
 		    If scope.HasKey(expr.Name.Lexeme) And _
 		      scope.Value(expr.Name.Lexeme).BooleanValue= False Then
 		      Error expr.Name, "Can't read local variable in its own initializer."

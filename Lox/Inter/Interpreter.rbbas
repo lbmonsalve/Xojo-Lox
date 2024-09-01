@@ -39,16 +39,16 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Sub ExecuteBlock(statements() As Lox.Ast.Stmt, env As Environment)
-		  Dim previous As Environment= Self.Env
+		  Dim previous As Environment= mEnvironment
 		  
 		  Try
-		    Self.Env= env
+		    mEnvironment= env
 		    
 		    For Each statement As Lox.Ast.Stmt In statements
 		      execute statement
 		    Next
 		  Finally
-		    Self.Env= previous
+		    mEnvironment= previous
 		  End Try
 		End Sub
 	#tag EndMethod
@@ -89,7 +89,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Function lookUpVariable(name As Token, expr As Lox.Ast.Expr) As Variant
 		  If mLocals.HasKey(expr) Then
 		    Dim distance As Integer= mLocals.Value(expr).IntegerValue
-		    Return Env.GetAt(distance, name.Lexeme)
+		    Return mEnvironment.GetAt(distance, name.Lexeme)
 		  Else
 		    Return Globals.Get(name)
 		  End If
@@ -101,7 +101,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mGlobals= New Environment
 		  mGlobals.Define("clock", New LoxClock)
 		  
-		  mEnv= mGlobals
+		  mEnvironment= mGlobals
 		  
 		  mLocals= New Dictionary
 		End Sub
@@ -127,7 +127,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  If mLocals.HasKey(expr) Then
 		    Dim distance As Integer= mLocals.Value(expr).IntegerValue
-		    Env.AssignAt(distance, expr.Name, value)
+		    mEnvironment.AssignAt(distance, expr.Name, value)
 		  Else
 		    Globals.Assign(expr.Name, value)
 		  End If
@@ -196,7 +196,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Block) As Variant
-		  ExecuteBlock stmt.Statements, New Environment(Env)
+		  ExecuteBlock stmt.Statements, New Environment(mEnvironment)
 		End Function
 	#tag EndMethod
 
@@ -227,16 +227,16 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
-		  Env.Define(stmt.Name.Lexeme, Nil)
+		  mEnvironment.Define(stmt.Name.Lexeme, Nil)
 		  
 		  Dim methods As New Dictionary
 		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
-		    Dim func As LoxFunction= New LoxFunction(method, Env)
+		    Dim func As LoxFunction= New LoxFunction(method, mEnvironment)
 		    methods.Value(method.Name.Lexeme)= func
 		  Next
 		  
 		  Dim klass As New LoxClass(stmt.Name.Lexeme, methods)
-		  Env.Assign(stmt.Name, klass)
+		  mEnvironment.Assign(stmt.Name, klass)
 		End Function
 	#tag EndMethod
 
@@ -248,8 +248,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
-		  Dim func As New LoxFunction(stmt, mEnv)
-		  Env.Define(stmt.Name.Lexeme, func)
+		  Dim func As New LoxFunction(stmt, mEnvironment)
+		  mEnvironment.Define(stmt.Name.Lexeme, func)
 		End Function
 	#tag EndMethod
 
@@ -344,7 +344,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.This) As Variant
-		  
+		  Return lookUpVariable(expr.Keyword, expr)
 		End Function
 	#tag EndMethod
 
@@ -378,7 +378,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    value= Evaluate(stmt.Initializer)
 		  End If
 		  
-		  Env.Define stmt.Name.Lexeme, value
+		  mEnvironment.Define stmt.Name.Lexeme, value
 		End Function
 	#tag EndMethod
 
@@ -394,15 +394,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  return mEnv
+			  return mEnvironment
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
-			  mEnv= value
+			  mEnvironment= value
 			End Set
 		#tag EndSetter
-		Env As Environment
+		Environment As Environment
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -415,7 +415,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private mEnv As Environment
+		Private mEnvironment As Environment
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

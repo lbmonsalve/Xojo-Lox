@@ -8,6 +8,14 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Bind(instance As LoxInstance) As LoxFunction
+		  Dim env As Environment= New Environment(mClosure)
+		  env.Define "this", instance
+		  Return New LoxFunction(mDeclaration, env)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
 		  Dim env As New Environment(mClosure)
 		  

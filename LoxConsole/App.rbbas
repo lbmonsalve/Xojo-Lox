@@ -3,14 +3,13 @@ Protected Class App
 Inherits ConsoleApplication
 	#tag Event
 		Function Run(args() as String) As Integer
-		  // CommandLineArgs: ..\Examples\precedence.lox
-		  
 		  If args.Ubound> 1 Then
-		    Print "Usage: lox [script]"
+		    Print "Usage: "+ ExecutableFile.DisplayName+ " [script]"
 		    Quit 64
 		  ElseIf args.Ubound= 1 Then
 		    RunFile args(1)
 		  Else
+		    PrintWelcome
 		    RunPrompt
 		  End If
 		End Function
@@ -40,6 +39,16 @@ Inherits ConsoleApplication
 		    If line.Len= 0 Then line= " " //+ EndOfLine
 		    StdOut.WriteLine line
 		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub PrintWelcome()
+		  Dim msg As String= ExecutableFile.DisplayName+ " "+ _
+		  Str(MajorVersion)+ "."+ Str(MinorVersion)+ "."+ Str(BugVersion)+ _
+		  " | type .help for more information"
+		  
+		  Print msg
 		End Sub
 	#tag EndMethod
 
@@ -107,7 +116,7 @@ Inherits ConsoleApplication
 		      Lox.Interpreter.Reset
 		    Case ".help"
 		      PrintText kHelp
-		    Case ".source"
+		    Case ".buffer"
 		      PrintText source
 		    Case ".clear"
 		      source= ""
@@ -145,7 +154,7 @@ Inherits ConsoleApplication
 	#tag EndMethod
 
 
-	#tag Constant, Name = kHelp, Type = String, Dynamic = False, Default = \"Commands and special keys:\r\r  .multi\tenable multi-line\r\r  .run\t\trun multi-line buffer (or .r)\r\r  .reset\tREPL to default\r\r  .source\tshows multi-line buffer\r\r  .clear\tclear multi-line buffer\r\r  .load\t\tload file to buffer >.load file/to/load.lox\r\r  .save\t\tsave buffer to file >.save file/to/save.lox\r\r  .help\t\tthis info\r\r  .ver\t\tshows core version (or .version)\r\r  .quit\t\tquit (or .q)\r", Scope = Private
+	#tag Constant, Name = kHelp, Type = String, Dynamic = False, Default = \"Lox language implementation in Xojo (https://github.com/lbmonsalve/Xojo-Lox)\rTaken from the (http://craftinginterpreters.com/) Book.\r\rCommands:\r\r  .multi\tenable multi-line\r  .run\t\trun multi-line buffer (or .r)\r  .reset\tREPL to default\r  .buffer\tshows multi-line buffer\r  .clear\tclear multi-line buffer\r  .load\t\tload file to buffer >.load file/to/load.lox\r  .save\t\tsave buffer to file >.save file/to/save.lox\r  .help\t\tthis info\r  .ver\t\tshows core language version (or .version)\r  .quit\t\tquit (or .q)\r\rLICENCE and COPYRIGHT on github site.\t\r", Scope = Private
 	#tag EndConstant
 
 

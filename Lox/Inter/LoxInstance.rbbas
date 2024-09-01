@@ -14,7 +14,7 @@ Protected Class LoxInstance
 		  End If
 		  
 		  Dim method As LoxFunction= mClass.FindMethod(name.Lexeme)
-		  If Not (method Is Nil) Then Return method
+		  If Not (method Is Nil) Then Return method.Bind(Self)
 		  
 		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(name, "Undefined property '" + name.lexeme + "'.")
