@@ -89,6 +89,13 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function classDeclaration() As Lox.Ast.Stmt
 		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect class name.")
+		  
+		  Dim superClass As Lox.Ast.Variable
+		  If Match(TokenType.LESS) Then
+		    Call consume TokenType.IDENTIFIER, "Expect superclass name."
+		    superClass= New Lox.Ast.Variable(Previous)
+		  End If
+		  
 		  Call consume TokenType.LEFT_BRACE, "Expect '{' before class body."
 		  
 		  Dim methods() As Lox.Ast.FunctionStmt
@@ -98,7 +105,7 @@ Protected Class Parser
 		  
 		  Call consume TokenType.RIGHT_BRACE, "Expect '}' after class body."
 		  
-		  Return New Lox.Ast.ClassStmt(name, Nil, methods)
+		  Return New Lox.Ast.ClassStmt(name, superClass, methods)
 		End Function
 	#tag EndMethod
 
@@ -107,7 +114,7 @@ Protected Class Parser
 		  Dim expr As Lox.Ast.Expr= term
 		  
 		  While Match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL)
-		    Dim operator As Token= previous
+		    Dim operator As Token= Previous
 		    Dim right As Lox.Ast.Expr= term
 		    expr= New Lox.Ast.Binary(expr, operator, right)
 		  Wend
@@ -151,7 +158,7 @@ Protected Class Parser
 		  Dim expr As Lox.Ast.Expr= comparison
 		  
 		  While Match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL)
-		    Dim operator As Token= previous
+		    Dim operator As Token= Previous
 		    Dim right As Lox.Ast.Expr= comparison
 		    expr= New Lox.Ast.Binary(expr, operator, right)
 		  Wend
@@ -180,7 +187,7 @@ Protected Class Parser
 		  Dim expr As Lox.Ast.Expr= unary
 		  
 		  While Match(TokenType.SLASH, TokenType.STAR)
-		    Dim operator As Token= previous
+		    Dim operator As Token= Previous
 		    Dim right As Lox.Ast.Expr= unary
 		    expr= New Lox.Ast.Binary(expr, operator, right)
 		  Wend
@@ -349,7 +356,7 @@ Protected Class Parser
 		  If Match(TokenType.NIL_) Then Return New Lox.Ast.Literal(Nil)
 		  If Match(TokenType.THIS) Then Return New Lox.Ast.This(Previous)
 		  
-		  If Match(TokenType.NUMBER, TokenType.STRING_) Then Return New Lox.Ast.Literal(previous.Literal)
+		  If Match(TokenType.NUMBER, TokenType.STRING_) Then Return New Lox.Ast.Literal(Previous.Literal)
 		  // TODO: match STRING
 		  If Match(TokenType.IDENTIFIER) Then Return New Lox.Ast.Variable(Previous)
 		  
@@ -357,6 +364,13 @@ Protected Class Parser
 		    Dim expr As Lox.Ast.Expr= expression
 		    Call consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
 		    Return New Lox.Ast.Grouping(expr)
+		  End If
+		  
+		  If Match(TokenType.SUPER_) Then
+		    Dim keyword As Token= Previous
+		    Call consume TokenType.DOT, "Expect '.' after 'super'."
+		    Dim method As Token= consume(TokenType.IDENTIFIER, "Expect superclass method name.")
+		    Return New Lox.Ast.SuperExpr(keyword, method)
 		  End If
 		  
 		  #pragma BreakOnExceptions Off
@@ -422,7 +436,7 @@ Protected Class Parser
 		  Dim expr As Lox.Ast.Expr= factor
 		  
 		  While Match(TokenType.MINUS, TokenType.PLUS)
-		    Dim operator As Token= previous
+		    Dim operator As Token= Previous
 		    Dim right As Lox.Ast.Expr= factor
 		    expr= New Lox.Ast.Binary(expr, operator, right)
 		  Wend
@@ -434,7 +448,7 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function unary() As Lox.Ast.Expr
 		  If Match(TokenType.BANG, TokenType.MINUS) Then
-		    Dim operator As Token= previous
+		    Dim operator As Token= Previous
 		    Dim right As Lox.Ast.Expr= unary
 		    Return New Lox.Ast.Unary(operator, right)
 		  End If

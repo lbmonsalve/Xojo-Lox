@@ -24,8 +24,9 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(name As String, methods As Dictionary)
+		Sub Constructor(name As String, superClass As LoxClass, methods As Dictionary)
 		  Self.Name= name
+		  Self.SuperClass= superClass
 		  mMethods= methods
 		End Sub
 	#tag EndMethod
@@ -33,6 +34,7 @@ Implements ICallable
 	#tag Method, Flags = &h0
 		Function FindMethod(name As String) As LoxFunction
 		  If mMethods.HasKey(name) Then Return mMethods.Value(name)
+		  If Not (SuperClass Is Nil) Then Return SuperClass.FindMethod(name)
 		End Function
 	#tag EndMethod
 
@@ -49,6 +51,10 @@ Implements ICallable
 
 	#tag Property, Flags = &h0
 		Name As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		SuperClass As LoxClass
 	#tag EndProperty
 
 

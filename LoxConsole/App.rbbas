@@ -3,14 +3,14 @@ Protected Class App
 Inherits ConsoleApplication
 	#tag Event
 		Function Run(args() as String) As Integer
-		  If args.Ubound> 1 Then
-		    Print "Usage: "+ ExecutableFile.DisplayName+ " [script]"
-		    Quit 64
+		  If args.Ubound= 0 Then
+		    PrintWelcome
+		    RunPrompt
 		  ElseIf args.Ubound= 1 Then
 		    RunFile args(1)
 		  Else
-		    PrintWelcome
-		    RunPrompt
+		    Print "Usage: "+ ExecutableFile.DisplayName+ " [script]"
+		    Quit 64
 		  End If
 		End Function
 	#tag EndEvent

@@ -8,7 +8,7 @@ A dynamic typing, automatic memory management, 'first class' functions and objec
 [The Lox Language](https://craftinginterpreters.com/the-lox-language.html)
 
 Example:
-```lox
+```fsharp
 // Your first Lox program!
 print "Hello, world!";
 
@@ -80,7 +80,8 @@ declaration    → classDecl
                | varDecl
                | statement ;
 
-classDecl      → "class" IDENTIFIER "{" function* "}" ;
+classDecl      → "class" IDENTIFIER ( "<" IDENTIFIER )?
+                 "{" function* "}" ;
 funDecl        → "fun" function ;
 varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
 

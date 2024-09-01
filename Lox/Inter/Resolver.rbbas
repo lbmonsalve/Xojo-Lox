@@ -131,6 +131,21 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  declare_ stmt.Name
 		  define stmt.Name
 		  
+		  If Not (stmt.SuperClass Is Nil) And _
+		    stmt.Name.Lexeme= stmt.SuperClass.Name.Lexeme Then
+		    Error stmt.SuperClass.Name, "A class can't inherit from itself."
+		  End If
+		  
+		  If Not (stmt.SuperClass Is Nil) Then
+		    mCurrentClass= ClassType.SUBCLASS
+		    resolve(stmt.SuperClass)
+		  End If
+		  
+		  If Not (stmt.SuperClass Is Nil) Then
+		    beginScope
+		    mScopes(mScopes.Ubound).Value("super")= True
+		  End If
+		  
 		  beginScope
 		  mScopes(mScopes.Ubound).Value("this")= True
 		  
@@ -141,6 +156,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Next
 		  
 		  endScope
+		  
+		  If Not (stmt.SuperClass Is Nil) Then endScope
 		  
 		  mCurrentClass= enclosingClass
 		End Function
@@ -225,7 +242,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
+		  If mCurrentClass= ClassType.NONE Then
+		    Error expr.Keyword, "Can't use 'super' outside of a class."
+		  ElseIf mCurrentClass<> ClassType.SUBCLASS Then
+		    Error expr.Keyword, "Can't use 'super' in a class with no superclass."
+		  End If
 		  
+		  resolveLocal expr, expr.Keyword
 		End Function
 	#tag EndMethod
 
@@ -294,7 +317,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Enum, Name = ClassType, Type = Integer, Flags = &h21
 		NONE
-		CLASS_
+		  CLASS_
+		SUBCLASS
 	#tag EndEnum
 
 	#tag Enum, Name = FunctionType, Type = Integer, Flags = &h21

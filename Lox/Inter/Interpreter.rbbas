@@ -227,7 +227,21 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
+		  Dim superclass As Variant
+		  IF Not (stmt.SuperClass Is Nil) THEN
+		    superclass= Evaluate(stmt.SuperClass)
+		    If Not (superclass ISA LoxClass) Then
+		      #pragma BreakOnExceptions Off
+		      Raise New RuntimeError(stmt.Superclass.Name, "Superclass must be a class.")
+		    End If
+		  END IF
+		  
 		  mEnvironment.Define(stmt.Name.Lexeme, Nil)
+		  
+		  If Not (stmt.SuperClass Is Nil) Then
+		    mEnvironment= New Environment(mEnvironment)
+		    mEnvironment.Define "super", superclass
+		  End If
 		  
 		  Dim methods As New Dictionary
 		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
@@ -236,7 +250,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    methods.Value(method.Name.Lexeme)= func
 		  Next
 		  
-		  Dim klass As New LoxClass(stmt.Name.Lexeme, methods)
+		  Dim klass As New LoxClass(stmt.Name.Lexeme, LoxClass(superClass), methods)
+		  
+		  If Not (superclass Is Nil) Then mEnvironment= mEnvironment.Enclosing
+		  
 		  mEnvironment.Assign(stmt.Name, klass)
 		End Function
 	#tag EndMethod
@@ -339,7 +356,17 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
+		  Dim distance As Integer= mLocals.Value(expr)
+		  Dim superClass As LoxClass= LoxClass(mEnvironment.GetAt(distance, "super"))
+		  Dim obj As LoxInstance= LoxInstance(mEnvironment.GetAt(distance- 1, "this"))
+		  Dim method As LoxFunction= superClass.FindMethod(expr.Method.Lexeme)
 		  
+		  If method Is Nil Then
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(expr.Method, "Undefined property '" + expr.Method.Lexeme + "'.")
+		  End If
+		  
+		  Return method.Bind(obj)
 		End Function
 	#tag EndMethod
 
