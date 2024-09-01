@@ -55,7 +55,7 @@ Inherits ConsoleApplication
 		Private Sub PrintWelcome()
 		  Dim msg As String= ExecutableFile.DisplayName+ " "+ _
 		  Str(MajorVersion)+ "."+ Str(MinorVersion)+ "."+ Str(BugVersion)+ _
-		  " | type .help for more information"
+		  " ("+ Lox.CommitHash+ ") type .help for more information"
 		  
 		  Print msg
 		End Sub

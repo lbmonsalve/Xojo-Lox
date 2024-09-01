@@ -228,7 +228,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
 		  Dim superclass As Variant
-		  IF Not (stmt.SuperClass Is Nil) THEN
+		  If Not (stmt.SuperClass Is Nil) THEN
 		    superclass= Evaluate(stmt.SuperClass)
 		    If Not (superclass ISA LoxClass) Then
 		      #pragma BreakOnExceptions Off

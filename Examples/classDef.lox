@@ -1,6 +1,0 @@
-class foo {
-  far() {
-    return "far";
-  }
-}
-print foo;

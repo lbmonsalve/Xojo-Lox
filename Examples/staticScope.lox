@@ -1,6 +1,0 @@
-var a="o";
-{
-  print a;
-  var a="i";
-  print a;
-}

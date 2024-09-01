@@ -244,6 +244,9 @@ Protected Module Lox
 	#tag EndProperty
 
 
+	#tag Constant, Name = CommitHash, Type = String, Dynamic = False, Default = \"6b99765", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240901", Scope = Public
 	#tag EndConstant
 

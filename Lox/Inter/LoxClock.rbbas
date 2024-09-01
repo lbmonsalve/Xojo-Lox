@@ -15,7 +15,7 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  Return "<native fn>"
+		  Return "Clock"
 		End Function
 	#tag EndMethod
 

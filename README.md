@@ -51,6 +51,11 @@ print identity(addPair)(1, 2); // Prints "3".
 
 // classes
 class Breakfast {
+  init(meat, bread) {
+    this.meat = meat;
+    this.bread = bread;
+  }
+
   cook() {
     print "Eggs a-fryin'!";
   }
@@ -60,11 +65,36 @@ class Breakfast {
   }
 }
 
+class Brunch < Breakfast {
+  drink() {
+    print "How about a Bloody Mary?";
+  }
+}
+
 // Store it in variables.
-var someVariable = Breakfast;
+var breakfast = Breakfast("saug", "sour");
+print breakfast; // "Breakfast instance".
 
 breakfast.meat = "sausage";
 breakfast.bread = "sourdough";
+
+breakfast.serve("Dear Reader");
+// "Enjoy your bacon and toast, Dear Reader."
+
+var benedict = Brunch("ham", "English muffin");
+benedict.serve("Noble Reader");
+benedict.drink();
+
+
+fun fib(n) {
+  if (n < 2) return n;
+  return fib(n - 1) + fib(n - 2); 
+}
+
+var before = clock();
+print fib(10);
+var after = clock();
+print after - before;
 
 ```
 
