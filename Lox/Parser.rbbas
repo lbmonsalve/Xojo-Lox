@@ -39,6 +39,7 @@ Protected Class Parser
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
+		    HadError= True
 		  End If
 		  
 		  Return expr
@@ -133,6 +134,7 @@ Protected Class Parser
 		Private Function consume(type As TokenType, message As String) As Token
 		  If Check(type) Then Return Advance
 		  
+		  HadError= True
 		  #pragma BreakOnExceptions Off
 		  Raise Error(Peek, message)
 		End Function
@@ -201,7 +203,10 @@ Protected Class Parser
 		  Dim arguments() As Lox.Ast.Expr
 		  If Not (check(TokenType.RIGHT_PAREN)) Then
 		    Do
-		      If arguments.Ubound>= 254 Then Error(Peek, "Can't have more than 255 arguments.")
+		      If arguments.Ubound>= 254 Then
+		        Error Peek, "Can't have more than 255 arguments."
+		        HadError= True
+		      End If
 		      arguments.Append expression
 		    Loop Until Not Match(TokenType.COMMA)
 		  End If
@@ -265,6 +270,7 @@ Protected Class Parser
 		    Do
 		      If parameters.Count>= 255 Then
 		        Error Peek, "Can't have more than 255 parameters."
+		        HadError= True
 		      End If
 		      
 		      parameters.Append consume(TokenType.IDENTIFIER, "Expect parameter name.")
@@ -373,6 +379,7 @@ Protected Class Parser
 		    Return New Lox.Ast.SuperExpr(keyword, method)
 		  End If
 		  
+		  HadError= True
 		  #pragma BreakOnExceptions Off
 		  Raise Error(Peek, "Expect expression.")
 		End Function
@@ -480,6 +487,10 @@ Protected Class Parser
 		End Function
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h0
+		HadError As Boolean
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private mCurrent As Integer

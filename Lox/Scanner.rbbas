@@ -248,6 +248,7 @@ Protected Class Scanner
 		      Identifier
 		    Else
 		      Error mLine, "Unexpected character."
+		      HadError= True
 		    End If
 		    
 		  End Select
@@ -269,6 +270,7 @@ Protected Class Scanner
 		  
 		  If IsAtEnd Then
 		    Error mLine, "Unterminated string."
+		    HadError= True
 		    Return
 		  End If
 		  
@@ -278,6 +280,10 @@ Protected Class Scanner
 		End Sub
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h0
+		HadError As Boolean
+	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h21
 		#tag Getter

@@ -86,8 +86,6 @@ Protected Module Lox
 		  Else
 		    ErrorOut.Write msg+ EndOfLine
 		  End If
-		  
-		  HadError= True
 		End Sub
 	#tag EndMethod
 
@@ -102,8 +100,6 @@ Protected Module Lox
 		  Else
 		    ErrorOut.Write msg+ EndOfLine
 		  End If
-		  
-		  HadRuntimeError= True
 		End Sub
 	#tag EndMethod
 
@@ -249,14 +245,6 @@ Protected Module Lox
 		#tag EndSetter
 		ErrorOut As Writeable
 	#tag EndComputedProperty
-
-	#tag Property, Flags = &h0
-		HadError As Boolean
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		HadRuntimeError As Boolean
-	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter

@@ -65,16 +65,27 @@ Inherits ConsoleApplication
 		Private Sub Run(source As String)
 		  Dim scanner As New Lox.Scanner(source)
 		  Dim tokens() As Lox.Token= scanner.Scan
+		  If scanner.HadError Then
+		    HadError= True
+		    Return
+		  End If
 		  
 		  Dim parser As New Lox.Parser(tokens)
 		  Dim statements() As Lox.Ast.Stmt= parser.Parse
-		  
-		  If Lox.HadError Then Return // Stop if there was a syntax error.
+		  If parser.HadError Then
+		    HadError= True
+		    Return
+		  End If
 		  
 		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
 		  resolver.Resolve(statements)
+		  If resolver.HadError Then
+		    HadError= True
+		    Return
+		  End If
 		  
 		  Lox.Interpreter.Interpret(statements)
+		  If Lox.Interpreter.HadRuntimeError Then HadRuntimeError= True
 		End Sub
 	#tag EndMethod
 
@@ -89,8 +100,8 @@ Inherits ConsoleApplication
 		    PrintText "Error ("+ Str(exc.ErrorNumber)+ ") loading "+ path
 		  End Try
 		  
-		  If Lox.HadError Then Quit(65)
-		  If Lox.HadRuntimeError Then Quit(70)
+		  If HadError Then Quit(65)
+		  If HadRuntimeError Then Quit(70)
 		End Sub
 	#tag EndMethod
 
@@ -115,7 +126,6 @@ Inherits ConsoleApplication
 		      Exit
 		    Case ".run", ".r"
 		      run source
-		      Lox.HadError= False
 		    Case ".version", ".ver"
 		      PrintText Lox.Version
 		    Case ".multi"
@@ -139,7 +149,6 @@ Inherits ConsoleApplication
 		        source= source+ line+ EndOfLine
 		      Else // line:
 		        run ChkExpression(line)
-		        Lox.HadError= False
 		      End If
 		    End Select
 		  Wend
@@ -161,6 +170,15 @@ Inherits ConsoleApplication
 		  End Try
 		End Sub
 	#tag EndMethod
+
+
+	#tag Property, Flags = &h21
+		Private HadError As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private HadRuntimeError As Boolean
+	#tag EndProperty
 
 
 	#tag Constant, Name = kHelp, Type = String, Dynamic = False, Default = \"Lox language implementation in Xojo (https://github.com/lbmonsalve/Xojo-Lox)\rTaken from the (http://craftinginterpreters.com/) Book.\r\rCommands:\r\r  .multi\tenable multi-line\r  .run\t\trun multi-line buffer (or .r)\r  .reset\tREPL to default\r  .buffer\tshows multi-line buffer\r  .clear\tclear multi-line buffer\r  .load\t\tload file to buffer >.load file/to/load.lox\r  .save\t\tsave buffer to file >.save file/to/save.lox\r  .help\t\tthis info\r  .ver\t\tshows core language version (or .version)\r  .quit\t\tquit (or .q)\r\rLICENCE and COPYRIGHT on github site.\t\r", Scope = Private

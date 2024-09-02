@@ -420,20 +420,22 @@ End
 #tag Events PushButton2
 	#tag Event
 		Sub Action()
-		  Lox.HadError= False
-		  
 		  Dim scanner As New Lox.Scanner(TextArea1.Text)
 		  Dim tokens() As Lox.Token= scanner.Scan
+		  If scanner.HadError Then Return
 		  
 		  Dim parser As New Lox.Parser(tokens)
 		  Dim statements() As Lox.Ast.Stmt= parser.Parse
-		  
-		  If Lox.HadError Then Return // Stop if there was a syntax error.
+		  If parser.HadError Then Return
 		  
 		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
 		  resolver.Resolve(statements)
+		  If resolver.HadError Then Return
 		  
 		  Lox.Interpreter.Interpret(statements)
+		  If Lox.Interpreter.HadRuntimeError Then
+		    'Break
+		  End If
 		  
 		  TextArea2.AppendText EndOfLine
 		End Sub
@@ -450,8 +452,6 @@ End
 #tag Events PushButton4
 	#tag Event
 		Sub Action()
-		  Lox.HadError= False
-		  
 		  Dim scanner As New Lox.Scanner(TextArea1.Text)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  

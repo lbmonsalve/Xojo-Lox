@@ -22,6 +22,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Dim scope As Dictionary= mScopes(mScopes.Ubound)
 		  If scope.HasKey(name.Lexeme) Then
 		    Error name, "Already a variable with this name in this scope."
+		    HadError= True
 		  End If
 		  
 		  scope.Value(name.Lexeme)= False
@@ -134,6 +135,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  If Not (stmt.SuperClass Is Nil) And _
 		    stmt.Name.Lexeme= stmt.SuperClass.Name.Lexeme Then
 		    Error stmt.SuperClass.Name, "A class can't inherit from itself."
+		    HadError= True
 		  End If
 		  
 		  If Not (stmt.SuperClass Is Nil) Then
@@ -221,11 +223,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function Visit(stmt As Lox.Ast.ReturnStmt) As Variant
 		  If mCurrentFunction= FunctionType.NONE Then
 		    Error stmt.Keyword, "Can't return from top-level code."
+		    HadError= True
 		  End If
 		  
 		  If Not (stmt.Value Is Nil) Then
 		    If mCurrentFunction= FunctionType.INITIALIZER Then
 		      Error stmt.Keyword, "Can't return a value from an initializer."
+		      HadError= True
 		    End If
 		    
 		    resolve stmt.Value
@@ -244,8 +248,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
 		  If mCurrentClass= ClassType.NONE Then
 		    Error expr.Keyword, "Can't use 'super' outside of a class."
+		    HadError= True
 		  ElseIf mCurrentClass<> ClassType.SUBCLASS Then
 		    Error expr.Keyword, "Can't use 'super' in a class with no superclass."
+		    HadError= True
 		  End If
 		  
 		  resolveLocal expr, expr.Keyword
@@ -256,6 +262,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function Visit(expr As Lox.Ast.This) As Variant
 		  If mCurrentClass= ClassType.NONE Then
 		    Error expr.Keyword, "Can't use 'this' outside of a class."
+		    HadError= True
 		  End If
 		  
 		  resolveLocal expr, expr.Keyword
@@ -275,6 +282,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    If scope.HasKey(expr.Name.Lexeme) And _
 		      scope.Value(expr.Name.Lexeme).BooleanValue= False Then
 		      Error expr.Name, "Can't read local variable in its own initializer."
+		      HadError= True
 		    End If
 		  End If
 		  
@@ -297,6 +305,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		End Function
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h0
+		HadError As Boolean
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private mCurrentClass As ClassType

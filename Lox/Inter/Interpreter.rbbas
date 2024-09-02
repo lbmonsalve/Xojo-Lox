@@ -5,6 +5,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Sub CheckNumberOperand(operator As Lox.Token, operand As Variant)
 		  If operand.IsNumberLox Then Return
 		  
+		  HadRuntimeError= True
 		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(operator, "Operand must be a number.")
 		End Sub
@@ -14,6 +15,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Sub CheckNumberOperands(operator As Lox.Token, left As Variant, right As Variant)
 		  If left.IsNumeric And right.IsNumeric Then Return
 		  
+		  HadRuntimeError= True
 		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(operator, "Operands must be numbers.")
 		End Sub
@@ -179,6 +181,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		      Return left.StringValue+ right.StringValue
 		    End If
 		    
+		    HadRuntimeError= True
 		    #pragma BreakOnExceptions Off
 		    Raise New RuntimeError(expr.Operator, "Operands must be two numbers or two strings.")
 		  Case TokenType.SLASH
@@ -209,13 +212,18 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    arguments.Append Evaluate(argument)
 		  Next
 		  
-		  #pragma BreakOnExceptions Off
-		  If Not (callee IsA ICallable) Then Raise New RuntimeError(expr.Paren, _
-		  "Can only call functions and classes.")
+		  If Not (callee IsA ICallable) Then
+		    HadRuntimeError= True
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(expr.Paren, _
+		    "Can only call functions and classes.")
+		  End If
 		  
 		  Dim func As ICallable= ICallable(callee)
 		  
 		  If arguments.CountLox<> func.Arity Then
+		    HadRuntimeError= True
+		    #pragma BreakOnExceptions Off
 		    Raise New RuntimeError(expr.Paren, "Expected "+ _
 		    Str(func.Arity)+ " arguments but got "+ Str(arguments.CountLox) + ".")
 		  End If
@@ -231,6 +239,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  If Not (stmt.SuperClass Is Nil) THEN
 		    superclass= Evaluate(stmt.SuperClass)
 		    If Not (superclass ISA LoxClass) Then
+		      HadRuntimeError= True
 		      #pragma BreakOnExceptions Off
 		      Raise New RuntimeError(stmt.Superclass.Name, "Superclass must be a class.")
 		    End If
@@ -279,6 +288,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return objInstance.Get(expr.Name)
 		  End If
 		  
+		  HadRuntimeError= True
 		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(expr.Name, "Only instances have properties.")
 		End Function
@@ -349,6 +359,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Dim obj As Variant= Evaluate(expr.Obj)
 		  
 		  If Not (obj IsA LoxInstance) Then
+		    HadRuntimeError= True
 		    #pragma BreakOnExceptions Off
 		    Raise New RuntimeError(expr.Name, "Only instances have fields.")
 		  End If
@@ -369,6 +380,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Dim method As LoxFunction= superClass.FindMethod(expr.Method.Lexeme)
 		  
 		  If method Is Nil Then
+		    HadRuntimeError= True
 		    #pragma BreakOnExceptions Off
 		    Raise New RuntimeError(expr.Method, "Undefined property '" + expr.Method.Lexeme + "'.")
 		  End If
@@ -448,6 +460,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		#tag EndGetter
 		Globals As Environment
 	#tag EndComputedProperty
+
+	#tag Property, Flags = &h0
+		HadRuntimeError As Boolean
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private mEnvironment As Environment
