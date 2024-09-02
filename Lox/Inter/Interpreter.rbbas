@@ -78,6 +78,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Function IsEqual(left As Variant, right As Variant) As Boolean
 		  If left.IsNull And right.IsNull Then Return True
 		  If left.IsNull Then Return False
+		  If left.Type<> right.Type Then Return False
 		  
 		  Return left.Equals(right)
 		End Function

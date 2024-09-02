@@ -420,6 +420,9 @@ End
 #tag Events PushButton2
 	#tag Event
 		Sub Action()
+		  Lox.PrintOut= Self
+		  Lox.ErrorOut= Self
+		  
 		  Dim scanner As New Lox.Scanner(TextArea1.Text)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  If scanner.HadError Then Return

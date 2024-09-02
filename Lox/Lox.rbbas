@@ -78,7 +78,7 @@ Protected Module Lox
 
 	#tag Method, Flags = &h21
 		Private Sub Report(line As Integer, where As String, message As String)
-		  Dim msg As String= "[line "+ Str(line)+ "] error"+ where+ ": "+ message
+		  Dim msg As String= "[line "+ Str(line)+ "] Error"+ where+ ": "+ message
 		  
 		  // TODO: add logging system
 		  If ErrorOut Is Nil Then
@@ -209,8 +209,10 @@ Protected Module Lox
 		    #endif
 		  Case 7 // date
 		    Return obj.DateValue.SQLDateTime
-		  Case 8, 11, 16
+		  Case 8, 16
 		    Return obj.StringValue
+		  Case 11 // boolean
+		    Return obj.StringValue.Lowercase
 		  Case 9 // obj TODO: cache methods
 		    Dim ti As Introspection.TypeInfo= Introspection.GetType(obj)
 		    Dim methods() As Introspection.MethodInfo= ti.GetMethods
@@ -295,7 +297,7 @@ Protected Module Lox
 	#tag Constant, Name = CommitHash, Type = String, Dynamic = False, Default = \"02b09ff", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240901", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240902", Scope = Public
 	#tag EndConstant
 
 

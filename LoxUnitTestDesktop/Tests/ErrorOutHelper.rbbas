@@ -1,5 +1,5 @@
 #tag Class
-Protected Class PrintOutHelper
+Protected Class ErrorOutHelper
 Implements Writeable
 	#tag Method, Flags = &h0
 		Sub Constructor(testGroup As LoxTests)
@@ -15,7 +15,7 @@ Implements Writeable
 
 	#tag Method, Flags = &h0
 		Sub Write(text As String)
-		  TestGroup.BufferPrint= TestGroup.BufferPrint+ text
+		  TestGroup.BufferError= TestGroup.BufferError+ text
 		End Sub
 	#tag EndMethod
 

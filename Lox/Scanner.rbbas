@@ -24,7 +24,7 @@ Protected Class Scanner
 
 	#tag Method, Flags = &h0
 		Sub Constructor(source As String)
-		  mSource= source
+		  mSource= ReplaceLineEndings(source, EndOfLine.Windows)
 		End Sub
 	#tag EndMethod
 
@@ -92,8 +92,8 @@ Protected Class Scanner
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function IsAtEnd() As Boolean
+	#tag Method, Flags = &h21
+		Private Function IsAtEnd() As Boolean
 		  Return mCurrent> mSource.Len
 		End Function
 	#tag EndMethod
@@ -231,9 +231,10 @@ Protected Class Scanner
 		    // slash or comment
 		    
 		    // whitespaces, tab, newlines, etc
-		  Case " ", Chr(13), Chr(9)
 		  Case Chr(EOL)
 		    mLine= mLine+ 1
+		    
+		  Case " ", Chr(13), Chr(9), Chr(10)
 		    // whitespaces, tab, newlines, etc
 		    
 		    // strings

@@ -17,6 +17,7 @@ Class=UnitTestsDefault;Tests/UnitTestsDefault.rbbas;&h31E3CFFF;&h9FB7FFF;false
 Class=UnitTestsFail;Tests/UnitTestsFail.rbbas;&h23120FFF;&h9FB7FFF;false
 Class=LoxTests;Tests/LoxTests.rbbas;&h4EEFE7FF;&h9FB7FFF;false
 Class=PrintOutHelper;Tests/PrintOutHelper.rbbas;&h6132E7FF;&h9FB7FFF;false
+Class=ErrorOutHelper;Tests/ErrorOutHelper.rbbas;&h27279FFF;&h9FB7FFF;false
 Class=DesktopTestController;DesktopTestController.rbbas;&h30F4F7FF;&h0;false
 Module=Lox;../Lox/Lox.rbbas;&h7D262FFF;&h0;false
 Class=Token;../Lox/Token.rbbas;&h7836C7FF;&h7D262FFF;false

@@ -3,50 +3,11 @@ Protected Class LoxTests
 Inherits TestGroup
 	#tag Event
 		Sub Setup()
-		  mOldPrintOut= Lox.PrintOut
 		  Lox.PrintOut= New PrintOutHelper(Self)
+		  Lox.ErrorOut= New ErrorOutHelper(Self)
 		End Sub
 	#tag EndEvent
 
-	#tag Event
-		Sub TearDown()
-		  Lox.PrintOut= mOldPrintOut
-		End Sub
-	#tag EndEvent
-
-
-	#tag Method, Flags = &h0
-		Sub AssignmentTest()
-		  Dim files() As FolderItem= FindFiles("assignment")
-		  
-		  For Each file As FolderItem In files
-		    Assert.Message file.DisplayName
-		    
-		    Dim t As TextInputStream= TextInputStream.Open(file)
-		    Dim source As String= t.ReadAll
-		    
-		    Dim expect() As String= GetExpect(source)
-		    Dim actual() As String
-		    
-		    Dim scanner As New Lox.Scanner(source)
-		    Dim tokens() As Lox.Token= scanner.Scan
-		    
-		    Dim parser As New Lox.Parser(tokens)
-		    Dim statements() As Lox.Ast.Stmt= parser.Parse
-		    'If parser.HadError Then Return
-		    
-		    Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
-		    resolver.Resolve(statements)
-		    'If resolver.HadError Then Return
-		    
-		    Lox.Interpreter.Interpret(statements)
-		    
-		    Break
-		    'Assert.AreEqual expect, actual, "AreEqual expect, actual"
-		    
-		  Next
-		End Sub
-	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Function FindFiles(folderName As String) As FolderItem()
@@ -79,8 +40,48 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function FindFolders() As String()
+		  Dim parent As FolderItem= app.ExecutableFile.Parent
+		  Dim folder As FolderItem, found As Boolean
+		  
+		  While parent<> Nil
+		    
+		    folder= parent.Child("Examples")
+		    If folder.Exists And folder.Directory Then
+		      found= True
+		      Exit
+		    End If
+		    
+		    parent= parent.Parent
+		  Wend
+		  
+		  Dim folders() As String
+		  If Not found Then Return folders
+		  
+		  For i As Integer= 1 To folder.Count
+		    Dim item As FolderItem= folder.Item(i)
+		    If item.Directory Then
+		      folders.Append item.DisplayName
+		    End If
+		  Next
+		  
+		  Return folders
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function GetActualError(buffer As String) As String
+		  Dim actualArr() As String= Split(buffer, EndOfLine)
+		  If actualArr.Ubound> -1 Then
+		    Dim actualStr As String= actualArr(0)
+		    Return actualStr.Mid(actualStr.InStr("Error"))
+		  End If
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function GetExpect(source As String) As String()
-		  Dim lines() As String= source.Split(EndOfLine.UNIX)
+		  Dim lines() As String= ReplaceLineEndings(source, EndOfLine).Split(EndOfLine)
 		  Dim resul() As String
 		  Dim search As String= "// expect: "
 		  
@@ -93,6 +94,120 @@ Inherits TestGroup
 		  
 		  Return resul
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function GetExpectError(source As String) As String
+		  Dim lines() As String= ReplaceLineEndings(source, EndOfLine).Split(EndOfLine)
+		  Dim search As String= "Error"
+		  
+		  For Each line As String In lines
+		    Dim pos As Integer= line.InStr(search)
+		    If pos> 0 Then
+		      Return line.Mid(pos)
+		    End If
+		  Next
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function GetExpectRuntimeError(source As String) As String
+		  Dim lines() As String= ReplaceLineEndings(source, EndOfLine).Split(EndOfLine)
+		  Dim search As String= "// expect runtime error:"
+		  
+		  For Each line As String In lines
+		    Dim pos As Integer= line.InStr(search)
+		    If pos> 0 Then
+		      Return line.Mid(pos+ 25)
+		    End If
+		  Next
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub InterpreterTest()
+		  Dim folders() As String= FindFolders
+		  
+		  For Each folder As String In folders
+		    // skip folders:
+		    If folder= "benchmark" Then Continue
+		    If folder= "expressions" Then Continue
+		    If folder= "scanning" Then Continue
+		    If folder= "limit" Then Continue
+		    If folder= "operator" Then Continue
+		    
+		    Assert.Message folder+ ":"
+		    
+		    Dim files() As FolderItem= FindFiles(folder)
+		    
+		    For Each file As FolderItem In files
+		      // skip files:
+		      If file.DisplayName= "inherit_from_nil.lox" Then Continue
+		      
+		      BufferPrint= ""
+		      BufferError= ""
+		      Lox.Interpreter.Reset
+		      
+		      Assert.Message file.DisplayName
+		      
+		      Dim t As TextInputStream= TextInputStream.Open(file)
+		      Dim source As String= t.ReadAll
+		      
+		      Dim scanner As New Lox.Scanner(source)
+		      Dim tokens() As Lox.Token= scanner.Scan
+		      If scanner.HadError Then
+		        Dim expectStr As String= GetExpectError(source)
+		        Dim actualStr As String= GetActualError(BufferError)
+		        Assert.AreEqual expectStr, actualStr, "AreEqual expectStr, actualStr"
+		        
+		        Continue
+		      End If
+		      
+		      Dim parser As New Lox.Parser(tokens)
+		      Dim statements() As Lox.Ast.Stmt= parser.Parse
+		      If parser.HadError Then
+		        Dim expectStr As String= GetExpectError(source)
+		        Dim actualStr As String= GetActualError(BufferError)
+		        Assert.AreEqual expectStr, actualStr, "AreEqual expectStr, actualStr"
+		        
+		        Continue
+		      End If
+		      
+		      Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		      resolver.Resolve(statements)
+		      If resolver.HadError Then
+		        Dim expectStr As String= GetExpectError(source)
+		        Dim actualArr() As String= Split(BufferError, EndOfLine)
+		        If actualArr.Ubound> -1 Then
+		          Dim actualStr As String= actualArr(0).Mid(10)
+		          Assert.AreEqual expectStr, actualStr, "AreEqual expectStr, actualStr"
+		        Else
+		          Break
+		        End If
+		        
+		        Continue
+		      End If
+		      
+		      Lox.Interpreter.Interpret(statements)
+		      If Lox.Interpreter.HadRuntimeError Then
+		        Dim expectStr As String= GetExpectRuntimeError(source)
+		        Dim actualStr As String= BufferError.Left(BufferError.InStr(EndOfLine)- 1)
+		        
+		        Assert.AreEqual expectStr, actualStr, "AreEqual expectStr, actualStr"
+		        
+		        Continue
+		      End If
+		      
+		      Dim expect() As String= GetExpect(source)
+		      Dim actual() As String= Split(BufferPrint, EndOfLine)
+		      If actual.Ubound> -1 Then actual.Remove actual.Ubound
+		      
+		      If expect.Ubound> -1 Then
+		        Assert.AreEqual expect, actual, "AreEqual expect, actual"
+		      End If
+		    Next
+		  Next
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -123,15 +238,27 @@ Inherits TestGroup
 
 
 	#tag Property, Flags = &h0
-		BufferPrint As String
+		BufferError As String
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private mOldPrintOut As Writeable
+	#tag Property, Flags = &h0
+		BufferPrint As String
 	#tag EndProperty
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="BufferError"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="BufferPrint"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Duration"
 			Group="Behavior"
