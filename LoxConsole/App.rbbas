@@ -86,7 +86,7 @@ Inherits ConsoleApplication
 		    Run ti.ReadAll(Encodings.UTF8)
 		    #pragma BreakOnExceptions Default
 		  Catch exc As IOException
-		    System.DebugLog CurrentMethodName+ " IOException: "+ path
+		    PrintText "Error ("+ Str(exc.ErrorNumber)+ ") loading "+ path
 		  End Try
 		  
 		  If Lox.HadError Then Quit(65)

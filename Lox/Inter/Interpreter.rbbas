@@ -115,7 +115,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h21
 		Private Function Stringify(obj As Variant) As String
-		  If obj.IsNull Then Return "nil"
+		  'If obj.IsNull Then Return "nil"
 		  
 		  Return obj.ToStringLox
 		End Function
@@ -323,7 +323,14 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Print) As Variant
 		  Dim value As Variant= Evaluate(stmt.Expression)
-		  StdOut.WriteLine Stringify(value)
+		  Dim msg As String= Stringify(value)
+		  
+		  // TODO: add logging system
+		  If PrintOut Is Nil Then
+		    System.DebugLog msg
+		  Else
+		    PrintOut.Write msg+ EndOfLine
+		  End If
 		End Function
 	#tag EndMethod
 

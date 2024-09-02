@@ -64,12 +64,6 @@ Protected Class Environment
 
 	#tag Method, Flags = &h0
 		Function GetAt(distance As Integer, name As String) As Variant
-		  'Dim dict As Dictionary= Ancestor(distance).Values
-		  'Dim keys() As Variant= dict.Keys
-		  'If dict.HasKey(name) Then
-		  'Break
-		  'End If
-		  
 		  Return Ancestor(distance).Values.Value(name)
 		End Function
 	#tag EndMethod

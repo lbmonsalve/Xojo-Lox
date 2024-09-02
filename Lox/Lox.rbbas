@@ -78,11 +78,14 @@ Protected Module Lox
 
 	#tag Method, Flags = &h21
 		Private Sub Report(line As Integer, where As String, message As String)
-		  Dim txt As String= "[line "+ Str(line)+ "] error"+ where+ ": "+ message
+		  Dim msg As String= "[line "+ Str(line)+ "] error"+ where+ ": "+ message
 		  
 		  // TODO: add logging system
-		  System.DebugLog CurrentMethodName+ " "+ txt
-		  StdErr.WriteLine txt
+		  If ErrorOut Is Nil Then
+		    System.DebugLog msg
+		  Else
+		    ErrorOut.Write msg+ EndOfLine
+		  End If
 		  
 		  HadError= True
 		End Sub
@@ -90,7 +93,16 @@ Protected Module Lox
 
 	#tag Method, Flags = &h1
 		Protected Sub RuntimeError(error As RuntimeError)
-		  StdErr.WriteLine error.Message+ EndOfLine+ "[line "+ Str(error.Token.Line)+ "]"
+		  Dim msg As String= error.Message+ EndOfLine+ "[line "+ _
+		  Str(error.Token.Line)+ "]"
+		  
+		  // TODO: add logging system
+		  If ErrorOut Is Nil Then
+		    System.DebugLog msg
+		  Else
+		    ErrorOut.Write msg+ EndOfLine
+		  End If
+		  
 		  HadRuntimeError= True
 		End Sub
 	#tag EndMethod
@@ -192,7 +204,7 @@ Protected Module Lox
 		Function ToStringLox(Extends obj As Variant) As String
 		  Select Case obj.Type
 		  Case 0
-		    Return ""
+		    Return "null"
 		  Case 2, 3, 4, 5, 6
 		    Return Str(obj.DoubleValue) // TODO: "-###########0.0#####"
 		  Case 7 // date
@@ -220,6 +232,24 @@ Protected Module Lox
 	#tag EndMethod
 
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  #if TargetConsole
+			    If mErrorOut Is Nil Then mErrorOut= StdErr
+			  #endif
+			  
+			  return mErrorOut
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mErrorOut = value
+			End Set
+		#tag EndSetter
+		ErrorOut As Writeable
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h0
 		HadError As Boolean
 	#tag EndProperty
@@ -240,11 +270,37 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
+		Private mErrorOut As Writeable
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mInterpreter As Lox.Inter.Interpreter
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private mPrintOut As Writeable
+	#tag EndProperty
 
-	#tag Constant, Name = CommitHash, Type = String, Dynamic = False, Default = \"6b99765", Scope = Public
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  #if TargetConsole
+			    If mPrintOut Is Nil Then mPrintOut= StdOut
+			  #endif
+			  
+			  return mPrintOut
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mPrintOut = value
+			End Set
+		#tag EndSetter
+		PrintOut As Writeable
+	#tag EndComputedProperty
+
+
+	#tag Constant, Name = CommitHash, Type = String, Dynamic = False, Default = \"02b09ff", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240901", Scope = Public

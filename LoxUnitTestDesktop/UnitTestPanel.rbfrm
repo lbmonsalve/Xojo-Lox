@@ -187,7 +187,6 @@ Begin ContainerControl UnitTestPanel
       Scope           =   0
       TabIndex        =   5
       TabPanelIndex   =   0
-      TabStop         =   True
       TextFont        =   "System"
       TextSize        =   16
       TextUnit        =   0
@@ -217,7 +216,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Test Name"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -252,7 +250,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   1
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Duration:"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -287,7 +284,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   2
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "0s"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -368,7 +364,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   4
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Messages:"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -403,7 +398,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   5
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Passed"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -436,7 +430,6 @@ Begin ContainerControl UnitTestPanel
       Scope           =   0
       TabIndex        =   6
       TabPanelIndex   =   0
-      TabStop         =   True
       TextFont        =   "System"
       TextSize        =   16
       TextUnit        =   0
@@ -466,7 +459,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   0
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Start:"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -501,7 +493,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   1
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Duration:"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -536,7 +527,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   2
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Total:"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -571,7 +561,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   3
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Passed:"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -606,7 +595,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   4
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Failed:"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -641,7 +629,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   5
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Skipped:"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -676,7 +663,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   6
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "1/1/2012 12:00PM"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -711,7 +697,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   7
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "0s"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -746,7 +731,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   8
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "(run tests first)"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -781,7 +765,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   9
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "0 (0%)"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -816,7 +799,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   10
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "0 (0%)"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -851,7 +833,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   11
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "0 (0%)"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -886,7 +867,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   12
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "Not Implemented:"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -921,7 +901,6 @@ Begin ContainerControl UnitTestPanel
          Selectable      =   False
          TabIndex        =   13
          TabPanelIndex   =   0
-         TabStop         =   True
          Text            =   "0 (0%)"
          TextAlign       =   0
          TextColor       =   "&c00000000"
@@ -988,7 +967,6 @@ Begin ContainerControl UnitTestPanel
    Begin DesktopTestController Controller
       AllTestCount    =   0
       Duration        =   0.0
-      Enabled         =   True
       FailedCount     =   0
       GroupCount      =   0
       Height          =   32
@@ -1002,11 +980,8 @@ Begin ContainerControl UnitTestPanel
       RunTestCount    =   0
       Scope           =   2
       SkippedCount    =   0
-      TabIndex        =   8
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   -30
-      Visible         =   True
       Width           =   32
    End
 End
