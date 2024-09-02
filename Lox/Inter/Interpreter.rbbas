@@ -49,6 +49,11 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    For Each statement As Lox.Ast.Stmt In statements
 		      execute statement
 		    Next
+		  Catch exp As StackOverflowException
+		    HadRuntimeError= True
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(New Token(Lox.TokenType.EOF, "",Nil,  -1), _
+		    "StackOverflowException")
 		  Finally
 		    mEnvironment= previous
 		  End Try
@@ -479,6 +484,11 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="HadRuntimeError"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true

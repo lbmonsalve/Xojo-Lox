@@ -9,7 +9,7 @@ Inherits TestController
 		  
 		  group = New UnitTestsDefault(Self, "Default")
 		  group = New UnitTestsFail(Self, "Always Fail")
-		  
+		  group = New LoxTests(Self, "LoxTests")
 		End Sub
 	#tag EndEvent
 

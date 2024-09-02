@@ -165,9 +165,9 @@ Protected Module Lox
 		  Case TokenType.FALSE_
 		    Return "FALSE"
 		  Case TokenType.FUN
-		    Return "LEFT_PAREN"
-		  Case TokenType.FOR_
 		    Return "FUN"
+		  Case TokenType.FOR_
+		    Return "FOR"
 		  Case TokenType.IF_
 		    Return "IF"
 		  Case TokenType.NIL_
@@ -202,7 +202,11 @@ Protected Module Lox
 		  Case 0
 		    Return "null"
 		  Case 2, 3, 4, 5, 6
-		    Return Str(obj.DoubleValue) // TODO: "-###########0.0#####"
+		    #if TargetConsole
+		      Return Str(obj.DoubleValue) // TODO: "-###########0.0#####"
+		    #else
+		      Return Str(obj.DoubleValue, "-###########0.0#####")
+		    #endif
 		  Case 7 // date
 		    Return obj.DateValue.SQLDateTime
 		  Case 8, 11, 16
@@ -339,16 +343,6 @@ Protected Module Lox
 
 
 	#tag ViewBehavior
-		#tag ViewProperty
-			Name="HadError"
-			Group="Behavior"
-			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="HadRuntimeError"
-			Group="Behavior"
-			Type="Boolean"
-		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
