@@ -129,6 +129,7 @@ forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
                  expression? ";"
                  expression? ")" statement ;
 ifStmt         → "if" "(" expression ")" statement
+               ( "or" statement )?
                ( "else" statement )? ;
 printStmt      → "print" expression ";" ;
 returnStmt     → "return" expression? ";" ;
@@ -139,6 +140,9 @@ block          → "{" declaration* "}";
 expression     → assignment ;
 
 assignment     → ( call "." )? IDENTIFIER "=" assignment
+               | ternary ;
+
+ternary        → expression "?" expression ":" expression ";"
                | logic_or ;
 
 logic_or       → logic_and ( "or" logic_and )* ;

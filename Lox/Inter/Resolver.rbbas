@@ -259,6 +259,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Visit(expr As Lox.Ast.Ternary) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.This) As Variant
 		  If mCurrentClass= ClassType.NONE Then
 		    Error expr.Keyword, "Can't use 'this' outside of a class."

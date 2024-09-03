@@ -55,6 +55,12 @@ Protected Interface IExprVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Visit(expr As Lox.Ast.Ternary) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.This) As Variant
 		  
 		End Function

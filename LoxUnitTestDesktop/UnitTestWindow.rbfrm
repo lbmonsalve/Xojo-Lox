@@ -150,7 +150,7 @@ Begin Window UnitTestWindow Implements Writeable
          Text            =   "// Your first Lox program!\r\nprint ""Hello, world!"";\r\n\r\n// variables\r\nvar condition = true;\r\n\r\n// control flow\r\nif (condition) {\r\n  print ""yes"";\r\n} else {\r\n  print ""no"";\r\n}\r\n\r\nvar a = 1;\r\nwhile (a < 10) {\r\n  print a;\r\n  a = a + 1;\r\n}\r\n\r\nfor (var a = 1; a < 10; a = a + 1) {\r\n  print a;\r\n}\r\n\r\n// functions\r\nfun printSum(a, b) {\r\n  print a + b;\r\n}\r\nprintSum(1,2);\r\n\r\n// closures\r\nfun addPair(a, b) {\r\n  return a + b;\r\n}\r\n\r\nfun identity(a) {\r\n  return a;\r\n}\r\n\r\nprint identity(addPair)(1, 2); // Prints ""3"".\r\n\r\n// classes\r\nclass Breakfast {\r\n  init(meat, bread) {\r\n    this.meat = meat;\r\n    this.bread = bread;\r\n  }\r\n\r\n  cook() {\r\n    print ""Eggs a-fryin'!"";\r\n  }\r\n\r\n  serve(who) {\r\n    print ""Enjoy your breakfast, "" + who + ""."";\r\n  }\r\n}\r\n\r\nclass Brunch < Breakfast {\r\n  drink() {\r\n    print ""How about a Bloody Mary?"";\r\n  }\r\n}\r\n\r\n// Store it in variables.\r\nvar breakfast = Breakfast(""saug"", ""sour"");\r\nprint breakfast; // ""Breakfast instance"".\r\n\r\nbreakfast.meat = ""sausage"";\r\nbreakfast.bread = ""sourdough"";\r\n\r\nbreakfast.serve(""Dear Reader"");\r\n// ""Enjoy your bacon and toast, Dear Reader.""\r\n\r\nvar benedict = Brunch(""ham"", ""English muffin"");\r\nbenedict.serve(""Noble Reader"");\r\nbenedict.drink();\r\n\r\n\r\nfun fib(n) {\r\n  if (n < 2) return n;\r\n  return fib(n - 1) + fib(n - 2); \r\n}\r\n\r\nvar before = clock();\r\nprint fib(10);\r\nvar after = clock();\r\nprint after - before;"
          TextColor       =   &h000000
          TextFont        =   "System"
-         TextSize        =   16
+         TextSize        =   18
          TextUnit        =   0
          Top             =   109
          Underline       =   ""
@@ -196,7 +196,7 @@ Begin Window UnitTestWindow Implements Writeable
          Text            =   ""
          TextColor       =   &h000000
          TextFont        =   "System"
-         TextSize        =   16
+         TextSize        =   18
          TextUnit        =   0
          Top             =   109
          Underline       =   ""

@@ -23,7 +23,7 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function assignment() As Lox.Ast.Expr
-		  Dim expr As Lox.Ast.Expr= or_
+		  Dim expr As Lox.Ast.Expr= ternary
 		  
 		  If Match(TokenType.EQUAL) Then
 		    Dim equals As Token= Previous
@@ -292,10 +292,21 @@ Protected Class Parser
 		  Call consume TokenType.RIGHT_PAREN, "Expect ')' after if condition."
 		  
 		  Dim thenBranch As Lox.Ast.Stmt= statement
+		  
+		  Dim orBranch() As Lox.Ast.Stmt
+		  While Check(TokenType.OR_)
+		    Call Advance
+		    Call consume TokenType.LEFT_PAREN, "Expect '(' after 'or'."
+		    Dim orCondition As Lox.Ast.Expr= expression
+		    Call consume TokenType.RIGHT_PAREN, "Expect ')' after or condition."
+		    Dim orThenBranch As Lox.Ast.Stmt= statement
+		    orBranch.Append New Lox.Ast.IfStmt(orCondition, orThenBranch, Nil)
+		  Wend
+		  
 		  Dim elseBranch As Lox.Ast.Stmt
 		  If Match(TokenType.ELSE_) Then elseBranch= statement
 		  
-		  Return New Lox.Ast.IfStmt(condition, thenBranch, elseBranch)
+		  Return New Lox.Ast.IfStmt(condition, thenBranch, elseBranch, orBranch)
 		End Function
 	#tag EndMethod
 
@@ -461,6 +472,21 @@ Protected Class Parser
 		    Dim right As Lox.Ast.Expr= factor
 		    expr= New Lox.Ast.Binary(expr, operator, right)
 		  Wend
+		  
+		  Return expr
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function ternary() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= or_
+		  
+		  If Match(TokenType.QUESTION) Then
+		    Dim thenBranch As Lox.Ast.Expr= expression
+		    Call consume TokenType.COLON, "Expected a ':' after 'then' condition in ternary operator."
+		    Dim elseBranch As Lox.Ast.Expr= ternary
+		    expr= New Lox.Ast.Ternary(expr, thenBranch, elseBranch)
+		  End If
 		  
 		  Return expr
 		End Function

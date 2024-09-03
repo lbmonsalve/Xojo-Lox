@@ -242,6 +242,13 @@ Protected Class Scanner
 		    Strings
 		    // strings
 		    
+		    // ternary
+		  Case "?"
+		    AddToken TokenType.QUESTION
+		  Case ":"
+		    AddToken TokenType.COLON
+		    // ternary
+		    
 		  Case Else
 		    If IsDigit(c) Then
 		      Number

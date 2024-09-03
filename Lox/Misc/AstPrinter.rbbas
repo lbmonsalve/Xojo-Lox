@@ -174,18 +174,29 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
-		  If stmt.ElseBranch Is Nil Then
-		    Return Parenthesize2("if", stmt.Condition, stmt.ThenBranch)
+		  Dim sb() As String
+		  
+		  sb.Append "("
+		  sb.Append Parenthesize("if", stmt.Condition)
+		  sb.Append Parenthesize2("", stmt.ThenBranch)
+		  
+		  For Each orBranch As Lox.Ast.Stmt In stmt.OrBranch
+		    Dim orBranchIf As Lox.Ast.IfStmt= Lox.Ast.IfStmt(orBranch)
+		    sb.Append Parenthesize2("or", orBranchIf.Condition, orBranchIf.ThenBranch)
+		  Next
+		  
+		  If Not (stmt.ElseBranch Is Nil) Then
+		    sb.Append Parenthesize2("else", stmt.ElseBranch)
 		  End If
 		  
-		  Return Parenthesize2("if-else", stmt.Condition, stmt.ThenBranch, stmt.ElseBranch)
+		  sb.Append ")"
+		  
+		  Return Join(sb, "")
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Literal) As Variant
-		  If expr.Value.IsNull Then Return "nil"
-		  
 		  Return expr.Value.ToStringLox
 		End Function
 	#tag EndMethod
@@ -219,6 +230,20 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
 		  Return Parenthesize2("super", expr.Method)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Visit(expr As Lox.Ast.Ternary) As Variant
+		  Dim sb() As String
+		  
+		  sb.Append "(? "
+		  sb.Append Print(expr.Expression)
+		  sb.Append Parenthesize("", expr.ThenBranch)
+		  sb.Append Parenthesize("", expr.ElseBranch)
+		  sb.Append ")"
+		  
+		  Return Join(sb, "")
 		End Function
 	#tag EndMethod
 

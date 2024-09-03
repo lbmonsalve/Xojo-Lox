@@ -1,36 +1,31 @@
 #tag Class
-Protected Class IfStmt
-Inherits Lox.Ast.Stmt
+Protected Class Ternary
+Inherits Lox.Ast.Expr
 	#tag Method, Flags = &h0
-		Function Accept(visitor As IStmtVisitor) As Variant
+		Function Accept(visitor As IExprVisitor) As Variant
 		  Return visitor.Visit(Self)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor(condition As Expr, thenBranch As Stmt, elseBranch As Stmt, Optional orbranch() As Stmt)
-		  Self.Condition= condition
+		Sub Constructor(expression As Expr, thenBranch As Expr, elseBranch As Expr)
+		  Self.Expression= expression
 		  Self.ThenBranch= thenBranch
 		  Self.ElseBranch= elseBranch
-		  Self.OrBranch= orbranch
 		End Sub
 	#tag EndMethod
 
 
 	#tag Property, Flags = &h0
-		Condition As Expr
+		ElseBranch As Expr
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		ElseBranch As Stmt
+		Expression As Expr
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		OrBranch() As Stmt
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		ThenBranch As Stmt
+		ThenBranch As Expr
 	#tag EndProperty
 
 

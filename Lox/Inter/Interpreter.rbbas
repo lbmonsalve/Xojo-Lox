@@ -310,7 +310,18 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
 		  If isTruthy(Evaluate(stmt.Condition)) Then
 		    execute stmt.ThenBranch
-		  ElseIf Not (stmt.ElseBranch Is Nil) Then
+		    Return Nil
+		  End If
+		  
+		  For i As Integer= 0 To stmt.OrBranch.Ubound
+		    Dim orStmt As Lox.Ast.IfStmt= Lox.Ast.IfStmt(stmt.OrBranch(i))
+		    If isTruthy(Evaluate(orStmt.Condition)) Then
+		      execute orStmt.ThenBranch
+		      Return Nil
+		    End If
+		  Next
+		  
+		  If Not (stmt.ElseBranch Is Nil) Then
 		    execute stmt.ElseBranch
 		  End If
 		End Function
@@ -392,6 +403,18 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  End If
 		  
 		  Return method.Bind(obj)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Visit(expr As Lox.Ast.Ternary) As Variant
+		  If isTruthy(Evaluate(expr.Expression)) Then
+		    Return Evaluate(expr.ThenBranch)
+		  End If
+		  
+		  If Not (expr.ElseBranch Is Nil) Then
+		    Return Evaluate(expr.ElseBranch)
+		  End If
 		End Function
 	#tag EndMethod
 

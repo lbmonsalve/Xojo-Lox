@@ -125,6 +125,48 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub IfOrElseTest()
+		  Dim snnipet As String= "if (false) {print ""if"";} "+_
+		  "or (true) {print ""or"";} "+ _
+		  "else {print ""else"";} "
+		  
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim actual As String= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
+		  Assert.AreEqual "or", actual, ".AreEqual ""or"", actual"
+		  
+		  BufferPrint= ""
+		  
+		  snnipet= "if (false) {print ""if"";} "+_
+		  "or (false) {print ""or"";} "+ _
+		  "else {print ""else"";} "
+		  
+		  scanner= New Lox.Scanner(snnipet)
+		  parser= New Lox.Parser(scanner.Scan)
+		  statements= parser.Parse
+		  'resolver= New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  actual= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
+		  Assert.AreEqual "else", actual, ".AreEqual ""else"", actual"
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub InterpreterTest()
 		  Dim folders() As String= FindFolders
 		  
@@ -214,7 +256,7 @@ Inherits TestGroup
 		Sub PostfixExprTest()
 		  Dim snnipet As String= "var i=1; i++; print i;"
 		  
-		  BufferError= ""
+		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
 		  Dim scanner As New Lox.Scanner(snnipet)
@@ -273,6 +315,46 @@ Inherits TestGroup
 		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
 		    
 		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub TernaryTest()
+		  Dim snnipet As String= "var a=1; var b=2; var c=a>b?1:2;"+_
+		  "print c;"
+		  
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim actual As String= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
+		  Assert.AreEqual "2.0", actual, ".AreEqual ""2.0"", actual"
+		  
+		  BufferPrint= ""
+		  
+		  snnipet= "var a=1; var b=2; var c=a<b?1:2;"+_
+		  "print c;"
+		  
+		  scanner= New Lox.Scanner(snnipet)
+		  parser= New Lox.Parser(scanner.Scan)
+		  statements= parser.Parse
+		  'resolver= New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  actual= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
+		  Assert.AreEqual "1.0", actual, ".AreEqual ""1.0"", actual"
+		  
 		End Sub
 	#tag EndMethod
 
