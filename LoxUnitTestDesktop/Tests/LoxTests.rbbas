@@ -9,6 +9,38 @@ Inherits TestGroup
 	#tag EndEvent
 
 
+	#tag Method, Flags = &h0
+		Sub ExtendIdNamesTest()
+		  Dim emoji As String= Encodings.UTF8.Chr(&h1f600)
+		  
+		  Dim snnipet As String= "var año=2024; print año; // expect: 2024.0"+ EndOfLine+ _
+		  "var Σ=""sigma""; print Σ; // expect: sigma"+ EndOfLine+ _
+		  "var "+ emoji+ "=""smileyface""; print "+ emoji+ "; // expect: smileyface"
+		  
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim expect() As String= GetExpect(snnipet)
+		  Dim actual() As String= Split(BufferPrint, EndOfLine)
+		  If actual.Ubound> -1 Then
+		    actual.Remove actual.Ubound
+		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
+		  End If
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function FindFiles(folderName As String) As FolderItem()
 		  Dim parent As FolderItem= app.ExecutableFile.Parent
@@ -242,9 +274,9 @@ Inherits TestGroup
 		      
 		      Dim expect() As String= GetExpect(source)
 		      Dim actual() As String= Split(BufferPrint, EndOfLine)
-		      If actual.Ubound> -1 Then actual.Remove actual.Ubound
 		      
 		      If expect.Ubound> -1 Then
+		        actual.Remove actual.Ubound
 		        Assert.AreEqual expect, actual, "AreEqual expect, actual"
 		      End If
 		    Next

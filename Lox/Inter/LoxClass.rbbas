@@ -40,7 +40,7 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  Return Name
+		  Return "<class "+ Name+ ">"
 		End Function
 	#tag EndMethod
 

@@ -28,7 +28,7 @@ while (a < 10) {
   a = a + 1;
 }
 
-for (var a = 1; a < 10; a = a + 1) {
+for (var a = 1; a < 10; a++ ) {
   print a;
 }
 
@@ -168,7 +168,20 @@ arguments      → expression ( "," expression )* ;
 NUMBER         → DIGIT+ ( "." DIGIT+ )? ;
 STRING         → "\"" <any char except "\"">* "\"" ;
 IDENTIFIER     → ALPHA ( ALPHA | DIGIT )* ;
-ALPHA          → "a" ... "z" | "A" ... "Z" | "_" ; // *extended!
+ALPHA          → "a" ... "z" 
+               | "A" ... "Z" 
+               | "\u00c0" ... "\u00d6" 
+               | "\u00d8" ... "\u00f6" 
+               | "\u0370" ... "\u037d" 
+               | "\u037f" ... "\u1fff" 
+               | "\u200c" ... "\u200d" 
+               | "\u2070" ... "\u218f" 
+               | "\u2c00" ... "\u2fef" 
+               | "\u3001" ... "\ud7ff" 
+               | "\uf900" ... "\uhfdcf" 
+               | "\uhfdf0" ... "\ufffd" 
+               | "\u1f600" ... "\u1f64f" // emojis
+               | "_" ;
 DIGIT          → "0" ... "9" ;
 
 ```
