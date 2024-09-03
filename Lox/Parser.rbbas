@@ -31,11 +31,78 @@ Protected Class Parser
 		    
 		    If expr IsA Lox.Ast.Variable Then
 		      Dim name As Token= Lox.Ast.Variable(expr).Name
-		      
 		      Return New Lox.Ast.Assign(name, value)
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		    HadError= True
+		  ElseIf Match(TokenType.PLUS_EQUAL) Then
+		    Dim equals As Token= Previous
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    Dim name As Token= Lox.Ast.Variable(expr).Name
+		    Dim oper As New Token(TokenType.PLUS, "+", Nil, name.Line)
+		    Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		    HadError= True
+		  ElseIf Match(TokenType.MINUS_EQUAL) Then
+		    Dim equals As Token= Previous
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    Dim name As Token= Lox.Ast.Variable(expr).Name
+		    Dim oper As New Token(TokenType.MINUS, "-", Nil, name.Line)
+		    Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		    HadError= True
+		  ElseIf Match(TokenType.STAR_EQUAL) Then
+		    Dim equals As Token= Previous
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    Dim name As Token= Lox.Ast.Variable(expr).Name
+		    Dim oper As New Token(TokenType.STAR, "*", Nil, name.Line)
+		    Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		    HadError= True
+		  ElseIf Match(TokenType.SLASH_EQUAL) Then
+		    Dim equals As Token= Previous
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    Dim name As Token= Lox.Ast.Variable(expr).Name
+		    Dim oper As New Token(TokenType.SLASH, "/", Nil, name.Line)
+		    Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."

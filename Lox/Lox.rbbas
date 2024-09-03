@@ -198,6 +198,14 @@ Protected Module Lox
 		    Return "QUESTION"
 		  Case TokenType.COLON
 		    Return "COLON"
+		  Case TokenType.PLUS_EQUAL
+		    Return "PLUS_EQUAL"
+		  Case TokenType.MINUS_EQUAL
+		    Return "MINUS_EQUAL"
+		  Case TokenType.STAR_EQUAL
+		    Return "STAR_EQUAL"
+		  Case TokenType.SLASH_EQUAL
+		    Return "SLASH_EQUAL"
 		  Case Else
 		    Return "STRINGIFY->"
 		  End Select
@@ -349,7 +357,11 @@ Protected Module Lox
 		  PLUS_PLUS
 		  MINUS_MINUS
 		  QUESTION
-		COLON
+		  COLON
+		  PLUS_EQUAL
+		  MINUS_EQUAL
+		  STAR_EQUAL
+		SLASH_EQUAL
 	#tag EndEnum
 
 

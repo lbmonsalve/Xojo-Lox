@@ -139,7 +139,7 @@ block          → "{" declaration* "}";
 // expressions:
 expression     → assignment ;
 
-assignment     → ( call "." )? IDENTIFIER "=" assignment
+assignment     → ( call "." )? IDENTIFIER ("=" | "+=" | "-=" | "*=" | "/=")* assignment
                | ternary ;
 
 ternary        → expression "?" expression ":" expression ";"
@@ -165,7 +165,7 @@ parameters     → IDENTIFIER ( "," IDENTIFIER )* ;
 arguments      → expression ( "," expression )* ;
 
 // lexical grammar:
-NUMBER         → DIGIT+ ( "." DIGIT+ )? ;
+NUMBER         → DIGIT+ ( "." DIGIT+ )? | HEX | OCT | BIN ;
 STRING         → "\"" <any char except "\"">* "\"" ;
 IDENTIFIER     → ALPHA ( ALPHA | DIGIT )* ;
 ALPHA          → "a" ... "z" 
@@ -183,5 +183,8 @@ ALPHA          → "a" ... "z"
                | "\u1f600" ... "\u1f64f" // emojis
                | "_" ;
 DIGIT          → "0" ... "9" ;
+HEX            → "0x" [a-fA-F0-9]* ;
+OCT            → "0o" [0-7]* ;
+BIN            → "0b" [01]* ;
 
 ```

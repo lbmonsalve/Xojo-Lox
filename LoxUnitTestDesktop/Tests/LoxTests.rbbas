@@ -10,6 +10,42 @@ Inherits TestGroup
 
 
 	#tag Method, Flags = &h0
+		Sub CompoundAssignmentOperatorsTest()
+		  Dim snnipet As String= "var a=5;"+ EndOfLine+ _
+		  "a+=5;"+ EndOfLine+ _
+		  "print a; // expect: 10.0"+ EndOfLine+ _
+		  "a-=3;"+ EndOfLine+ _
+		  "print a; // expect: 7.0"+ EndOfLine+ _
+		  "a*=5;"+ EndOfLine+ _
+		  "print a; // expect: 35.0"+ EndOfLine+ _
+		  "a/=2;"+ EndOfLine+ _
+		  "print a; // expect: 17.5"
+		  
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim expect() As String= GetExpect(snnipet)
+		  Dim actual() As String= Split(BufferPrint, EndOfLine)
+		  If actual.Ubound> -1 Then
+		    actual.Remove actual.Ubound
+		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
+		  End If
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub ExtendIdNamesTest()
 		  Dim emoji As String= Encodings.UTF8.Chr(&h1f600)
 		  
@@ -321,6 +357,37 @@ Inherits TestGroup
 		  Assert.AreEqual "1.0", actual, ".AreEqual ""1.0"", actual"
 		  
 		  'Break
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub PrefixedNumbersTest()
+		  Dim snnipet As String= "var h=0x2324; var o=0o1056; var b=0b1110;"+_
+		  "print h; // expect: 8996.0"+ EndOfLine+ _
+		  "print o; // expect: 558.0"+ EndOfLine+ _
+		  "print b; // expect: 14.0"
+		  
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim expect() As String= GetExpect(snnipet)
+		  Dim actual() As String= Split(BufferPrint, EndOfLine)
+		  If actual.Ubound> -1 Then
+		    actual.Remove actual.Ubound
+		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
+		  End If
+		  
 		End Sub
 	#tag EndMethod
 

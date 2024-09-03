@@ -99,10 +99,40 @@ Protected Class Scanner
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function IsBinnary(c As String) As Boolean
+		  If c= "0" Or c= "1" Then Return True
+		  Return False
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function IsDigit(c As String) As Boolean
 		  Dim cAsc As Integer= c.Asc
 		  
 		  Return cAsc>= Asc("0") And cAsc<= Asc("9")
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function IsHexadecimal(c As String) As Boolean
+		  Dim cAsc As Integer= c.Asc
+		  
+		  If IsDigit(c) Or (cAsc>= Asc("a") And cAsc<= Asc("f")) Or _
+		    (cAsc>= Asc("A") And cAsc<= Asc("F")) Then
+		    Return True
+		  End If
+		  
+		  Return False
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function IsOctal(c As String) As Boolean
+		  Dim cAsc As Integer= c.Asc
+		  
+		  If (cAsc>= Asc("0") And cAsc<= Asc("7")) Then Return True
+		  
+		  Return False
 		End Function
 	#tag EndMethod
 
@@ -186,6 +216,38 @@ Protected Class Scanner
 		  #endif
 		  
 		  Dim c As String= Advance
+		  
+		  If c= "0" Then // 0base prefixed number
+		    Dim base As String= Peek
+		    
+		    Select Case base
+		    Case "x"
+		      Call Advance
+		      While IsHexadecimal(Peek)
+		        Call Advance
+		      Wend
+		      Dim value As Double= Val("&h"+ mSource.SubstringLox(mStart+ 2, mCurrent))
+		      AddToken TokenType.NUMBER, value
+		      Return
+		    Case "o"
+		      Call Advance
+		      While IsOctal(Peek)
+		        Call Advance
+		      Wend
+		      Dim value As Double= Val("&o"+ mSource.SubstringLox(mStart+ 2, mCurrent))
+		      AddToken TokenType.NUMBER, value
+		      Return
+		    Case "b"
+		      Call Advance
+		      While IsBinnary(Peek)
+		        Call Advance
+		      Wend
+		      Dim value As Double= Val("&b"+ mSource.SubstringLox(mStart+ 2, mCurrent))
+		      AddToken TokenType.NUMBER, value
+		      Return
+		    End Select
+		  End If
+		  
 		  Select Case c
 		  Case "("
 		    AddToken TokenType.LEFT_PAREN
@@ -200,13 +262,23 @@ Protected Class Scanner
 		  Case "."
 		    AddToken TokenType.DOT
 		  Case "-"
-		    AddToken IIf(Match("-"), TokenType.MINUS_MINUS, TokenType.MINUS)
+		    If Peek= "=" Then
+		      Call Advance
+		      AddToken TokenType.MINUS_EQUAL
+		    Else
+		      AddToken IIf(Match("-"), TokenType.MINUS_MINUS, TokenType.MINUS)
+		    End If
 		  Case "+"
-		    AddToken IIf(Match("+"), TokenType.PLUS_PLUS, TokenType.PLUS)
+		    If Peek= "=" Then
+		      Call Advance
+		      AddToken TokenType.PLUS_EQUAL
+		    Else
+		      AddToken IIf(Match("+"), TokenType.PLUS_PLUS, TokenType.PLUS)
+		    End If
 		  Case ";"
 		    AddToken TokenType.SEMICOLON
 		  Case "*"
-		    AddToken TokenType.STAR
+		    AddToken IIf(Match("="), TokenType.STAR_EQUAL, TokenType.STAR)
 		    
 		    // 2-char operators
 		  Case "!"
@@ -226,7 +298,7 @@ Protected Class Scanner
 		        Call Advance
 		      Wend
 		    Else
-		      AddToken TokenType.SLASH
+		      AddToken IIf(Match("="), TokenType.SLASH_EQUAL, TokenType.SLASH)
 		    End If
 		    // slash or comment
 		    
