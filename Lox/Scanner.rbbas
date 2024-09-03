@@ -200,9 +200,9 @@ Protected Class Scanner
 		  Case "."
 		    AddToken TokenType.DOT
 		  Case "-"
-		    AddToken TokenType.MINUS
+		    AddToken IIf(Match("-"), TokenType.MINUS_MINUS, TokenType.MINUS)
 		  Case "+"
-		    AddToken TokenType.PLUS
+		    AddToken IIf(Match("+"), TokenType.PLUS_PLUS, TokenType.PLUS)
 		  Case ";"
 		    AddToken TokenType.SEMICOLON
 		  Case "*"

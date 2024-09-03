@@ -51,9 +51,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  For Each part As Variant In parts
 		    sb.Append " "
 		    If part IsA Lox.Ast.Expr Then
-		      Break
+		      sb.Append Print(Lox.Ast.Expr(part))
+		    ElseIf part IsA Lox.Ast.Stmt Then
+		      sb.Append Print(Lox.Ast.Stmt(part))
 		    ElseIf part IsA Lox.Token Then
-		      Break
+		      sb.Append Lox.Token(part).Lexeme
+		    ElseIf part.IsArray Then
+		      sb.Append "params..."
 		    Else
 		      sb.Append part.StringValue
 		    End If

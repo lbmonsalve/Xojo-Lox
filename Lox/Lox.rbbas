@@ -190,8 +190,12 @@ Protected Module Lox
 		    Return "WHILE"
 		  Case TokenType.EOF
 		    Return "EOF"
+		  Case TokenType.PLUS_PLUS
+		    Return "PLUS_PLUS"
+		  Case TokenType.MINUS_MINUS
+		    Return "MINUS_MINUS"
 		  Case Else
-		    Return ""
+		    Return "UNSTRINGIFY"
 		  End Select
 		End Function
 	#tag EndMethod
@@ -294,7 +298,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = CommitHash, Type = String, Dynamic = False, Default = \"02b09ff", Scope = Public
+	#tag Constant, Name = CommitHash, Type = String, Dynamic = False, Default = \"e565d39", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240902", Scope = Public
@@ -340,7 +344,9 @@ Protected Module Lox
 		  TRUE_
 		  VAR_
 		  WHILE_
-		EOF
+		  EOF
+		  PLUS_PLUS
+		MINUS_MINUS
 	#tag EndEnum
 
 

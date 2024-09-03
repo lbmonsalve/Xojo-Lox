@@ -340,6 +340,37 @@ Begin Window UnitTestWindow Implements Writeable
          Visible         =   True
          Width           =   80
       End
+      Begin PushButton PushButton5
+         AutoDeactivate  =   True
+         Bold            =   ""
+         ButtonStyle     =   0
+         Cancel          =   ""
+         Caption         =   "Stmts"
+         Default         =   ""
+         Enabled         =   True
+         Height          =   30
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   696
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   7
+         TabPanelIndex   =   2
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   16
+         TextUnit        =   0
+         Top             =   50
+         Underline       =   ""
+         Visible         =   True
+         Width           =   80
+      End
    End
 End
 #tag EndWindow
@@ -457,6 +488,7 @@ End
 		Sub Action()
 		  Dim scanner As New Lox.Scanner(TextArea1.Text)
 		  Dim tokens() As Lox.Token= scanner.Scan
+		  If scanner.HadError Then Return
 		  
 		  For Each token As Lox.Token In tokens
 		    TextArea2.AppendText token.TypeToken.ToString+ " "+ _
@@ -464,6 +496,25 @@ End
 		  Next
 		  
 		  TextArea2.AppendText EndOfLine
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton5
+	#tag Event
+		Sub Action()
+		  Dim scanner As New Lox.Scanner(TextArea1.Text)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  If scanner.HadError Then Return
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  If parser.HadError Then Return
+		  
+		  For Each statement As Lox.Ast.Stmt In statements
+		    Dim stmtPrinter As New Lox.Misc.AstPrinter
+		    Dim stmt As String= stmtPrinter.Print(statement)
+		    TextArea2.AppendText stmt+ EndOfLine
+		  Next
 		End Sub
 	#tag EndEvent
 #tag EndEvents
