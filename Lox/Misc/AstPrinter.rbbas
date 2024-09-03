@@ -23,8 +23,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Function Parenthesize2(name As String, ParamArray parts As Variant) As String
 		  Dim sb() As String
 		  
-		  sb.Append "("
-		  sb.Append name
+		  sb.Append "("+ name
 		  
 		  Transform sb, parts
 		  
@@ -95,7 +94,20 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.CallExpr) As Variant
-		  Return Parenthesize2("call", expr.Callee, expr.Arguments)
+		  Dim sb() As String
+		  
+		  sb.Append "(call "
+		  sb.Append Print(expr.Callee)+ "("
+		  
+		  For i As Integer= 0 To expr.Arguments.Ubound
+		    Dim argument As Lox.Ast.Expr= expr.Arguments(i)
+		    If i> 0 Then sb.Append ","
+		    sb.Append Print(argument)
+		  Next
+		  
+		  sb.Append "))"
+		  
+		  Return Join(sb, "")
 		End Function
 	#tag EndMethod
 

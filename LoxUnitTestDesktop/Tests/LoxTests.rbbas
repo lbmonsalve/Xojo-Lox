@@ -211,6 +211,46 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub PostfixExprTest()
+		  Dim snnipet As String= "var i=1; i++; print i;"
+		  
+		  BufferError= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim actual As String= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
+		  Assert.AreEqual "2.0", actual, ".AreEqual ""2.0"", actual"
+		  
+		  
+		  BufferPrint= ""
+		  
+		  snnipet= "i--; print i;"
+		  
+		  scanner= New Lox.Scanner(snnipet)
+		  parser= New Lox.Parser(scanner.Scan)
+		  statements= parser.Parse
+		  'resolver= New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  actual= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
+		  Assert.AreEqual "1.0", actual, ".AreEqual ""1.0"", actual"
+		  
+		  'Break
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub ScannerTest()
 		  Dim files() As FolderItem= FindFiles("scanning")
 		  

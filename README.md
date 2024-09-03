@@ -152,6 +152,7 @@ unary          → ( "!" | "-" ) unary | call ;
 call           → primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
 primary        → "true" | "false" | "nil" | "this"
                | NUMBER | STRING | IDENTIFIER | "(" expression ")"
+               | IDENTIFIER ("++" | "--")
                | "super" "." IDENTIFIER ;
 
 // utility rules:

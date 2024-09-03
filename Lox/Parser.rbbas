@@ -363,13 +363,27 @@ Protected Class Parser
 		  If Match(TokenType.THIS) Then Return New Lox.Ast.This(Previous)
 		  
 		  If Match(TokenType.NUMBER, TokenType.STRING_) Then Return New Lox.Ast.Literal(Previous.Literal)
-		  // TODO: match STRING
-		  If Match(TokenType.IDENTIFIER) Then Return New Lox.Ast.Variable(Previous)
+		  // TODO: match STRING?
 		  
 		  If Match(TokenType.LEFT_PAREN) Then
 		    Dim expr As Lox.Ast.Expr= expression
 		    Call consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
 		    Return New Lox.Ast.Grouping(expr)
+		  End If
+		  
+		  If Match(TokenType.IDENTIFIER) Then
+		    Dim id As New Lox.Ast.Variable(Previous)
+		    If Match(TokenType.PLUS_PLUS) Then
+		      Dim oper As New Token(TokenType.PLUS, "+", Nil, id.Name.Line)
+		      Dim binn As New Lox.Ast.Binary(id, oper, New Lox.Ast.Literal(1))
+		      Return New Lox.Ast.Assign(id.Name, binn)
+		    ElseIf Match(TokenType.MINUS_MINUS) Then
+		      Dim oper As New Token(TokenType.MINUS, "-", Nil, id.Name.Line)
+		      Dim binn As New Lox.Ast.Binary(id, oper, New Lox.Ast.Literal(1))
+		      Return New Lox.Ast.Assign(id.Name, binn)
+		    Else
+		      Return id
+		    End If
 		  End If
 		  
 		  If Match(TokenType.SUPER_) Then
