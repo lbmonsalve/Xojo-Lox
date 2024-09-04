@@ -138,6 +138,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Visit(stmt As Lox.Ast.ContinueStmt) As Variant
+		  Return "(continue)"
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Expression) As Variant
 		  Return Parenthesize(";", stmt.Expression)
 		End Function

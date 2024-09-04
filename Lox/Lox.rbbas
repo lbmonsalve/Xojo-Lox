@@ -208,6 +208,8 @@ Protected Module Lox
 		    Return "SLASH_EQUAL"
 		  Case TokenType.BREAK_
 		    Return "BREAK"
+		  Case TokenType.CONTINUE_
+		    Return "CONTINUE"
 		  Case Else
 		    Return "STRINGIFY->"
 		  End Select
@@ -312,7 +314,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240903", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240904", Scope = Public
 	#tag EndConstant
 
 
@@ -364,7 +366,8 @@ Protected Module Lox
 		  MINUS_EQUAL
 		  STAR_EQUAL
 		  SLASH_EQUAL
-		BREAK_
+		  BREAK_
+		CONTINUE_
 	#tag EndEnum
 
 

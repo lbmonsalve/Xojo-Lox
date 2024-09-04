@@ -62,6 +62,32 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ContinueTest()
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(kContinueSnnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim expect() As String= GetExpect(kContinueSnnipet)
+		  Dim actual() As String= Split(BufferPrint, EndOfLine)
+		  If actual.Ubound> -1 Then
+		    actual.Remove actual.Ubound
+		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
+		  End If
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub ExtendIdNamesTest()
 		  Dim snnipet As String= kExtendIdSnnipet.ReplaceAll("$emoji$", Encodings.UTF8.Chr(&h1f600))
 		  
@@ -460,6 +486,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kCompoundSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D5;\ra+\x3D5;\rprint a; // expect: 10.0\ra-\x3D3;\rprint a; // expect: 7.0\ra*\x3D5;\rprint a; // expect: 35.0\ra/\x3D2;\rprint a; // expect: 17.5", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kContinueSnnipet, Type = String, Dynamic = False, Default = \"var a \x3D 0;\rwhile (a < 10) {\r  a \x3D a + 1;\r  if (a\x3D\x3D 6) continue;\r  print a;\r}\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r// expect: 4.0\r// expect: 5.0\r// expect: 7.0\r// expect: 8.0\r// expect: 9.0\r// expect: 10.0\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kExtendIdSnnipet, Type = String, Dynamic = False, Default = \"var a\xC3\xB1o\x3D2024; print a\xC3\xB1o; // expect: 2024.0\rvar \xCE\xA3\x3D \"sigma\"; print \xCE\xA3; // expect: sigma\rvar $emoji$\x3D \"smileyface\";\rprint $emoji$; // expect: smileyface", Scope = Private

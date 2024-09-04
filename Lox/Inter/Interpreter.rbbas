@@ -281,6 +281,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Visit(stmt As Lox.Ast.ContinueStmt) As Variant
+		  #pragma BreakOnExceptions Off
+		  Raise New ContinueExc
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Expression) As Variant
 		  Call Evaluate stmt.Expression
 		End Function
@@ -469,10 +476,16 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
 		  Try
 		    While IsTruthy(Evaluate(stmt.Condition))
-		      execute stmt.Body
+		      Try
+		        execute stmt.Body
+		      Catch exc As BreakExc
+		        #pragma BreakOnExceptions Off
+		        Raise exc
+		      Catch exc As ContinueExc
+		        'System.DebugLog CurrentMethodName+ " continue!"
+		      End Try
 		    Wend
 		  Catch exc As BreakExc
-		    'System.DebugLog CurrentMethodName+ " break!!"
 		    Return Nil
 		  End Try
 		End Function

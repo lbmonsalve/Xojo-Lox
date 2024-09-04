@@ -389,6 +389,7 @@ Protected Class Scanner
 			  mKeywords.Value("var")= TokenType.VAR_
 			  mKeywords.Value("while")= TokenType.WHILE_
 			  mKeywords.Value("break")= TokenType.BREAK_
+			  mKeywords.Value("continue")= TokenType.CONTINUE_
 			  
 			  Return mKeywords
 			End Get

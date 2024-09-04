@@ -123,6 +123,7 @@ statement      → exprStmt
                | returnStmt
                | whileStmt
                | breakStmt
+               | continueStmt
                | block ;
 
 exprStmt       → expression ";" ;
@@ -136,6 +137,7 @@ printStmt      → "print" expression ";" ;
 returnStmt     → "return" expression? ";" ;
 whileStmt      → "while" "(" expression ")" statement ;
 breakStmt      → "break" ";" ;
+continueStmt   → "continue" ";" ;
 block          → "{" declaration* "}";
 
 // expressions:

@@ -217,6 +217,15 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function continueStatement() As Lox.Ast.Stmt
+		  Dim keyword As Token= Previous
+		  Call consume TokenType.SEMICOLON, "Expect ';' after return value."
+		  
+		  Return New Lox.Ast.ContinueStmt(keyword)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function declaration() As Lox.Ast.Stmt
 		  Try
 		    If Match(TokenType.CLASS_) Then Return classDeclaration
@@ -515,6 +524,7 @@ Protected Class Parser
 		  If Match(TokenType.RETURN_) Then Return returnStatement
 		  If Match(TokenType.WHILE_) Then Return whileStatement
 		  If Match(TokenType.BREAK_) Then Return breakStatement
+		  If Match(TokenType.CONTINUE_) Then Return continueStatement
 		  If Match(TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(block)
 		  
 		  Return expressionStatement
