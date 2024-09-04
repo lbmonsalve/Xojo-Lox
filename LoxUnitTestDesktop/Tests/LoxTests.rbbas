@@ -10,21 +10,11 @@ Inherits TestGroup
 
 
 	#tag Method, Flags = &h0
-		Sub CompoundAssignmentOperatorsTest()
-		  Dim snnipet As String= "var a=5;"+ EndOfLine+ _
-		  "a+=5;"+ EndOfLine+ _
-		  "print a; // expect: 10.0"+ EndOfLine+ _
-		  "a-=3;"+ EndOfLine+ _
-		  "print a; // expect: 7.0"+ EndOfLine+ _
-		  "a*=5;"+ EndOfLine+ _
-		  "print a; // expect: 35.0"+ EndOfLine+ _
-		  "a/=2;"+ EndOfLine+ _
-		  "print a; // expect: 17.5"
-		  
+		Sub BreakTest()
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
-		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim scanner As New Lox.Scanner(kBreakSnnipet)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
@@ -35,7 +25,33 @@ Inherits TestGroup
 		  
 		  Lox.Interpreter.Interpret(statements)
 		  
-		  Dim expect() As String= GetExpect(snnipet)
+		  Dim expect() As String= GetExpect(kBreakSnnipet)
+		  Dim actual() As String= Split(BufferPrint, EndOfLine)
+		  If actual.Ubound> -1 Then
+		    actual.Remove actual.Ubound
+		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
+		  End If
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub CompoundAssignmentOperatorsTest()
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(kCompoundSnnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim expect() As String= GetExpect(kCompoundSnnipet)
 		  Dim actual() As String= Split(BufferPrint, EndOfLine)
 		  If actual.Ubound> -1 Then
 		    actual.Remove actual.Ubound
@@ -47,11 +63,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub ExtendIdNamesTest()
-		  Dim emoji As String= Encodings.UTF8.Chr(&h1f600)
-		  
-		  Dim snnipet As String= "var año=2024; print año; // expect: 2024.0"+ EndOfLine+ _
-		  "var Σ=""sigma""; print Σ; // expect: sigma"+ EndOfLine+ _
-		  "var "+ emoji+ "=""smileyface""; print "+ emoji+ "; // expect: smileyface"
+		  Dim snnipet As String= kExtendIdSnnipet.ReplaceAll("$emoji$", Encodings.UTF8.Chr(&h1f600))
 		  
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
@@ -194,14 +206,10 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub IfOrElseTest()
-		  Dim snnipet As String= "if (false) {print ""if"";} "+_
-		  "or (true) {print ""or"";} "+ _
-		  "else {print ""else"";} "
-		  
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
-		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim scanner As New Lox.Scanner(kIfOrElseSnnipet)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
@@ -212,24 +220,12 @@ Inherits TestGroup
 		  
 		  Lox.Interpreter.Interpret(statements)
 		  
-		  Dim actual As String= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
-		  Assert.AreEqual "or", actual, ".AreEqual ""or"", actual"
-		  
-		  BufferPrint= ""
-		  
-		  snnipet= "if (false) {print ""if"";} "+_
-		  "or (false) {print ""or"";} "+ _
-		  "else {print ""else"";} "
-		  
-		  scanner= New Lox.Scanner(snnipet)
-		  parser= New Lox.Parser(scanner.Scan)
-		  statements= parser.Parse
-		  'resolver= New Lox.Inter.Resolver(Lox.Interpreter)
-		  resolver.Resolve(statements)
-		  Lox.Interpreter.Interpret(statements)
-		  
-		  actual= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
-		  Assert.AreEqual "else", actual, ".AreEqual ""else"", actual"
+		  Dim expect() As String= GetExpect(kIfOrElseSnnipet)
+		  Dim actual() As String= Split(BufferPrint, EndOfLine)
+		  If actual.Ubound> -1 Then
+		    actual.Remove actual.Ubound
+		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
+		  End If
 		  
 		End Sub
 	#tag EndMethod
@@ -362,15 +358,10 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub PrefixedNumbersTest()
-		  Dim snnipet As String= "var h=0x2324; var o=0o1056; var b=0b1110;"+_
-		  "print h; // expect: 8996.0"+ EndOfLine+ _
-		  "print o; // expect: 558.0"+ EndOfLine+ _
-		  "print b; // expect: 14.0"
-		  
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
-		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim scanner As New Lox.Scanner(kPrefixedNumberSnnipet)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
@@ -381,7 +372,7 @@ Inherits TestGroup
 		  
 		  Lox.Interpreter.Interpret(statements)
 		  
-		  Dim expect() As String= GetExpect(snnipet)
+		  Dim expect() As String= GetExpect(kPrefixedNumberSnnipet)
 		  Dim actual() As String= Split(BufferPrint, EndOfLine)
 		  If actual.Ubound> -1 Then
 		    actual.Remove actual.Ubound
@@ -419,8 +410,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub TernaryTest()
-		  Dim snnipet As String= "var a=1; var b=2; var c=a>b?1:2;"+_
-		  "print c;"
+		  Dim snnipet As String= "var a=1; var b=2; var c=a>b?1:2; print c;"
 		  
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
@@ -441,8 +431,7 @@ Inherits TestGroup
 		  
 		  BufferPrint= ""
 		  
-		  snnipet= "var a=1; var b=2; var c=a<b?1:2;"+_
-		  "print c;"
+		  snnipet= "var a=1; var b=2; var c=a<b?1:2; print c;"
 		  
 		  scanner= New Lox.Scanner(snnipet)
 		  parser= New Lox.Parser(scanner.Scan)
@@ -465,6 +454,22 @@ Inherits TestGroup
 	#tag Property, Flags = &h0
 		BufferPrint As String
 	#tag EndProperty
+
+
+	#tag Constant, Name = kBreakSnnipet, Type = String, Dynamic = False, Default = \"var bb\x3D0;\rwhile (true) {\r  if (bb\x3D10) break;\r  bb++;\r}\rprint bb; // expect: 10.0", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kCompoundSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D5;\ra+\x3D5;\rprint a; // expect: 10.0\ra-\x3D3;\rprint a; // expect: 7.0\ra*\x3D5;\rprint a; // expect: 35.0\ra/\x3D2;\rprint a; // expect: 17.5", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kExtendIdSnnipet, Type = String, Dynamic = False, Default = \"var a\xC3\xB1o\x3D2024; print a\xC3\xB1o; // expect: 2024.0\rvar \xCE\xA3\x3D \"sigma\"; print \xCE\xA3; // expect: sigma\rvar $emoji$\x3D \"smileyface\";\rprint $emoji$; // expect: smileyface", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kIfOrElseSnnipet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0", Scope = Private
+	#tag EndConstant
 
 
 	#tag ViewBehavior

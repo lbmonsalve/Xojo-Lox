@@ -93,6 +93,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Visit(stmt As Lox.Ast.BreakStmt) As Variant
+		  Return "(break)"
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.CallExpr) As Variant
 		  Dim sb() As String
 		  

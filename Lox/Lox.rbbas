@@ -206,6 +206,8 @@ Protected Module Lox
 		    Return "STAR_EQUAL"
 		  Case TokenType.SLASH_EQUAL
 		    Return "SLASH_EQUAL"
+		  Case TokenType.BREAK_
+		    Return "BREAK"
 		  Case Else
 		    Return "STRINGIFY->"
 		  End Select
@@ -361,7 +363,8 @@ Protected Module Lox
 		  PLUS_EQUAL
 		  MINUS_EQUAL
 		  STAR_EQUAL
-		SLASH_EQUAL
+		  SLASH_EQUAL
+		BREAK_
 	#tag EndEnum
 
 

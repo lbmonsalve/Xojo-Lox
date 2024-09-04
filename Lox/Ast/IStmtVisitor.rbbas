@@ -7,6 +7,12 @@ Protected Interface IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Visit(stmt As Lox.Ast.BreakStmt) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
 		  
 		End Function

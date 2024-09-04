@@ -46,6 +46,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Sub resolve(expr As Lox.Ast.Expr)
 		  Call expr.Accept Self
+		  
+		Exception exc As RuntimeError
+		  HadError= True
+		  Error exc.Token, exc.Message
 		End Sub
 	#tag EndMethod
 
@@ -60,6 +64,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Sub resolve(stmt As Lox.Ast.Stmt)
 		  Call stmt.Accept Self
+		  
+		Exception exc As RuntimeError
+		  HadError= True
+		  Error exc.Token, exc.Message
 		End Sub
 	#tag EndMethod
 
@@ -111,6 +119,16 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  beginScope
 		  resolve stmt.Statements
 		  endScope
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Visit(stmt As Lox.Ast.BreakStmt) As Variant
+		  If mLoopLevel<= 0 Then
+		    HadError= True
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(stmt.Keyword, "Cannot break when not in a loop.")
+		  End If
 		End Function
 	#tag EndMethod
 
@@ -260,7 +278,9 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Ternary) As Variant
-		  
+		  resolve expr.Expression
+		  resolve expr.ThenBranch
+		  If Not (expr.ElseBranch Is Nil ) Then resolve expr.ElseBranch
 		End Function
 	#tag EndMethod
 
@@ -306,8 +326,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
+		  mLoopLevel= mLoopLevel+ 1 // enter
+		  
 		  resolve stmt.Condition
 		  resolve stmt.Body
+		  
+		  mLoopLevel= mLoopLevel- 1 // exit
 		End Function
 	#tag EndMethod
 
@@ -326,6 +350,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Property, Flags = &h21
 		Private mInterpreter As Interpreter
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mLoopLevel As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

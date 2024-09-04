@@ -128,6 +128,15 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function breakStatement() As Lox.Ast.Stmt
+		  Dim keyword As Token= Previous
+		  Call consume TokenType.SEMICOLON, "Expect ';' after return value."
+		  
+		  Return New Lox.Ast.BreakStmt(keyword)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function call_() As Lox.Ast.Expr
 		  Dim expr As Lox.Ast.Expr= primary
 		  
@@ -505,6 +514,7 @@ Protected Class Parser
 		  If Match(TokenType.PRINT_) Then Return printStatement
 		  If Match(TokenType.RETURN_) Then Return returnStatement
 		  If Match(TokenType.WHILE_) Then Return whileStatement
+		  If Match(TokenType.BREAK_) Then Return breakStatement
 		  If Match(TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(block)
 		  
 		  Return expressionStatement

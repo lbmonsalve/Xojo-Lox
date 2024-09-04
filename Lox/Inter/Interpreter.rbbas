@@ -210,6 +210,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Visit(stmt As Lox.Ast.BreakStmt) As Variant
+		  #pragma BreakOnExceptions Off
+		  Raise New BreakExc
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.CallExpr) As Variant
 		  Dim callee As Variant= Evaluate(expr.Callee)
 		  
@@ -460,9 +467,14 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
-		  While IsTruthy(Evaluate(stmt.Condition))
-		    execute stmt.Body
-		  Wend
+		  Try
+		    While IsTruthy(Evaluate(stmt.Condition))
+		      execute stmt.Body
+		    Wend
+		  Catch exc As BreakExc
+		    'System.DebugLog CurrentMethodName+ " break!!"
+		    Return Nil
+		  End Try
 		End Function
 	#tag EndMethod
 
