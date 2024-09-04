@@ -8,13 +8,18 @@ Inherits Lox.Ast.Stmt
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor(name As Lox.Token, superClass As Lox.Ast.Variable, methods() As FunctionStmt)
+		Sub Constructor(name As Lox.Token, superClass As Lox.Ast.Variable, methods() As FunctionStmt, classMethods() As FunctionStmt)
 		  Self.Name= name
 		  Self.SuperClass= superClass
 		  Self.Methods= methods
+		  Self.ClassMethods= classMethods
 		End Sub
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h0
+		ClassMethods() As FunctionStmt
+	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		Methods() As FunctionStmt

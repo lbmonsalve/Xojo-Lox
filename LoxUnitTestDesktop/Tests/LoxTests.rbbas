@@ -217,6 +217,10 @@ Inherits TestGroup
 		    Dim files() As FolderItem= FindFiles(folder)
 		    
 		    For Each file As FolderItem In files
+		      // skip files:
+		      If file.DisplayName= "get_on_class.lox" Then Continue
+		      If file.DisplayName= "set_on_class.lox" Then Continue // Static!!
+		      
 		      BufferPrint= ""
 		      BufferError= ""
 		      Lox.Interpreter.Reset
@@ -362,6 +366,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub StaticMethodTest()
+		  DoRun kStaticMethodsSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub TernaryTest()
 		  Dim snnipet As String= "var a=1; var b=2; var c=a>b?1:2; print c;"
 		  
@@ -428,6 +438,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kStaticMethodsSnnipet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private
 	#tag EndConstant
 
 

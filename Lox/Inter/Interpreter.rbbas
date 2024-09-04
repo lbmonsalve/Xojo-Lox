@@ -265,6 +265,14 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    mEnvironment.Define "super", superclass
 		  End If
 		  
+		  Dim classMethods As New Lox.Misc.CSDictionary
+		  For Each method As Lox.Ast.FunctionStmt In stmt.ClassMethods
+		    Dim func As New LoxFunction(method.Name.Lexeme, method.Func, mEnvironment, False)
+		    classMethods.Value(method.Name.Lexeme)= func
+		  Next
+		  
+		  Dim metaclass As LoxClass= New LoxClass(Nil, stmt.Name.Lexeme+ " metaclass", superclass, classMethods)
+		  
 		  Dim methods As New Lox.Misc.CSDictionary
 		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
 		    Dim func As New LoxFunction(method.Name.Lexeme, method.Func, mEnvironment, _
@@ -272,7 +280,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    methods.Value(method.Name.Lexeme)= func
 		  Next
 		  
-		  Dim klass As New LoxClass(stmt.Name.Lexeme, LoxClass(superClass), methods)
+		  Dim klass As New LoxClass(metaclass, stmt.Name.Lexeme, LoxClass(superClass), methods)
 		  
 		  If Not (superclass Is Nil) Then mEnvironment= mEnvironment.Enclosing
 		  

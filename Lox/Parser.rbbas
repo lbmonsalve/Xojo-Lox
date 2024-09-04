@@ -185,13 +185,20 @@ Protected Class Parser
 		  Call consume TokenType.LEFT_BRACE, "Expect '{' before class body."
 		  
 		  Dim methods() As Lox.Ast.FunctionStmt
+		  Dim classMethods() As Lox.Ast.FunctionStmt
+		  
 		  While Not Check(TokenType.RIGHT_BRACE) And Not IsAtEnd
-		    methods.Append function_("method")
+		    Dim isClassMethod As Boolean= Match(TokenType.CLASS_)
+		    If isClassMethod Then
+		      classMethods.Append function_("method")
+		    Else
+		      methods.Append function_("method")
+		    End If
 		  Wend
 		  
 		  Call consume TokenType.RIGHT_BRACE, "Expect '}' after class body."
 		  
-		  Return New Lox.Ast.ClassStmt(name, superClass, methods)
+		  Return New Lox.Ast.ClassStmt(name, superClass, methods, classMethods)
 		End Function
 	#tag EndMethod
 

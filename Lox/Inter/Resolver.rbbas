@@ -179,6 +179,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  If Not (stmt.SuperClass Is Nil) Then endScope
 		  
+		  For Each method As Lox.Ast.FunctionStmt In stmt.ClassMethods
+		    beginScope
+		    mScopes(mScopes.Ubound).Value("this")= True
+		    resolveFunction method, FunctionType.METHOD
+		    endScope
+		  Next
+		  
 		  mCurrentClass= enclosingClass
 		End Function
 	#tag EndMethod

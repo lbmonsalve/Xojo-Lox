@@ -1,5 +1,6 @@
 #tag Class
 Protected Class LoxClass
+Inherits Lox.Inter.LoxInstance
 Implements ICallable
 	#tag Method, Flags = &h0
 		Function Arity() As Integer
@@ -24,10 +25,12 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(name As String, superClass As LoxClass, methods As Lox.Misc.CSDictionary)
+		Sub Constructor(metaclass As LoxClass, name As String, superClass As LoxClass, methods As Lox.Misc.CSDictionary)
 		  Self.Name= name
 		  Self.SuperClass= superClass
 		  mMethods= methods
+		  
+		  Super.Constructor metaclass
 		End Sub
 	#tag EndMethod
 
