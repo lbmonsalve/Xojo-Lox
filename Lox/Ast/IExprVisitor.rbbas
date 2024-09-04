@@ -1,85 +1,85 @@
 #tag Interface
 Protected Interface IExprVisitor
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Assign) As Variant
+		Function VisitAssign(expr As Lox.Ast.Assign) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Binary) As Variant
+		Function VisitBinary(expr As Lox.Ast.Binary) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.CallExpr) As Variant
+		Function VisitCallExpr(expr As Lox.Ast.CallExpr) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.FunctionExpr) As Variant
+		Function VisitFunctionExpr(expr As Lox.Ast.FunctionExpr) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Get) As Variant
+		Function VisitGet(expr As Lox.Ast.Get) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Grouping) As Variant
+		Function VisitGrouping(expr As Lox.Ast.Grouping) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Literal) As Variant
+		Function VisitLiteral(expr As Lox.Ast.Literal) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Logical) As Variant
+		Function VisitLogical(expr As Lox.Ast.Logical) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Set) As Variant
+		Function VisitSet(expr As Lox.Ast.Set) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
+		Function VisitSuperExpr(expr As Lox.Ast.SuperExpr) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Ternary) As Variant
+		Function VisitTernary(expr As Lox.Ast.Ternary) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.This) As Variant
+		Function VisitThis(expr As Lox.Ast.This) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Unary) As Variant
+		Function VisitUnary(expr As Lox.Ast.Unary) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Variable) As Variant
+		Function VisitVariable(expr As Lox.Ast.Variable) As Variant
 		  
 		End Function
 	#tag EndMethod

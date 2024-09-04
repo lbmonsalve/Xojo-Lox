@@ -34,6 +34,15 @@ Protected Class LoxInstance
 	#tag EndMethod
 
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Return mFields
+			End Get
+		#tag EndGetter
+		Fields As Lox.Misc.CSDictionary
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h21
 		Private mClass As LoxClass
 	#tag EndProperty

@@ -124,7 +124,7 @@ Begin Window UnitTestWindow Implements Writeable
          DataSource      =   ""
          Enabled         =   True
          Format          =   ""
-         Height          =   471
+         Height          =   437
          HelpTag         =   ""
          HideSelection   =   True
          Index           =   -2147483648
@@ -144,7 +144,7 @@ Begin Window UnitTestWindow Implements Writeable
          ScrollbarHorizontal=   ""
          ScrollbarVertical=   True
          Styled          =   False
-         TabIndex        =   1
+         TabIndex        =   3
          TabPanelIndex   =   2
          TabStop         =   True
          Text            =   "// Your first Lox program!\r\nprint ""Hello, world!"";\r\n\r\n// variables\r\nvar condition = true;\r\n\r\n// control flow\r\nif (condition) {\r\n  print ""yes"";\r\n} else {\r\n  print ""no"";\r\n}\r\n\r\nvar a = 1;\r\nwhile (a < 10) {\r\n  print a;\r\n  a = a + 1;\r\n}\r\n\r\nfor (var a = 1; a < 10; a = a + 1) {\r\n  print a;\r\n}\r\n\r\n// functions\r\nfun printSum(a, b) {\r\n  print a + b;\r\n}\r\nprintSum(1,2);\r\n\r\n// closures\r\nfun addPair(a, b) {\r\n  return a + b;\r\n}\r\n\r\nfun identity(a) {\r\n  return a;\r\n}\r\n\r\nprint identity(addPair)(1, 2); // Prints ""3"".\r\n\r\n// classes\r\nclass Breakfast {\r\n  init(meat, bread) {\r\n    this.meat = meat;\r\n    this.bread = bread;\r\n  }\r\n\r\n  cook() {\r\n    print ""Eggs a-fryin'!"";\r\n  }\r\n\r\n  serve(who) {\r\n    print ""Enjoy your breakfast, "" + who + ""."";\r\n  }\r\n}\r\n\r\nclass Brunch < Breakfast {\r\n  drink() {\r\n    print ""How about a Bloody Mary?"";\r\n  }\r\n}\r\n\r\n// Store it in variables.\r\nvar breakfast = Breakfast(""saug"", ""sour"");\r\nprint breakfast; // ""Breakfast instance"".\r\n\r\nbreakfast.meat = ""sausage"";\r\nbreakfast.bread = ""sourdough"";\r\n\r\nbreakfast.serve(""Dear Reader"");\r\n// ""Enjoy your bacon and toast, Dear Reader.""\r\n\r\nvar benedict = Brunch(""ham"", ""English muffin"");\r\nbenedict.serve(""Noble Reader"");\r\nbenedict.drink();\r\n\r\n\r\nfun fib(n) {\r\n  if (n < 2) return n;\r\n  return fib(n - 1) + fib(n - 2); \r\n}\r\n\r\nvar before = clock();\r\nprint fib(10);\r\nvar after = clock();\r\nprint after - before;"
@@ -152,7 +152,7 @@ Begin Window UnitTestWindow Implements Writeable
          TextFont        =   "System"
          TextSize        =   18
          TextUnit        =   0
-         Top             =   109
+         Top             =   143
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
@@ -170,7 +170,7 @@ Begin Window UnitTestWindow Implements Writeable
          DataSource      =   ""
          Enabled         =   True
          Format          =   ""
-         Height          =   471
+         Height          =   488
          HelpTag         =   ""
          HideSelection   =   True
          Index           =   -2147483648
@@ -190,7 +190,7 @@ Begin Window UnitTestWindow Implements Writeable
          ScrollbarHorizontal=   ""
          ScrollbarVertical=   True
          Styled          =   False
-         TabIndex        =   2
+         TabIndex        =   9
          TabPanelIndex   =   2
          TabStop         =   True
          Text            =   ""
@@ -198,7 +198,7 @@ Begin Window UnitTestWindow Implements Writeable
          TextFont        =   "System"
          TextSize        =   18
          TextUnit        =   0
-         Top             =   109
+         Top             =   92
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
@@ -224,7 +224,7 @@ Begin Window UnitTestWindow Implements Writeable
          LockRight       =   True
          LockTop         =   True
          Scope           =   0
-         TabIndex        =   3
+         TabIndex        =   4
          TabPanelIndex   =   2
          TabStop         =   True
          TextFont        =   "System"
@@ -233,7 +233,7 @@ Begin Window UnitTestWindow Implements Writeable
          Top             =   50
          Underline       =   ""
          Visible         =   True
-         Width           =   80
+         Width           =   60
       End
       Begin TextField TextField1
          AcceptTabs      =   ""
@@ -264,7 +264,7 @@ Begin Window UnitTestWindow Implements Writeable
          Password        =   ""
          ReadOnly        =   False
          Scope           =   0
-         TabIndex        =   4
+         TabIndex        =   1
          TabPanelIndex   =   2
          TabStop         =   True
          Text            =   ""
@@ -291,7 +291,100 @@ Begin Window UnitTestWindow Implements Writeable
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   512
+         Left            =   564
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   False
+         LockRight       =   True
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   6
+         TabPanelIndex   =   2
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   16
+         TextUnit        =   0
+         Top             =   50
+         Underline       =   ""
+         Visible         =   True
+         Width           =   60
+      End
+      Begin PushButton PushButton4
+         AutoDeactivate  =   True
+         Bold            =   ""
+         ButtonStyle     =   0
+         Cancel          =   ""
+         Caption         =   "Scan"
+         Default         =   ""
+         Enabled         =   True
+         Height          =   30
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   636
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   False
+         LockRight       =   True
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   7
+         TabPanelIndex   =   2
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   16
+         TextUnit        =   0
+         Top             =   50
+         Underline       =   ""
+         Visible         =   True
+         Width           =   60
+      End
+      Begin PushButton PushButton5
+         AutoDeactivate  =   True
+         Bold            =   ""
+         ButtonStyle     =   0
+         Cancel          =   ""
+         Caption         =   "Tokens"
+         Default         =   ""
+         Enabled         =   True
+         Height          =   30
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   708
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   False
+         LockRight       =   True
+         LockTop         =   True
+         Scope           =   0
+         TabIndex        =   8
+         TabPanelIndex   =   2
+         TabStop         =   True
+         TextFont        =   "System"
+         TextSize        =   16
+         TextUnit        =   0
+         Top             =   50
+         Underline       =   ""
+         Visible         =   True
+         Width           =   60
+      End
+      Begin PushButton PushButton6
+         AutoDeactivate  =   True
+         Bold            =   ""
+         ButtonStyle     =   0
+         Cancel          =   ""
+         Caption         =   "Expr"
+         Default         =   ""
+         Enabled         =   True
+         Height          =   30
+         HelpTag         =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   492
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   False
@@ -307,14 +400,14 @@ Begin Window UnitTestWindow Implements Writeable
          Top             =   50
          Underline       =   ""
          Visible         =   True
-         Width           =   80
+         Width           =   60
       End
-      Begin PushButton PushButton4
+      Begin PushButton PushButton7
          AutoDeactivate  =   True
          Bold            =   ""
          ButtonStyle     =   0
          Cancel          =   ""
-         Caption         =   "Scanner"
+         Caption         =   "From clipboard"
          Default         =   ""
          Enabled         =   True
          Height          =   30
@@ -322,54 +415,23 @@ Begin Window UnitTestWindow Implements Writeable
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   604
+         Left            =   20
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   True
          LockRight       =   ""
          LockTop         =   True
          Scope           =   0
-         TabIndex        =   6
+         TabIndex        =   2
          TabPanelIndex   =   2
          TabStop         =   True
          TextFont        =   "System"
          TextSize        =   16
          TextUnit        =   0
-         Top             =   50
+         Top             =   92
          Underline       =   ""
          Visible         =   True
-         Width           =   80
-      End
-      Begin PushButton PushButton5
-         AutoDeactivate  =   True
-         Bold            =   ""
-         ButtonStyle     =   0
-         Cancel          =   ""
-         Caption         =   "Stmts"
-         Default         =   ""
-         Enabled         =   True
-         Height          =   30
-         HelpTag         =   ""
-         Index           =   -2147483648
-         InitialParent   =   "TabPanel1"
-         Italic          =   ""
-         Left            =   696
-         LockBottom      =   ""
-         LockedInPosition=   False
-         LockLeft        =   True
-         LockRight       =   ""
-         LockTop         =   True
-         Scope           =   0
-         TabIndex        =   7
-         TabPanelIndex   =   2
-         TabStop         =   True
-         TextFont        =   "System"
-         TextSize        =   16
-         TextUnit        =   0
-         Top             =   50
-         Underline       =   ""
-         Visible         =   True
-         Width           =   80
+         Width           =   130
       End
    End
 End
@@ -490,12 +552,13 @@ End
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  If scanner.HadError Then Return
 		  
+		  Dim lines() As String
 		  For Each token As Lox.Token In tokens
-		    TextArea2.AppendText token.TypeToken.ToString+ " "+ _
-		    token.Lexeme+ " "+ token.Literal.ToStringLox+ EndOfLine
+		    lines.Append token.TypeToken.ToString+ " "+ token.Lexeme+ _
+		    " "+ token.Literal.ToStringLox+ EndOfLine
 		  Next
 		  
-		  TextArea2.AppendText EndOfLine
+		  TextArea2.AppendText Join(lines)+ EndOfLine
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -510,11 +573,56 @@ End
 		  Dim statements() As Lox.Ast.Stmt= parser.Parse
 		  If parser.HadError Then Return
 		  
+		  Dim lines() As String
 		  For Each statement As Lox.Ast.Stmt In statements
 		    Dim stmtPrinter As New Lox.Misc.AstPrinter
 		    Dim stmt As String= stmtPrinter.Print(statement)
-		    TextArea2.AppendText stmt+ EndOfLine
+		    lines.Append stmt+ EndOfLine
 		  Next
+		  
+		  TextArea2.AppendText Join(lines)
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton6
+	#tag Event
+		Sub Action()
+		  Lox.PrintOut= Self
+		  Lox.ErrorOut= Self
+		  
+		  Dim scanner As New Lox.Scanner(TextArea1.Text)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  If scanner.HadError Then Return
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim syntax As Variant= parser.ParseREPL
+		  If parser.HadError Then Return
+		  
+		  If syntax.isArray Then
+		    Dim statements() As Lox.Ast.Stmt= syntax
+		    
+		    Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		    resolver.Resolve(statements)
+		    If resolver.HadError Then Return
+		    
+		    Lox.Interpreter.Interpret(statements)
+		    If Lox.Interpreter.HadRuntimeError Then Return
+		  Else
+		    Dim expr As Lox.Ast.Expr= Lox.Ast.Expr(syntax)
+		    Dim result As Variant= Lox.Interpreter.Interpret(expr)
+		    If result.Type= 8 Then TextArea2.AppendText "= "+ result+ EndOfLine
+		  End If
+		  
+		  TextArea2.AppendText EndOfLine
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton7
+	#tag Event
+		Sub Action()
+		  Dim cb As New Clipboard
+		  TextArea1.Text= cb.Text
+		  cb.Close
 		End Sub
 	#tag EndEvent
 #tag EndEvents

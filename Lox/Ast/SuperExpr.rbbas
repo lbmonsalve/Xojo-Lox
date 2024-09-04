@@ -3,7 +3,7 @@ Protected Class SuperExpr
 Inherits Lox.Ast.Expr
 	#tag Method, Flags = &h0
 		Function Accept(visitor As IExprVisitor) As Variant
-		  Return visitor.Visit(Self)
+		  Return visitor.VisitSuperExpr(Self)
 		End Function
 	#tag EndMethod
 

@@ -12,8 +12,8 @@ Protected Class Environment
 
 	#tag Method, Flags = &h0
 		Sub Assign(name As Lox.Token, value As Variant)
-		  If Values.HasKey(name.Lexeme) Then
-		    Values.Value(name.Lexeme)= value
+		  If mValues.HasKey(name.Lexeme) Then
+		    mValues.Value(name.Lexeme)= value
 		    Return
 		  End If
 		  
@@ -35,25 +35,26 @@ Protected Class Environment
 
 	#tag Method, Flags = &h0
 		Sub Constructor()
-		  
+		  mValues= New Lox.Misc.CSDictionary
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Constructor(enclosing As Environment)
+		  Constructor
 		  Self.Enclosing= enclosing
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Define(name As String, value As Variant)
-		  Values.Value(name)= value
+		  mValues.Value(name)= value
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Get(name As Lox.Token) As Variant
-		  If Values.HasKey(name.Lexeme) Then Return Values.Value(name.Lexeme)
+		  If mValues.HasKey(name.Lexeme) Then Return mValues.Value(name.Lexeme)
 		  
 		  If Not (Enclosing Is Nil) Then Return Enclosing.Get(name)
 		  
@@ -80,8 +81,6 @@ Protected Class Environment
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mValues Is Nil Then mValues= New Lox.Misc.CSDictionary
-			  
 			  return mValues
 			End Get
 		#tag EndGetter

@@ -3,7 +3,7 @@ Protected Class Expression
 Inherits Lox.Ast.Stmt
 	#tag Method, Flags = &h0
 		Function Accept(visitor As IStmtVisitor) As Variant
-		  Return visitor.Visit(Self)
+		  Return visitor.VisitExpression(Self)
 		End Function
 	#tag EndMethod
 

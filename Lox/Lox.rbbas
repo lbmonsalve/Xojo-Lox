@@ -67,12 +67,8 @@ Protected Module Lox
 
 	#tag Method, Flags = &h0
 		Function IsStringLox(Extends vart As Variant) As Boolean
-		  Select Case vart.Type
-		  Case 8, 11, 16
-		    Return True
-		  Case Else
-		    Return False
-		  End Select
+		  If vart.Type= 8 Then Return True
+		  Return False
 		End Function
 	#tag EndMethod
 
@@ -210,6 +206,8 @@ Protected Module Lox
 		    Return "BREAK"
 		  Case TokenType.CONTINUE_
 		    Return "CONTINUE"
+		  Case TokenType.MODULE_
+		    Return "MODULE"
 		  Case Else
 		    Return "STRINGIFY->"
 		  End Select
@@ -250,6 +248,65 @@ Protected Module Lox
 		  Case Else
 		    Return "other"
 		  End Select
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ValChar(asc As UInt8) As UInt64
+		  Select Case asc
+		  Case 48
+		    Return 0
+		  Case 49
+		    Return 1
+		  Case 50
+		    Return 2
+		  Case 51
+		    Return 3
+		  Case 52
+		    Return 4
+		  Case 53
+		    Return 5
+		  Case 54
+		    Return 6
+		  Case 55
+		    Return 7
+		  Case 56
+		    Return 8
+		  Case 57
+		    Return 9
+		  Case 97
+		    Return 10
+		  Case 98
+		    Return 11
+		  Case 99
+		    Return 12
+		  Case 100
+		    Return 13
+		  Case 101
+		    Return 14
+		  Case 102
+		    Return 15
+		    
+		  End Select
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ValHexLox(extends cad As String) As Double
+		  Dim len As Integer= cad.Len
+		  If len> 16 Then Return &hffffffffffffffff
+		  
+		  Dim num3 As UInt64= ValChar(cad.Mid(len, 1).Lowercase.Asc)
+		  Dim num4 As UInt64= num3
+		  Dim i As Integer= 1
+		  
+		  For j As Integer= len- 1 DownTo 1 // bigendian
+		    num3= ValChar(cad.Mid(j, 1).Lowercase.Asc)
+		    num4= num4 Or Bitwise.ShiftLeft(num3, i* 4)
+		    i= i+ 1
+		  Next
+		  
+		  Return CType(num4, Double)
 		End Function
 	#tag EndMethod
 
@@ -314,7 +371,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240904", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240905", Scope = Public
 	#tag EndConstant
 
 
@@ -367,7 +424,8 @@ Protected Module Lox
 		  STAR_EQUAL
 		  SLASH_EQUAL
 		  BREAK_
-		CONTINUE_
+		  CONTINUE_
+		MODULE_
 	#tag EndEnum
 
 

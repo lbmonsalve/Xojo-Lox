@@ -3,7 +3,7 @@ Protected Class Unary
 Inherits Lox.Ast.Expr
 	#tag Method, Flags = &h0
 		Function Accept(visitor As IExprVisitor) As Variant
-		  Return visitor.Visit(Self)
+		  Return visitor.VisitUnary(Self)
 		End Function
 	#tag EndMethod
 

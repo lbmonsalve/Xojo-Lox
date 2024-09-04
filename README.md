@@ -105,10 +105,15 @@ print after - before;
 program        → declaration* EOF ;
 
 // declarations:
-declaration    → classDecl
+declaration    → moduleDecl
+               | classDecl
                | funDecl
                | varDecl
                | statement ;
+
+moduleDecl     → "module" IDENTIFIER "{" 
+                 classDecl+ | funDecl+ | moduleDecl+
+                 "}" ;
 
 classDecl      → "class" IDENTIFIER ( "<" IDENTIFIER )?
                  "{" function* "}" ;

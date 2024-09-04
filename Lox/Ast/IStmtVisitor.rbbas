@@ -1,67 +1,73 @@
 #tag Interface
 Protected Interface IStmtVisitor
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.Block) As Variant
+		Function VisitBlock(stmt As Lox.Ast.Block) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.BreakStmt) As Variant
+		Function VisitBreakStmt(stmt As Lox.Ast.BreakStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
+		Function VisitClassStmt(stmt As Lox.Ast.ClassStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.ContinueStmt) As Variant
+		Function VisitContinueStmt(stmt As Lox.Ast.ContinueStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.Expression) As Variant
+		Function VisitExpression(stmt As Lox.Ast.Expression) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
+		Function VisitFunctionStmt(stmt As Lox.Ast.FunctionStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
+		Function VisitIfStmt(stmt As Lox.Ast.IfStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.Print) As Variant
+		Function VisitModuleStmt(stmt As Lox.Ast.ModuleStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.ReturnStmt) As Variant
+		Function VisitPrint(stmt As Lox.Ast.Print) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.VarStmt) As Variant
+		Function VisitReturnStmt(stmt As Lox.Ast.ReturnStmt) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
+		Function VisitVarStmt(stmt As Lox.Ast.VarStmt) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitWhileStmt(stmt As Lox.Ast.WhileStmt) As Variant
 		  
 		End Function
 	#tag EndMethod

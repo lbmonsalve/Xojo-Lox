@@ -244,6 +244,7 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function declaration() As Lox.Ast.Stmt
 		  Try
+		    If Match(TokenType.MODULE_) Then Return moduleDeclaration
 		    If Match(TokenType.CLASS_) Then Return classDeclaration
 		    If Check(TokenType.FUN) And CheckNext(TokenType.IDENTIFIER) Then
 		      Call consume TokenType.FUN, ""
@@ -438,6 +439,39 @@ Protected Class Parser
 		  Next
 		  
 		  Return False
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function moduleDeclaration() As Lox.Ast.Stmt
+		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect module name.")
+		  
+		  Call consume TokenType.LEFT_BRACE, "Expect '{' before class body."
+		  
+		  Dim modules() As Lox.Ast.ModuleStmt
+		  Dim classes() As Lox.Ast.ClassStmt
+		  Dim functio() As Lox.Ast.FunctionStmt
+		  
+		  While Not Check(TokenType.RIGHT_BRACE) And Not IsAtEnd
+		    If Check(TokenType.MODULE_) Then
+		      Call Advance
+		      modules.Append Lox.Ast.ModuleStmt(moduleDeclaration)
+		    ElseIf Check(TokenType.CLASS_) Then
+		      Call Advance
+		      classes.Append Lox.Ast.ClassStmt(classDeclaration)
+		    ElseIf Check(TokenType.FUN) Then
+		      Call Advance
+		      functio.Append function_("function")
+		    Else
+		      Error Peek, "Expected a module, class or method definition."
+		      HadError= True
+		    End If
+		    //
+		  Wend
+		  
+		  Call consume TokenType.RIGHT_BRACE, "Expect '}' after class body."
+		  
+		  Return New Lox.Ast.ModuleStmt(name, modules, classes, functio)
 		End Function
 	#tag EndMethod
 

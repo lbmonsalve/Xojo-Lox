@@ -194,6 +194,15 @@ Protected Class Scanner
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function PreviousTokenIs(type As TokenType) As Boolean
+		  If mTokens.Ubound= -1 Then Return False
+		  If mTokens(mTokens.Ubound).TypeToken= type Then Return True
+		  
+		  Return False
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function Scan() As Token()
 		  While Not IsAtEnd
@@ -226,7 +235,7 @@ Protected Class Scanner
 		      While IsHexadecimal(Peek)
 		        Call Advance
 		      Wend
-		      Dim value As Double= Val("&h"+ mSource.SubstringLox(mStart+ 2, mCurrent))
+		      Dim value As Double= mSource.SubstringLox(mStart+ 2, mCurrent).ValHexLox
 		      AddToken TokenType.NUMBER, value
 		      Return
 		    Case "o"
@@ -266,7 +275,19 @@ Protected Class Scanner
 		      Call Advance
 		      AddToken TokenType.MINUS_EQUAL
 		    Else
-		      AddToken IIf(Match("-"), TokenType.MINUS_MINUS, TokenType.MINUS)
+		      'AddToken IIf(Match("-"), TokenType.MINUS_MINUS, TokenType.MINUS)
+		      // --ID, ---ID, ...
+		      If Peek= "-" Then
+		        If PreviousTokenIs(TokenType.IDENTIFIER) Then
+		          Call Advance
+		          AddToken TokenType.MINUS_MINUS
+		        Else
+		          AddToken TokenType.MINUS
+		        End If
+		      Else
+		        AddToken TokenType.MINUS
+		      End If
+		      // --ID, ---ID, ...
 		    End If
 		  Case "+"
 		    If Peek= "=" Then
@@ -390,6 +411,7 @@ Protected Class Scanner
 			  mKeywords.Value("while")= TokenType.WHILE_
 			  mKeywords.Value("break")= TokenType.BREAK_
 			  mKeywords.Value("continue")= TokenType.CONTINUE_
+			  mKeywords.Value("module")= TokenType.MODULE_
 			  
 			  Return mKeywords
 			End Get

@@ -3,7 +3,7 @@ Protected Class VarStmt
 Inherits Lox.Ast.Stmt
 	#tag Method, Flags = &h0
 		Function Accept(visitor As IStmtVisitor) As Variant
-		  Return visitor.Visit(Self)
+		  Return visitor.VisitVarStmt(Self)
 		End Function
 	#tag EndMethod
 

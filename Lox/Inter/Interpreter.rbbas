@@ -13,7 +13,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h21
 		Private Sub CheckNumberOperands(operator As Lox.Token, left As Variant, right As Variant)
-		  If left.IsNumeric And right.IsNumeric Then Return
+		  If left.IsNumberLox And right.IsNumberLox Then Return
 		  
 		  HadRuntimeError= True
 		  #pragma BreakOnExceptions Off
@@ -142,7 +142,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Assign) As Variant
+		Function VisitAssign(expr As Lox.Ast.Assign) As Variant
 		  Dim value As Variant= Evaluate(expr.Value)
 		  
 		  If mLocals.HasKey(expr) Then
@@ -157,7 +157,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Binary) As Variant
+		Function VisitBinary(expr As Lox.Ast.Binary) As Variant
 		  Dim left As Variant= Evaluate(expr.Left)
 		  Dim right As Variant= Evaluate(expr.Right)
 		  
@@ -216,20 +216,20 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.Block) As Variant
+		Function VisitBlock(stmt As Lox.Ast.Block) As Variant
 		  ExecuteBlock stmt.Statements, New Environment(mEnvironment)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.BreakStmt) As Variant
+		Function VisitBreakStmt(stmt As Lox.Ast.BreakStmt) As Variant
 		  #pragma BreakOnExceptions Off
 		  Raise New BreakExc
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.CallExpr) As Variant
+		Function VisitCallExpr(expr As Lox.Ast.CallExpr) As Variant
 		  Dim callee As Variant= Evaluate(expr.Callee)
 		  
 		  Dim arguments() As Variant
@@ -259,7 +259,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
+		Function VisitClassStmt(stmt As Lox.Ast.ClassStmt) As Variant
 		  Dim superclass As Variant
 		  If Not (stmt.SuperClass Is Nil) THEN
 		    superclass= Evaluate(stmt.SuperClass)
@@ -270,7 +270,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    End If
 		  END IF
 		  
-		  mEnvironment.Define(stmt.Name.Lexeme, Nil)
+		  mEnvironment.Define stmt.Name.Lexeme, Nil
 		  
 		  If Not (stmt.SuperClass Is Nil) Then
 		    mEnvironment= New Environment(mEnvironment)
@@ -301,34 +301,33 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.ContinueStmt) As Variant
+		Function VisitContinueStmt(stmt As Lox.Ast.ContinueStmt) As Variant
 		  #pragma BreakOnExceptions Off
 		  Raise New ContinueExc
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.Expression) As Variant
+		Function VisitExpression(stmt As Lox.Ast.Expression) As Variant
 		  Call Evaluate stmt.Expression
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.FunctionExpr) As Variant
+		Function VisitFunctionExpr(expr As Lox.Ast.FunctionExpr) As Variant
 		  Return New LoxFunction("", expr, Environment, False)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
-		  Dim fnName As String= stmt.Name.Lexeme
-		  Dim func As New LoxFunction(fnName, stmt.Func, mEnvironment, False)
-		  mEnvironment.Define(stmt.Name.Lexeme, func)
+		Function VisitFunctionStmt(stmt As Lox.Ast.FunctionStmt) As Variant
+		  Dim func As New LoxFunction(stmt.Name.Lexeme, stmt.Func, mEnvironment, False)
+		  mEnvironment.Define stmt.Name.Lexeme, func
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Get) As Variant
+		Function VisitGet(expr As Lox.Ast.Get) As Variant
 		  Dim obj As Variant= Evaluate(expr.Obj)
 		  If obj IsA LoxInstance Then
 		    Dim objInstance As LoxInstance= LoxInstance(obj)
@@ -342,13 +341,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Grouping) As Variant
+		Function VisitGrouping(expr As Lox.Ast.Grouping) As Variant
 		  Return Evaluate(expr.Expression)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
+		Function VisitIfStmt(stmt As Lox.Ast.IfStmt) As Variant
 		  If isTruthy(Evaluate(stmt.Condition)) Then
 		    execute stmt.ThenBranch
 		    Return Nil
@@ -369,13 +368,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Literal) As Variant
+		Function VisitLiteral(expr As Lox.Ast.Literal) As Variant
 		  Return expr.Value
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Logical) As Variant
+		Function VisitLogical(expr As Lox.Ast.Logical) As Variant
 		  Dim left As Variant= evaluate(expr.Left)
 		  
 		  If expr.Operator.TypeToken= TokenType.OR_ Then
@@ -389,7 +388,54 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.Print) As Variant
+		Function VisitModuleStmt(stmt As Lox.Ast.ModuleStmt) As Variant
+		  Dim func As LoxFunction
+		  
+		  // Define the module's name in the current environment.
+		  mEnvironment.Define stmt.Name.Lexeme, Nil
+		  
+		  // Store the current environment and then immediately create a new one that
+		  // will act as the module's namespace.
+		  Dim oldEnv As Environment= mEnvironment
+		  mEnvironment= New Environment(oldEnv)
+		  
+		  // Convert any methods in the module to RooFunctions.
+		  Dim functions As New Lox.Misc.CSDictionary
+		  For Each fun As Lox.Ast.FunctionStmt In stmt.Functions
+		    func= New LoxFunction(fun.Name.Lexeme, fun.Func, mEnvironment, False)
+		    functions.Value(fun.Name.Lexeme)= func
+		  Next
+		  
+		  // Create a metaclass for this module to enable the use of the above
+		  // methods (which are essentially static).
+		  Dim metaclass As New LoxClass(Nil, stmt.Name.Lexeme+ " metaclass", Nil, functions)
+		  
+		  // Convert any sub-module declarations to RooModules within this module's namespace.
+		  Dim modules() As LoxModule
+		  For Each modul As Lox.Ast.ModuleStmt In stmt.Modules
+		    Call VisitModuleStmt(modul)
+		    modules.Append mEnvironment.Get(modul.Name)
+		  Next
+		  
+		  // Convert any class declarations to RooClasses within this module's namespace.
+		  Dim classes() As LoxClass
+		  For Each cls As Lox.Ast.ClassStmt In stmt.Classes
+		    Call VisitClassStmt(cls)
+		    classes.Append mEnvironment.Get(cls.Name)
+		  Next
+		  
+		  // Convert the passed module statement node into its runtime representation.
+		  Dim mo As New LoxModule(metaclass, stmt.Name.Lexeme, modules, classes, functions)
+		  
+		  // Store the module object in the variable we previously declared.
+		  mEnvironment.Assign stmt.Name, mo
+		  
+		  mEnvironment= oldEnv
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitPrint(stmt As Lox.Ast.Print) As Variant
 		  Dim value As Variant= Evaluate(stmt.Expression)
 		  Dim msg As String= Stringify(value)
 		  
@@ -403,7 +449,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.ReturnStmt) As Variant
+		Function VisitReturnStmt(stmt As Lox.Ast.ReturnStmt) As Variant
 		  Dim value As Variant
 		  If Not (stmt.Value Is Nil) Then value= Evaluate(stmt.Value)
 		  
@@ -413,7 +459,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Set) As Variant
+		Function VisitSet(expr As Lox.Ast.Set) As Variant
 		  Dim obj As Variant= Evaluate(expr.Obj)
 		  
 		  If Not (obj IsA LoxInstance) Then
@@ -431,7 +477,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
+		Function VisitSuperExpr(expr As Lox.Ast.SuperExpr) As Variant
 		  Dim distance As Integer= mLocals.Value(expr)
 		  Dim superClass As LoxClass= LoxClass(mEnvironment.GetAt(distance, "super"))
 		  Dim obj As LoxInstance= LoxInstance(mEnvironment.GetAt(distance- 1, "this"))
@@ -448,7 +494,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Ternary) As Variant
+		Function VisitTernary(expr As Lox.Ast.Ternary) As Variant
 		  If isTruthy(Evaluate(expr.Expression)) Then
 		    Return Evaluate(expr.ThenBranch)
 		  End If
@@ -460,13 +506,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.This) As Variant
+		Function VisitThis(expr As Lox.Ast.This) As Variant
 		  Return lookUpVariable(expr.Keyword, expr)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Unary) As Variant
+		Function VisitUnary(expr As Lox.Ast.Unary) As Variant
 		  Dim right As Variant= Evaluate(expr.Right)
 		  
 		  Select Case expr.Operator.TypeToken
@@ -483,13 +529,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Variable) As Variant
+		Function VisitVariable(expr As Lox.Ast.Variable) As Variant
 		  Return lookUpVariable(expr.Name, expr)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.VarStmt) As Variant
+		Function VisitVarStmt(stmt As Lox.Ast.VarStmt) As Variant
 		  Dim value As Variant
 		  If Not (stmt.Initializer Is Nil) Then
 		    value= Evaluate(stmt.Initializer)
@@ -500,7 +546,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
+		Function VisitWhileStmt(stmt As Lox.Ast.WhileStmt) As Variant
 		  Try
 		    While IsTruthy(Evaluate(stmt.Condition))
 		      Try

@@ -90,7 +90,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h21
 		Private Sub resolveLocal(expr As Lox.Ast.Expr, name As Lox.Token)
-		  For i As Integer= mScopes.Ubound To 0 Step -1
+		  For i As Integer= mScopes.Ubound DownTo 0
 		    Dim scope As Lox.Misc.CSDictionary= mScopes(i)
 		    If scope.HasKey(name.Lexeme) Then
 		      mInterpreter.Resolve(expr, mScopes.Ubound- i)
@@ -101,21 +101,21 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Assign) As Variant
+		Function VisitAssign(expr As Lox.Ast.Assign) As Variant
 		  resolve expr.Value
 		  resolveLocal expr, expr.Name
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Binary) As Variant
+		Function VisitBinary(expr As Lox.Ast.Binary) As Variant
 		  resolve expr.Left
 		  resolve expr.Right
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.Block) As Variant
+		Function VisitBlock(stmt As Lox.Ast.Block) As Variant
 		  beginScope
 		  resolve stmt.Statements
 		  endScope
@@ -123,7 +123,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.BreakStmt) As Variant
+		Function VisitBreakStmt(stmt As Lox.Ast.BreakStmt) As Variant
 		  If mLoopLevel<= 0 Then
 		    HadError= True
 		    #pragma BreakOnExceptions Off
@@ -133,7 +133,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.CallExpr) As Variant
+		Function VisitCallExpr(expr As Lox.Ast.CallExpr) As Variant
 		  resolve expr.Callee
 		  
 		  For Each arg As Lox.Ast.Expr In expr.Arguments
@@ -143,7 +143,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.ClassStmt) As Variant
+		Function VisitClassStmt(stmt As Lox.Ast.ClassStmt) As Variant
 		  Dim enclosingClass As ClassType= mCurrentClass
 		  mCurrentClass= ClassType.CLASS_
 		  
@@ -191,7 +191,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.ContinueStmt) As Variant
+		Function VisitContinueStmt(stmt As Lox.Ast.ContinueStmt) As Variant
 		  If mLoopLevel<= 0 Then
 		    HadError= True
 		    #pragma BreakOnExceptions Off
@@ -201,19 +201,19 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.Expression) As Variant
+		Function VisitExpression(stmt As Lox.Ast.Expression) As Variant
 		  resolve stmt.Expression
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.FunctionExpr) As Variant
+		Function VisitFunctionExpr(expr As Lox.Ast.FunctionExpr) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
+		Function VisitFunctionStmt(stmt As Lox.Ast.FunctionStmt) As Variant
 		  declare_ stmt.Name
 		  define stmt.Name
 		  
@@ -222,19 +222,19 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Get) As Variant
+		Function VisitGet(expr As Lox.Ast.Get) As Variant
 		  resolve expr.Obj
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Grouping) As Variant
+		Function VisitGrouping(expr As Lox.Ast.Grouping) As Variant
 		  resolve expr.Expression
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.IfStmt) As Variant
+		Function VisitIfStmt(stmt As Lox.Ast.IfStmt) As Variant
 		  resolve stmt.Condition
 		  resolve stmt.ThenBranch
 		  If Not (stmt.ElseBranch Is Nil ) Then resolve stmt.ElseBranch
@@ -242,26 +242,58 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Literal) As Variant
+		Function VisitLiteral(expr As Lox.Ast.Literal) As Variant
 		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Logical) As Variant
+		Function VisitLogical(expr As Lox.Ast.Logical) As Variant
 		  resolve expr.Left
 		  resolve expr.Right
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.Print) As Variant
+		Function VisitModuleStmt(stmt As Lox.Ast.ModuleStmt) As Variant
+		  declare_ stmt.Name
+		  define stmt.Name
+		  
+		  Dim enclosingClass As ClassType= mCurrentClass
+		  mCurrentClass= ClassType.MODULE_
+		  
+		  // Analyse any classes in this module.
+		  For i As Integer= 0 To stmt.Classes.Ubound
+		    Call VisitClassStmt stmt.Classes(i)
+		  Next
+		  
+		  // Before we start analysing the method bodies we start a new scope and define `self` as if it were
+		  // a new variable.
+		  beginScope
+		  mScopes(mScopes.Ubound).Value(Self)= True
+		  
+		  // Analyse methods.
+		  For i As Integer= 0 To stmt.Modules.Ubound
+		    beginScope
+		    mScopes(mScopes.Ubound).Value(Self)= True
+		    resolveFunction Lox.Ast.FunctionStmt(stmt.Modules(i)), FunctionType.METHOD
+		    endScope
+		  Next
+		  
+		  endScope
+		  
+		  mCurrentClass= enclosingClass
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitPrint(stmt As Lox.Ast.Print) As Variant
 		  resolve stmt.Expression
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.ReturnStmt) As Variant
+		Function VisitReturnStmt(stmt As Lox.Ast.ReturnStmt) As Variant
 		  If mCurrentFunction= FunctionType.NONE Then
 		    Error stmt.Keyword, "Can't return from top-level code."
 		    HadError= True
@@ -279,14 +311,14 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Set) As Variant
+		Function VisitSet(expr As Lox.Ast.Set) As Variant
 		  resolve expr.Value
 		  resolve expr.Obj
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.SuperExpr) As Variant
+		Function VisitSuperExpr(expr As Lox.Ast.SuperExpr) As Variant
 		  If mCurrentClass= ClassType.NONE Then
 		    Error expr.Keyword, "Can't use 'super' outside of a class."
 		    HadError= True
@@ -300,7 +332,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Ternary) As Variant
+		Function VisitTernary(expr As Lox.Ast.Ternary) As Variant
 		  resolve expr.Expression
 		  resolve expr.ThenBranch
 		  If Not (expr.ElseBranch Is Nil ) Then resolve expr.ElseBranch
@@ -308,7 +340,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.This) As Variant
+		Function VisitThis(expr As Lox.Ast.This) As Variant
 		  If mCurrentClass= ClassType.NONE Then
 		    Error expr.Keyword, "Can't use 'this' outside of a class."
 		    HadError= True
@@ -319,13 +351,13 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Unary) As Variant
+		Function VisitUnary(expr As Lox.Ast.Unary) As Variant
 		  resolve expr.Right
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(expr As Lox.Ast.Variable) As Variant
+		Function VisitVariable(expr As Lox.Ast.Variable) As Variant
 		  If mScopes.Ubound> -1 Then
 		    Dim scope As Lox.Misc.CSDictionary= mScopes(mScopes.Ubound)
 		    If scope.HasKey(expr.Name.Lexeme) And _
@@ -340,7 +372,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.VarStmt) As Variant
+		Function VisitVarStmt(stmt As Lox.Ast.VarStmt) As Variant
 		  declare_ stmt.Name
 		  If Not (stmt.Initializer Is Nil) Then resolve stmt.Initializer
 		  define stmt.Name
@@ -348,7 +380,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Visit(stmt As Lox.Ast.WhileStmt) As Variant
+		Function VisitWhileStmt(stmt As Lox.Ast.WhileStmt) As Variant
 		  mLoopLevel= mLoopLevel+ 1 // enter
 		  
 		  resolve stmt.Condition
@@ -387,7 +419,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Enum, Name = ClassType, Type = Integer, Flags = &h21
 		NONE
 		  CLASS_
-		SUBCLASS
+		  SUBCLASS
+		MODULE_
 	#tag EndEnum
 
 	#tag Enum, Name = FunctionType, Type = Integer, Flags = &h21

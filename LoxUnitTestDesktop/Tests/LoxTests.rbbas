@@ -55,6 +55,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub ExtendIdNamesTest()
+		  // emoji friendly!
 		  Dim snnipet As String= kExtendIdSnnipet.ReplaceAll("$emoji$", Encodings.UTF8.Chr(&h1f600))
 		  
 		  BufferPrint= ""
@@ -141,6 +142,12 @@ Inherits TestGroup
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub FunctionsTest()
+		  DoRun kFuntionsSnnipet
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function GetActualError(buffer As String) As String
 		  Dim actualArr() As String= Split(buffer, EndOfLine)
@@ -209,23 +216,22 @@ Inherits TestGroup
 		  For Each folder As String In folders
 		    // skip folders:
 		    If folder= "benchmark" Then Continue
-		    If folder= "expressions" Then Continue
-		    If folder= "scanning" Then Continue
+		    If folder= "expressions" Then Continue // other test
+		    If folder= "scanning" Then Continue // other test
 		    If folder= "limit" Then Continue
-		    If folder= "operator" Then Continue
 		    
 		    Dim files() As FolderItem= FindFiles(folder)
 		    
 		    For Each file As FolderItem In files
 		      // skip files:
-		      If file.DisplayName= "get_on_class.lox" Then Continue
-		      If file.DisplayName= "set_on_class.lox" Then Continue // Static!!
+		      If file.DisplayName= "get_on_class.lox" Then Continue // Static?
+		      If file.DisplayName= "set_on_class.lox" Then Continue // Static?
 		      
 		      BufferPrint= ""
 		      BufferError= ""
 		      Lox.Interpreter.Reset
 		      
-		      Assert.Message folder+ "/"+ file.DisplayName+ ":"
+		      Assert.Message folder+ "/"+ file.DisplayName+ " :"
 		      
 		      Dim t As TextInputStream= TextInputStream.Open(file)
 		      Dim source As String= t.ReadAll
@@ -290,6 +296,12 @@ Inherits TestGroup
 	#tag Method, Flags = &h0
 		Sub LamdaTest()
 		  DoRun kLamdaSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ModuleTest()
+		  DoRun kModuleSnnipet
 		End Sub
 	#tag EndMethod
 
@@ -394,7 +406,7 @@ Inherits TestGroup
 		  
 		  BufferPrint= ""
 		  
-		  snnipet= "var a=1; var b=2; var c=a<b?1:2; print c;"
+		  snnipet= "var c=a<b?1:2; print c;"
 		  
 		  scanner= New Lox.Scanner(snnipet)
 		  parser= New Lox.Parser(scanner.Scan)
@@ -431,13 +443,19 @@ Inherits TestGroup
 	#tag Constant, Name = kExtendIdSnnipet, Type = String, Dynamic = False, Default = \"var a\xC3\xB1o\x3D2024; print a\xC3\xB1o; // expect: 2024.0\rvar \xCE\xA3\x3D \"sigma\"; print \xCE\xA3; // expect: sigma\rvar $emoji$\x3D \"smileyface\";\rprint $emoji$; // expect: smileyface", Scope = Private
 	#tag EndConstant
 
+	#tag Constant, Name = kFuntionsSnnipet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6.0\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: null\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1.0\rcounter(); // expect: 2.0", Scope = Private
+	#tag EndConstant
+
 	#tag Constant, Name = kIfOrElseSnnipet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kLamdaSnnipet, Type = String, Dynamic = False, Default = \"fun whichFn(fn) {\r  print fn;\r}\r\rwhichFn(fun (b) {\r print b;\r});\r\rfun named(a) { print a; }\rwhichFn(named);\r//\r// expect: <fn>\r// expect: <fn named>", Scope = Private
+	#tag Constant, Name = kLamdaSnnipet, Type = String, Dynamic = False, Default = \"fun whichFn(fn) {\r  print fn;\r}\r\rwhichFn(fun (b) {\r print b;\r});\r\rfun named(a) { print a; }\rwhichFn(named);\r//\r// expect: <fn>\r// expect: <fn named>\r\rfun whichFn(fn) {\r  for (var i \x3D 1; i <\x3D 3; i \x3D i + 1) {\r    fn(i);\r  }\r}\r\rfun named(a) { print a; }\r\rwhichFn(named);\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0", Scope = Private
+	#tag Constant, Name = kModuleSnnipet, Type = String, Dynamic = False, Default = \"module M {\r  class C {\r    parse(cc) {print cc;}\r  }\r  fun F() {print \"hello\";}\r  fun hello() {return \"hello!\";}\r}\rM.hello2\x3D \"hello2\";\r\rM.F();\rvar a\x3D M.C();\ra.parse(\"b\");\r\rvar hello\x3D M.hello();\rprint hello;\rprint M.hello2;\r\r// expect: hello\r// expect: b\r// expect: hello!\r// expect: hello2\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0\r\rh\x3D0x1a2b3c4d5e6f;\rprint h; // expect: 28772997619311.0", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kStaticMethodsSnnipet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private
