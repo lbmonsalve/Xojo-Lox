@@ -181,7 +181,7 @@ Inherits ConsoleApplication
 	#tag EndProperty
 
 
-	#tag Constant, Name = kCommitHash, Type = String, Dynamic = False, Default = \"e5435a5", Scope = Private
+	#tag Constant, Name = kCommitHash, Type = String, Dynamic = False, Default = \"a2323ac", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kHelp, Type = String, Dynamic = False, Default = \"Lox language implementation in Xojo (https://github.com/lbmonsalve/Xojo-Lox)\rTaken from the (http://craftinginterpreters.com/) Book.\r\rCommands:\r\r  .multi\tenable multi-line\r  .run\t\trun multi-line buffer (or .r)\r  .reset\tREPL to default\r  .buffer\tshows multi-line buffer\r  .clear\tclear multi-line buffer\r  .load\t\tload file to buffer >.load file/to/load.lox\r  .save\t\tsave buffer to file >.save file/to/save.lox\r  .help\t\tthis info\r  .ver\t\tshows core language version (or .version)\r  .quit\t\tquit (or .q)\r\rLICENCE and COPYRIGHT on github site.\t\r", Scope = Private
