@@ -77,11 +77,11 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mCurrentFunction= type
 		  
 		  beginScope
-		  For Each param As Token In func.Params
+		  For Each param As Token In func.Func.Parameters
 		    declare_ param
 		    define param
 		  Next
-		  resolve func.Body
+		  resolve func.Func.Body
 		  endScope
 		  
 		  mCurrentFunction= enclosingFunction
@@ -196,6 +196,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.Expression) As Variant
 		  resolve stmt.Expression
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Visit(expr As Lox.Ast.FunctionExpr) As Variant
+		  
 		End Function
 	#tag EndMethod
 

@@ -267,7 +267,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  Dim methods As New Dictionary
 		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
-		    Dim func As LoxFunction= New LoxFunction(method, mEnvironment, _
+		    Dim func As New LoxFunction(method.Name.Lexeme, method.Func, mEnvironment, _
 		    method.Name.Lexeme= "init")
 		    methods.Value(method.Name.Lexeme)= func
 		  Next
@@ -294,8 +294,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Visit(expr As Lox.Ast.FunctionExpr) As Variant
+		  Return New LoxFunction("", expr, Environment, False)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Visit(stmt As Lox.Ast.FunctionStmt) As Variant
-		  Dim func As New LoxFunction(stmt, mEnvironment, False)
+		  Dim fnName As String= stmt.Name.Lexeme
+		  Dim func As New LoxFunction(fnName, stmt.Func, mEnvironment, False)
 		  mEnvironment.Define(stmt.Name.Lexeme, func)
 		End Function
 	#tag EndMethod

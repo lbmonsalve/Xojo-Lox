@@ -43,6 +43,7 @@ Class=This;../Lox/Ast/This.rbbas;&h46062FFF;&h472807FF;false
 Class=Unary;../Lox/Ast/Unary.rbbas;&h3B217FFF;&h472807FF;false
 Class=Variable;../Lox/Ast/Variable.rbbas;&h5D151FFF;&h472807FF;false
 Class=Ternary;../Lox/Ast/Ternary.rbbas;&h4B9627FF;&h472807FF;false
+Class=FunctionExpr;../Lox/Ast/FunctionExpr.rbbas;&h6FEEFFF;&h472807FF;false
 Interface=IStmtVisitor;../Lox/Ast/IStmtVisitor.rbbas;&h67EDD7FF;&h472807FF;false
 Class=Stmt;../Lox/Ast/Stmt.rbbas;&h3D24D7FF;&h472807FF;false
 Class=Block;../Lox/Ast/Block.rbbas;&h7EEB07FF;&h472807FF;false

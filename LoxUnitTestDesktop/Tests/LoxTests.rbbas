@@ -268,8 +268,6 @@ Inherits TestGroup
 		    If folder= "limit" Then Continue
 		    If folder= "operator" Then Continue
 		    
-		    Assert.Message folder+ ":"
-		    
 		    Dim files() As FolderItem= FindFiles(folder)
 		    
 		    For Each file As FolderItem In files
@@ -280,7 +278,7 @@ Inherits TestGroup
 		      BufferError= ""
 		      Lox.Interpreter.Reset
 		      
-		      Assert.Message file.DisplayName
+		      Assert.Message folder+ "/"+ file.DisplayName
 		      
 		      Dim t As TextInputStream= TextInputStream.Open(file)
 		      Dim source As String= t.ReadAll
@@ -339,6 +337,32 @@ Inherits TestGroup
 		      End If
 		    Next
 		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub LamdaTest()
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(kBreakSnnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim expect() As String= GetExpect(kBreakSnnipet)
+		  Dim actual() As String= Split(BufferPrint, EndOfLine)
+		  If actual.Ubound> -1 Then
+		    actual.Remove actual.Ubound
+		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
+		  End If
+		  
 		End Sub
 	#tag EndMethod
 
@@ -495,6 +519,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kIfOrElseSnnipet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kLamdaSnnipet, Type = String, Dynamic = False, Default = \"fun whichFn(fn) {\r  print fn;\r}\r\rwhichFn(fun (b) {\r print b;\r});\r\rfun named(a) { print a; }\rwhichFn(named);\r//\r// expect: <fn>\r// expect: <fn named>", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0", Scope = Private

@@ -1,26 +1,26 @@
 #tag Class
-Protected Class FunctionStmt
-Inherits Lox.Ast.Stmt
+Protected Class FunctionExpr
+Inherits Lox.Ast.Expr
 	#tag Method, Flags = &h0
-		Function Accept(visitor As IStmtVisitor) As Variant
+		Function Accept(visitor As IExprVisitor) As Variant
 		  Return visitor.Visit(Self)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor(name As Lox.Token, func As Lox.Ast.FunctionExpr)
-		  Self.Name= name
-		  Self.Func= func
+		Sub Constructor(parameters() As Token, body() As Stmt)
+		  Self.Parameters= parameters
+		  Self.Body= body
 		End Sub
 	#tag EndMethod
 
 
 	#tag Property, Flags = &h0
-		Func As Lox.Ast.FunctionExpr
+		Body() As Stmt
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		Name As Lox.Token
+		Parameters() As Token
 	#tag EndProperty
 
 

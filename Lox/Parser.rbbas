@@ -164,6 +164,15 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function CheckNext(type As TokenType) As Boolean
+		  If IsAtEnd Then Return False
+		  If mTokens(mCurrent+ 1).TypeToken= TokenType.EOF Then Return False
+		  
+		  Return mTokens(mCurrent+ 1).TypeToken= type
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function classDeclaration() As Lox.Ast.Stmt
 		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect class name.")
 		  
@@ -229,7 +238,10 @@ Protected Class Parser
 		Private Function declaration() As Lox.Ast.Stmt
 		  Try
 		    If Match(TokenType.CLASS_) Then Return classDeclaration
-		    If Match(TokenType.FUN) Then Return function_("function")
+		    If Check(TokenType.FUN) And CheckNext(TokenType.IDENTIFIER) Then
+		      Call consume TokenType.FUN, ""
+		      Return function_("function")
+		    End If
 		    If Match(TokenType.VAR_) Then Return varDeclaration
 		    
 		    Return statement
@@ -346,9 +358,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function function_(kind As String) As Lox.Ast.FunctionStmt
-		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect "+ kind+ " name.")
-		  
+		Private Function functionBody(kind As String) As Lox.Ast.FunctionExpr
 		  Call consume TokenType.LEFT_PAREN, "Expect '(' after "+ kind+ " name."
 		  Dim parameters() As Token
 		  If Not Check(TokenType.RIGHT_PAREN) Then
@@ -357,16 +367,21 @@ Protected Class Parser
 		        Error Peek, "Can't have more than 255 parameters."
 		        HadError= True
 		      End If
-		      
 		      parameters.Append consume(TokenType.IDENTIFIER, "Expect parameter name.")
-		    Loop Until Not Match(TokenType.COMMA)
+		    Loop Until Not (Match(TokenType.COMMA))
 		  End If
 		  Call consume TokenType.RIGHT_PAREN, "Expect ')' after parameters."
 		  
 		  Call consume TokenType.LEFT_BRACE, "Expect '{' before "+ kind+ " body."
 		  Dim body() As Lox.Ast.Stmt= block
-		  
-		  Return New Lox.Ast.FunctionStmt(name, parameters, body)
+		  Return New Lox.Ast.FunctionExpr(parameters, body)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function function_(kind As String) As Lox.Ast.FunctionStmt
+		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect "+ kind+ " name.")
+		  Return New Lox.Ast.FunctionStmt(name, functionBody(kind))
 		End Function
 	#tag EndMethod
 
@@ -457,6 +472,7 @@ Protected Class Parser
 		  If Match(TokenType.TRUE_) Then Return New Lox.Ast.Literal(True)
 		  If Match(TokenType.NIL_) Then Return New Lox.Ast.Literal(Nil)
 		  If Match(TokenType.THIS) Then Return New Lox.Ast.This(Previous)
+		  If Match(TokenType.FUN) Then Return functionBody("function")
 		  
 		  If Match(TokenType.NUMBER, TokenType.STRING_) Then Return New Lox.Ast.Literal(Previous.Literal)
 		  // TODO: match STRING?
