@@ -17,15 +17,6 @@ Inherits ConsoleApplication
 
 
 	#tag Method, Flags = &h21
-		Private Function ChkExpression(line As String) As String
-		  Dim rightChar As String= line.Right(1)
-		  If rightChar= ";" Or rightChar= "}" Then Return line
-		  
-		  Return "print "+ line+ ";"
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
 		Private Function LoadFile(path As String) As String
 		  If path.Len= 0 Then Return ""
 		  
@@ -71,21 +62,29 @@ Inherits ConsoleApplication
 		  End If
 		  
 		  Dim parser As New Lox.Parser(tokens)
-		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  Dim syntax As Variant= parser.ParseREPL
 		  If parser.HadError Then
 		    HadError= True
 		    Return
 		  End If
 		  
-		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
-		  resolver.Resolve(statements)
-		  If resolver.HadError Then
-		    HadError= True
-		    Return
+		  If syntax.isArray Then
+		    Dim statements() As Lox.Ast.Stmt= syntax
+		    
+		    Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		    resolver.Resolve(statements)
+		    If resolver.HadError Then
+		      HadError= True
+		      Return
+		    End If
+		    
+		    Lox.Interpreter.Interpret(statements)
+		    If Lox.Interpreter.HadRuntimeError Then HadRuntimeError= True
+		  Else
+		    Dim expr As Lox.Ast.Expr= Lox.Ast.Expr(syntax)
+		    Dim result As Variant= Lox.Interpreter.Interpret(expr)
+		    If result.Type= 8 Then Lox.PrintOut.Write "= "+ result+ EndOfLine
 		  End If
-		  
-		  Lox.Interpreter.Interpret(statements)
-		  If Lox.Interpreter.HadRuntimeError Then HadRuntimeError= True
 		End Sub
 	#tag EndMethod
 
@@ -148,7 +147,7 @@ Inherits ConsoleApplication
 		      ElseIf multiLine Then
 		        source= source+ line+ EndOfLine
 		      Else // line:
-		        run ChkExpression(line)
+		        run line
 		      End If
 		    End Select
 		  Wend

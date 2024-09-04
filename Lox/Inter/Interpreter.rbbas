@@ -61,6 +61,18 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Interpret(expression As Lox.Ast.Expr) As Variant
+		  Try
+		    Dim value As Variant= Evaluate(expression)
+		    Return Stringify(value)
+		  Catch exc As RuntimeError
+		    RuntimeError exc
+		    Return Nil
+		  End Try
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Interpret(statements() As Lox.Ast.Stmt)
 		  Try
 		    For Each statement As Lox.Ast.Stmt In statements

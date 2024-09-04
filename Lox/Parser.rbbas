@@ -282,7 +282,12 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function expressionStatement() As Lox.Ast.Stmt
 		  Dim expr As Lox.Ast.Expr= expression
-		  Call consume TokenType.SEMICOLON, "Expect ';' after expression."
+		  
+		  If mAllowExpression And IsAtEnd Then
+		    mFoundExpression= True
+		  Else
+		    Call consume TokenType.SEMICOLON, "Expect ';' after expression."
+		  End If
 		  
 		  Return New Lox.Ast.Expression(expr)
 		End Function
@@ -458,6 +463,26 @@ Protected Class Parser
 		  Wend
 		  
 		  Return statements
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ParseREPL() As Variant
+		  mAllowExpression= True
+		  Dim statements() As Lox.Ast.Stmt
+		  While Not IsAtEnd
+		    statements.Append declaration
+		    
+		    If mFoundExpression Then
+		      Dim last As Lox.Ast.Stmt= statements(statements.Ubound)
+		      Return lox.Ast.Expression(last).Expression
+		    End If
+		    mAllowExpression= True
+		  Wend
+		  
+		  Return statements
+		  
+		  
 		End Function
 	#tag EndMethod
 
@@ -643,7 +668,15 @@ Protected Class Parser
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mAllowExpression As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mCurrent As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mFoundExpression As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
