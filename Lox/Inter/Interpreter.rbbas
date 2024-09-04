@@ -111,7 +111,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  mEnvironment= mGlobals
 		  
-		  mLocals= New Dictionary
+		  mLocals= New Lox.Misc.CSDictionary
 		End Sub
 	#tag EndMethod
 
@@ -265,7 +265,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    mEnvironment.Define "super", superclass
 		  End If
 		  
-		  Dim methods As New Dictionary
+		  Dim methods As New Lox.Misc.CSDictionary
 		  For Each method As Lox.Ast.FunctionStmt In stmt.Methods
 		    Dim func As New LoxFunction(method.Name.Lexeme, method.Func, mEnvironment, _
 		    method.Name.Lexeme= "init")
@@ -535,7 +535,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mLocals As Dictionary
+		Private mLocals As Lox.Misc.CSDictionary
 	#tag EndProperty
 
 

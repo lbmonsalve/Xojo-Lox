@@ -24,7 +24,7 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(name As String, superClass As LoxClass, methods As Dictionary)
+		Sub Constructor(name As String, superClass As LoxClass, methods As Lox.Misc.CSDictionary)
 		  Self.Name= name
 		  Self.SuperClass= superClass
 		  mMethods= methods
@@ -46,7 +46,7 @@ Implements ICallable
 
 
 	#tag Property, Flags = &h21
-		Private mMethods As Dictionary
+		Private mMethods As Lox.Misc.CSDictionary
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

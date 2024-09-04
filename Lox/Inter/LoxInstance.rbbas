@@ -3,7 +3,7 @@ Protected Class LoxInstance
 	#tag Method, Flags = &h0
 		Sub Constructor(klass As LoxClass)
 		  mClass= klass
-		  mFields= New Dictionary
+		  mFields= New Lox.Misc.CSDictionary
 		End Sub
 	#tag EndMethod
 
@@ -39,7 +39,7 @@ Protected Class LoxInstance
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mFields As Dictionary
+		Private mFields As Lox.Misc.CSDictionary
 	#tag EndProperty
 
 

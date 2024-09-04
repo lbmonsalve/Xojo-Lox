@@ -45,7 +45,7 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  If mName.Len= 0 Then Return "<fn"
+		  If mName.Len= 0 Then Return "<fn>"
 		  Return "<fn "+ mName+ ">"
 		End Function
 	#tag EndMethod

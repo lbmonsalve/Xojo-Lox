@@ -3,7 +3,7 @@ Protected Class Resolver
 Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Sub beginScope()
-		  mScopes.Append New Dictionary
+		  mScopes.Append New Lox.Misc.CSDictionary
 		End Sub
 	#tag EndMethod
 
@@ -19,7 +19,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Sub declare_(name As Lox.Token)
 		  If mScopes.Ubound= -1 Then Return
 		  
-		  Dim scope As Dictionary= mScopes(mScopes.Ubound)
+		  Dim scope As Lox.Misc.CSDictionary= mScopes(mScopes.Ubound)
 		  If scope.HasKey(name.Lexeme) Then
 		    Error name, "Already a variable with this name in this scope."
 		    HadError= True
@@ -32,7 +32,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Sub define(name As Lox.Token)
 		  If mScopes.Ubound= -1 Then Return
-		  Dim scope As Dictionary= mScopes(mScopes.Ubound)
+		  Dim scope As Lox.Misc.CSDictionary= mScopes(mScopes.Ubound)
 		  scope.Value(name.Lexeme)= True
 		End Sub
 	#tag EndMethod
@@ -91,7 +91,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h21
 		Private Sub resolveLocal(expr As Lox.Ast.Expr, name As Lox.Token)
 		  For i As Integer= mScopes.Ubound To 0 Step -1
-		    Dim scope As Dictionary= mScopes(i)
+		    Dim scope As Lox.Misc.CSDictionary= mScopes(i)
 		    If scope.HasKey(name.Lexeme) Then
 		      mInterpreter.Resolve(expr, mScopes.Ubound- i)
 		      Return
@@ -320,7 +320,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function Visit(expr As Lox.Ast.Variable) As Variant
 		  If mScopes.Ubound> -1 Then
-		    Dim scope As Dictionary= mScopes(mScopes.Ubound)
+		    Dim scope As Lox.Misc.CSDictionary= mScopes(mScopes.Ubound)
 		    If scope.HasKey(expr.Name.Lexeme) And _
 		      scope.Value(expr.Name.Lexeme).BooleanValue= False Then
 		      Error expr.Name, "Can't read local variable in its own initializer."
@@ -373,7 +373,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mScopes() As Dictionary
+		Private mScopes() As Lox.Misc.CSDictionary
 	#tag EndProperty
 
 

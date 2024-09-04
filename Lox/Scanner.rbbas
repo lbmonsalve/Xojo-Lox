@@ -370,7 +370,7 @@ Protected Class Scanner
 			Get
 			  If Not(mKeywords Is Nil) Then Return mKeywords
 			  
-			  mKeywords= New Dictionary
+			  mKeywords= New Lox.Misc.CSDictionary
 			  
 			  mKeywords.Value("and")= TokenType.AND_
 			  mKeywords.Value("class")= TokenType.CLASS_
@@ -394,7 +394,7 @@ Protected Class Scanner
 			  Return mKeywords
 			End Get
 		#tag EndGetter
-		Private Shared Keywords As Dictionary
+		Private Shared Keywords As Lox.Misc.CSDictionary
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
@@ -402,7 +402,7 @@ Protected Class Scanner
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private Shared mKeywords As Dictionary
+		Private Shared mKeywords As Lox.Misc.CSDictionary
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

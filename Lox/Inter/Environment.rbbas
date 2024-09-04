@@ -74,18 +74,18 @@ Protected Class Environment
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mValues As Dictionary
+		Private mValues As Lox.Misc.CSDictionary
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mValues Is Nil Then mValues= New Dictionary
+			  If mValues Is Nil Then mValues= New Lox.Misc.CSDictionary
 			  
 			  return mValues
 			End Get
 		#tag EndGetter
-		Values As Dictionary
+		Values As Lox.Misc.CSDictionary
 	#tag EndComputedProperty
 
 

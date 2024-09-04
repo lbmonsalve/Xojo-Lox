@@ -11,62 +11,28 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub BreakTest()
-		  BufferPrint= ""
-		  Lox.Interpreter.Reset
-		  
-		  Dim scanner As New Lox.Scanner(kBreakSnnipet)
-		  Dim tokens() As Lox.Token= scanner.Scan
-		  
-		  Dim parser As New Lox.Parser(tokens)
-		  Dim statements() As Lox.Ast.Stmt= parser.Parse
-		  
-		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
-		  resolver.Resolve(statements)
-		  
-		  Lox.Interpreter.Interpret(statements)
-		  
-		  Dim expect() As String= GetExpect(kBreakSnnipet)
-		  Dim actual() As String= Split(BufferPrint, EndOfLine)
-		  If actual.Ubound> -1 Then
-		    actual.Remove actual.Ubound
-		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
-		  End If
-		  
+		  DoRun kBreakSnnipet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub CompoundAssignmentOperatorsTest()
-		  BufferPrint= ""
-		  Lox.Interpreter.Reset
-		  
-		  Dim scanner As New Lox.Scanner(kCompoundSnnipet)
-		  Dim tokens() As Lox.Token= scanner.Scan
-		  
-		  Dim parser As New Lox.Parser(tokens)
-		  Dim statements() As Lox.Ast.Stmt= parser.Parse
-		  
-		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
-		  resolver.Resolve(statements)
-		  
-		  Lox.Interpreter.Interpret(statements)
-		  
-		  Dim expect() As String= GetExpect(kCompoundSnnipet)
-		  Dim actual() As String= Split(BufferPrint, EndOfLine)
-		  If actual.Ubound> -1 Then
-		    actual.Remove actual.Ubound
-		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
-		  End If
-		  
+		  DoRun kCompoundSnnipet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ContinueTest()
+		  DoRun kContinueSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub DoRun(snnipet As String)
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
-		  Dim scanner As New Lox.Scanner(kContinueSnnipet)
+		  Dim scanner As New Lox.Scanner(snnipet)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
@@ -77,7 +43,7 @@ Inherits TestGroup
 		  
 		  Lox.Interpreter.Interpret(statements)
 		  
-		  Dim expect() As String= GetExpect(kContinueSnnipet)
+		  Dim expect() As String= GetExpect(snnipet)
 		  Dim actual() As String= Split(BufferPrint, EndOfLine)
 		  If actual.Ubound> -1 Then
 		    actual.Remove actual.Ubound
@@ -232,27 +198,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub IfOrElseTest()
-		  BufferPrint= ""
-		  Lox.Interpreter.Reset
-		  
-		  Dim scanner As New Lox.Scanner(kIfOrElseSnnipet)
-		  Dim tokens() As Lox.Token= scanner.Scan
-		  
-		  Dim parser As New Lox.Parser(tokens)
-		  Dim statements() As Lox.Ast.Stmt= parser.Parse
-		  
-		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
-		  resolver.Resolve(statements)
-		  
-		  Lox.Interpreter.Interpret(statements)
-		  
-		  Dim expect() As String= GetExpect(kIfOrElseSnnipet)
-		  Dim actual() As String= Split(BufferPrint, EndOfLine)
-		  If actual.Ubound> -1 Then
-		    actual.Remove actual.Ubound
-		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
-		  End If
-		  
+		  DoRun kIfOrElseSnnipet
 		End Sub
 	#tag EndMethod
 
@@ -271,14 +217,11 @@ Inherits TestGroup
 		    Dim files() As FolderItem= FindFiles(folder)
 		    
 		    For Each file As FolderItem In files
-		      // skip files:
-		      If file.DisplayName= "inherit_from_nil.lox" Then Continue
-		      
 		      BufferPrint= ""
 		      BufferError= ""
 		      Lox.Interpreter.Reset
 		      
-		      Assert.Message folder+ "/"+ file.DisplayName
+		      Assert.Message folder+ "/"+ file.DisplayName+ ":"
 		      
 		      Dim t As TextInputStream= TextInputStream.Open(file)
 		      Dim source As String= t.ReadAll
@@ -342,27 +285,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub LamdaTest()
-		  BufferPrint= ""
-		  Lox.Interpreter.Reset
-		  
-		  Dim scanner As New Lox.Scanner(kBreakSnnipet)
-		  Dim tokens() As Lox.Token= scanner.Scan
-		  
-		  Dim parser As New Lox.Parser(tokens)
-		  Dim statements() As Lox.Ast.Stmt= parser.Parse
-		  
-		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
-		  resolver.Resolve(statements)
-		  
-		  Lox.Interpreter.Interpret(statements)
-		  
-		  Dim expect() As String= GetExpect(kBreakSnnipet)
-		  Dim actual() As String= Split(BufferPrint, EndOfLine)
-		  If actual.Ubound> -1 Then
-		    actual.Remove actual.Ubound
-		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
-		  End If
-		  
+		  DoRun kLamdaSnnipet
 		End Sub
 	#tag EndMethod
 
@@ -408,27 +331,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub PrefixedNumbersTest()
-		  BufferPrint= ""
-		  Lox.Interpreter.Reset
-		  
-		  Dim scanner As New Lox.Scanner(kPrefixedNumberSnnipet)
-		  Dim tokens() As Lox.Token= scanner.Scan
-		  
-		  Dim parser As New Lox.Parser(tokens)
-		  Dim statements() As Lox.Ast.Stmt= parser.Parse
-		  
-		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
-		  resolver.Resolve(statements)
-		  
-		  Lox.Interpreter.Interpret(statements)
-		  
-		  Dim expect() As String= GetExpect(kPrefixedNumberSnnipet)
-		  Dim actual() As String= Split(BufferPrint, EndOfLine)
-		  If actual.Ubound> -1 Then
-		    actual.Remove actual.Ubound
-		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
-		  End If
-		  
+		  DoRun kPrefixedNumberSnnipet
 		End Sub
 	#tag EndMethod
 
