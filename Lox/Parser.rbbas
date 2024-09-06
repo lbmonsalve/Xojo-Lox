@@ -542,6 +542,46 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function postfix() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= call_
+		  
+		  If Match(TokenType.PLUS_PLUS) Then
+		    Dim prev As Token= Previous
+		    Dim oper As New Token(TokenType.PLUS, "+", Nil, prev.Line)
+		    Dim binn As New Lox.Ast.Binary(expr, oper, New Lox.Ast.Literal(1))
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Token= Lox.Ast.Variable(expr).Name
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    End If
+		    
+		    Error prev, "Invalid assignment target."
+		    HadError= True
+		  ElseIf Match(TokenType.MINUS_MINUS) Then
+		    Dim prev As Token= Previous
+		    Dim oper As New Token(TokenType.MINUS, "-", Nil, prev.Line)
+		    Dim binn As New Lox.Ast.Binary(expr, oper, New Lox.Ast.Literal(1))
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Token= Lox.Ast.Variable(expr).Name
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    End If
+		    
+		    Error prev, "Invalid assignment target."
+		    HadError= True
+		  End If
+		  
+		  Return expr
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function Previous() As Token
 		  Return mTokens(mCurrent- 1)
 		End Function
@@ -564,18 +604,7 @@ Protected Class Parser
 		  End If
 		  
 		  If Match(TokenType.IDENTIFIER) Then
-		    Dim id As New Lox.Ast.Variable(Previous)
-		    If Match(TokenType.PLUS_PLUS) Then
-		      Dim oper As New Token(TokenType.PLUS, "+", Nil, id.Name.Line)
-		      Dim binn As New Lox.Ast.Binary(id, oper, New Lox.Ast.Literal(1))
-		      Return New Lox.Ast.Assign(id.Name, binn)
-		    ElseIf Match(TokenType.MINUS_MINUS) Then
-		      Dim oper As New Token(TokenType.MINUS, "-", Nil, id.Name.Line)
-		      Dim binn As New Lox.Ast.Binary(id, oper, New Lox.Ast.Literal(1))
-		      Return New Lox.Ast.Assign(id.Name, binn)
-		    Else
-		      Return id
-		    End If
+		    Return New Lox.Ast.Variable(Previous)
 		  End If
 		  
 		  If Match(TokenType.SUPER_) Then
@@ -683,7 +712,7 @@ Protected Class Parser
 		    Return New Lox.Ast.Unary(operator, right)
 		  End If
 		  
-		  Return call_
+		  Return postfix
 		End Function
 	#tag EndMethod
 

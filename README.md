@@ -162,11 +162,11 @@ bitwise        → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term           → factor ( ( "-" | "+" ) factor )* ;
 factor         → unary ( ( "/" | "*" ) unary )* ;
 
-unary          → ( "!" | "-" ) unary | call ;
+unary          → ( "!" | "-" ) unary | postfix ;
+postfix        → call ("++" | "--")* ;
 call           → primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
 primary        → "true" | "false" | "nil" | "this"
                | NUMBER | STRING | IDENTIFIER | "(" expression ")"
-               | IDENTIFIER ("++" | "--")
                | "super" "." IDENTIFIER ;
 
 // utility rules:

@@ -231,6 +231,8 @@ Protected Module Lox
 		    Return "LESS_LESS"
 		  Case TokenType.GREATER_GREATER
 		    Return "GREATER_GREATER"
+		  Case TokenType.STRING_INTERPOLATION
+		    Return "STRING_INTERPOLATION"
 		    
 		  Case Else
 		    Return "STRINGIFY->"
@@ -453,7 +455,8 @@ Protected Module Lox
 		  AMPERSAND
 		  PIPE
 		  LESS_LESS
-		GREATER_GREATER
+		  GREATER_GREATER
+		STRING_INTERPOLATION
 	#tag EndEnum
 
 
