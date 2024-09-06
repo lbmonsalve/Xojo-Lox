@@ -10,6 +10,12 @@ Inherits TestGroup
 
 
 	#tag Method, Flags = &h0
+		Sub BitwiseTest()
+		  DoRun kBitwiseSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub BreakTest()
 		  DoRun kBreakSnnipet
 		End Sub
@@ -430,6 +436,9 @@ Inherits TestGroup
 		BufferPrint As String
 	#tag EndProperty
 
+
+	#tag Constant, Name = kBitwiseSnnipet, Type = String, Dynamic = False, Default = \"print 7 & 5;\rprint 7 | 5;\rprint 7 << 2;\rprint 40 >> 2;\r\r // expect: 5.0\r // expect: 7.0\r // expect: 28.0\r // expect: 10.0\r", Scope = Private
+	#tag EndConstant
 
 	#tag Constant, Name = kBreakSnnipet, Type = String, Dynamic = False, Default = \"var bb\x3D0;\rwhile (true) {\r  if (bb\x3D10) break;\r  bb++;\r}\rprint bb; // expect: 10.0", Scope = Private
 	#tag EndConstant

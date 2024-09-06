@@ -243,7 +243,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function VisitLiteral(expr As Lox.Ast.Literal) As Variant
-		  
+		  // TODO: string interpolation
 		End Function
 	#tag EndMethod
 

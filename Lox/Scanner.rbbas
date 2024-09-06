@@ -161,6 +161,24 @@ Protected Class Scanner
 		    Wend
 		  End If
 		  
+		  // So far we have a number (either an integer or a double). Is there a valid exponent?
+		  If Peek = "e" Then
+		    Select Case PeekNext
+		    Case "-", "+"
+		      // Advance twice to consume the `e` and sign character.
+		      Call Advance
+		      Call Advance
+		      While IsDigit(Peek)
+		        Call Advance
+		      Wend
+		    Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+		      Call Advance // Advance to consume the `e`.
+		      While IsDigit(Peek)
+		        Call Advance
+		      Wend
+		    End Select
+		  End If
+		  
 		  'Dim val1 As Double= 1.2
 		  'Dim str1 As String= "1.2"
 		  'Dim str2 As String= Str(val1)
@@ -270,12 +288,13 @@ Protected Class Scanner
 		    AddToken TokenType.COMMA
 		  Case "."
 		    AddToken TokenType.DOT
+		    
+		    // 2-char operators
 		  Case "-"
 		    If Peek= "=" Then
 		      Call Advance
 		      AddToken TokenType.MINUS_EQUAL
 		    Else
-		      'AddToken IIf(Match("-"), TokenType.MINUS_MINUS, TokenType.MINUS)
 		      // --ID, ---ID, ...
 		      If Peek= "-" Then
 		        If PreviousTokenIs(TokenType.IDENTIFIER) Then
@@ -301,15 +320,24 @@ Protected Class Scanner
 		  Case "*"
 		    AddToken IIf(Match("="), TokenType.STAR_EQUAL, TokenType.STAR)
 		    
-		    // 2-char operators
 		  Case "!"
 		    AddToken IIf(Match("="), TokenType.BANG_EQUAL, TokenType.BANG)
 		  Case "="
 		    AddToken IIf(Match("="), TokenType.EQUAL_EQUAL, TokenType.EQUAL)
 		  Case "<"
-		    AddToken IIf(Match("="), TokenType.LESS_EQUAL, TokenType.LESS)
+		    If Peek= "<" Then
+		      Call Advance
+		      AddToken TokenType.LESS_LESS
+		    Else
+		      AddToken IIf(Match("="), TokenType.LESS_EQUAL, TokenType.LESS)
+		    End If
 		  Case ">"
-		    AddToken IIf(Match("="), TokenType.GREATER_EQUAL, TokenType.GREATER)
+		    If Peek= ">" Then
+		      Call Advance
+		      AddToken TokenType.GREATER_GREATER
+		    Else
+		      AddToken IIf(Match("="), TokenType.GREATER_EQUAL, TokenType.GREATER)
+		    End If
 		    // 2-char operators
 		    
 		    // slash or comment
@@ -341,6 +369,13 @@ Protected Class Scanner
 		  Case ":"
 		    AddToken TokenType.COLON
 		    // ternary
+		    
+		    // bitwise & |
+		  Case "&"
+		    AddToken TokenType.AMPERSAND
+		  Case "|"
+		    AddToken TokenType.PIPE
+		    // bitwise & |
 		    
 		  Case Else
 		    If IsDigit(c) Then

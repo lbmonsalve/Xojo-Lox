@@ -72,6 +72,21 @@ Protected Module Lox
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function IsUIntegerLox(Extends vart As Variant) As Boolean
+		  Select Case vart.Type
+		  Case 2, 3, 4, 5, 6
+		    If vart.DoubleValue>= 0 And vart.DoubleValue= vart.UInt64Value Then
+		      Return True
+		    Else
+		      Return False
+		    End If
+		  Case Else
+		    Return False
+		  End Select
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Sub Report(line As Integer, where As String, message As String)
 		  Dim msg As String= "[line "+ Str(line)+ "] Error"+ where+ ": "+ message
@@ -208,6 +223,15 @@ Protected Module Lox
 		    Return "CONTINUE"
 		  Case TokenType.MODULE_
 		    Return "MODULE"
+		  Case TokenType.AMPERSAND
+		    Return "AMPERSAND"
+		  Case TokenType.PIPE
+		    Return "PIPE"
+		  Case TokenType.LESS_LESS
+		    Return "LESS_LESS"
+		  Case TokenType.GREATER_GREATER
+		    Return "GREATER_GREATER"
+		    
 		  Case Else
 		    Return "STRINGIFY->"
 		  End Select
@@ -425,7 +449,11 @@ Protected Module Lox
 		  SLASH_EQUAL
 		  BREAK_
 		  CONTINUE_
-		MODULE_
+		  MODULE_
+		  AMPERSAND
+		  PIPE
+		  LESS_LESS
+		GREATER_GREATER
 	#tag EndEnum
 
 

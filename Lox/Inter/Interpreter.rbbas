@@ -210,6 +210,29 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    
 		    CheckNumberOperands expr.Operator, left, right
 		    Return left.DoubleValue* right.DoubleValue
+		  Case TokenType.AMPERSAND, TokenType.PIPE, TokenType.LESS_LESS, TokenType.GREATER_GREATER
+		    
+		    // assure positive integers
+		    If left.IsUIntegerLox And right.IsUIntegerLox Then
+		      Dim leftUInt As UInt64= left.UInt64Value
+		      Dim rightUInt As UInt64= right.UInt64Value
+		      
+		      // select
+		      Select Case expr.Operator.TypeToken
+		      Case TokenType.AMPERSAND
+		        Return leftUInt And rightUInt
+		      Case TokenType.PIPE
+		        Return leftUInt Or rightUInt
+		      Case TokenType.LESS_LESS
+		        Return Bitwise.ShiftLeft(leftUInt, rightUInt)
+		      Case TokenType.GREATER_GREATER
+		        Return Bitwise.ShiftRight(leftUInt, rightUInt)
+		      End Select
+		    Else
+		      HadRuntimeError= True
+		      #pragma BreakOnExceptions Off
+		      Raise New RuntimeError(expr.Operator, "Operands must be two positive integers.")
+		    End If
 		    
 		  End Select
 		End Function

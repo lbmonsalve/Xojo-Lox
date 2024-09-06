@@ -8,20 +8,6 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function and_() As Lox.Ast.Expr
-		  Dim expr As Lox.Ast.Expr= equality
-		  
-		  While Match(TokenType.AND_)
-		    Dim operator As Token= Previous
-		    Dim right As Lox.Ast.Expr= equality
-		    expr= New Lox.Ast.Logical(expr, operator, right)
-		  Wend
-		  
-		  Return expr
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
 		Private Function assignment() As Lox.Ast.Expr
 		  Dim expr As Lox.Ast.Expr= ternary
 		  
@@ -108,6 +94,21 @@ Protected Class Parser
 		    Error equals, "Invalid assignment target."
 		    HadError= True
 		  End If
+		  
+		  Return expr
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function bitwise() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= term // TODO:
+		  
+		  While Match(TokenType.AMPERSAND, _
+		    TokenType.PIPE, TokenType.LESS_LESS, TokenType.GREATER_GREATER)
+		    Dim operator As Token= Previous
+		    Dim right As Lox.Ast.Expr= term
+		    expr= New Lox.Ast.Binary(expr, operator, right)
+		  Wend
 		  
 		  Return expr
 		End Function
@@ -204,11 +205,11 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function comparison() As Lox.Ast.Expr
-		  Dim expr As Lox.Ast.Expr= term
+		  Dim expr As Lox.Ast.Expr= bitwise
 		  
 		  While Match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL)
 		    Dim operator As Token= Previous
-		    Dim right As Lox.Ast.Expr= term
+		    Dim right As Lox.Ast.Expr= bitwise
 		    expr= New Lox.Ast.Binary(expr, operator, right)
 		  Wend
 		  
@@ -430,6 +431,34 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function logicAnd() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= equality
+		  
+		  While Match(TokenType.AND_)
+		    Dim operator As Token= Previous
+		    Dim right As Lox.Ast.Expr= equality
+		    expr= New Lox.Ast.Logical(expr, operator, right)
+		  Wend
+		  
+		  Return expr
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function logicOr() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= logicAnd
+		  
+		  While Match(TokenType.OR_)
+		    Dim operator As Token= Previous
+		    Dim right As Lox.Ast.Expr= logicAnd
+		    expr= New Lox.Ast.Logical(expr, operator, right)
+		  Wend
+		  
+		  Return expr
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function Match(ParamArray types As TokenType) As Boolean
 		  For Each type As TokenType In types
 		    If Check(type) Then
@@ -472,20 +501,6 @@ Protected Class Parser
 		  Call consume TokenType.RIGHT_BRACE, "Expect '}' after class body."
 		  
 		  Return New Lox.Ast.ModuleStmt(name, modules, classes, functio)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function or_() As Lox.Ast.Expr
-		  Dim expr As Lox.Ast.Expr= and_
-		  
-		  While Match(TokenType.OR_)
-		    Dim operator As Token= Previous
-		    Dim right As Lox.Ast.Expr= and_
-		    expr= New Lox.Ast.Logical(expr, operator, right)
-		  Wend
-		  
-		  Return expr
 		End Function
 	#tag EndMethod
 
@@ -541,7 +556,6 @@ Protected Class Parser
 		  If Match(TokenType.FUN) Then Return functionBody("function")
 		  
 		  If Match(TokenType.NUMBER, TokenType.STRING_) Then Return New Lox.Ast.Literal(Previous.Literal)
-		  // TODO: match STRING?
 		  
 		  If Match(TokenType.LEFT_PAREN) Then
 		    Dim expr As Lox.Ast.Expr= expression
@@ -648,7 +662,7 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function ternary() As Lox.Ast.Expr
-		  Dim expr As Lox.Ast.Expr= or_
+		  Dim expr As Lox.Ast.Expr= logicOr
 		  
 		  If Match(TokenType.QUESTION) Then
 		    Dim thenBranch As Lox.Ast.Expr= expression
