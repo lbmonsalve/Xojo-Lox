@@ -144,6 +144,34 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitElvis(expr As Lox.Ast.Elvis) As Variant
+		  Dim sb() As String
+		  
+		  sb.Append "("
+		  sb.Append Parenthesize("elvis", expr.Condition)
+		  sb.Append Parenthesize2("", expr.RightExp)
+		  
+		  sb.Append ")"
+		  
+		  Return Join(sb, "")
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitElvisDot(expr As Lox.Ast.ElvisDot) As Variant
+		  Dim sb() As String
+		  
+		  sb.Append "("
+		  sb.Append Parenthesize("elvisDot", expr.Condition)
+		  sb.Append Parenthesize2("", expr.RightExp)
+		  
+		  sb.Append ")"
+		  
+		  Return Join(sb, "")
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitExpression(stmt As Lox.Ast.Expression) As Variant
 		  Return Parenthesize(";", stmt.Expression)
 		End Function

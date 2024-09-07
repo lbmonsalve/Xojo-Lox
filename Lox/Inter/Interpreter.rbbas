@@ -331,6 +331,24 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitElvis(expr As Lox.Ast.Elvis) As Variant
+		  Dim condition As Variant= Evaluate(expr.Condition)
+		  If isTruthy(condition) Then Return condition
+		  
+		  Return Evaluate(expr.RightExp)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitElvisDot(expr As Lox.Ast.ElvisDot) As Variant
+		  Dim condition As Variant= Evaluate(expr.Condition)
+		  If condition.IsNull Then Return Nil
+		  
+		  Return Evaluate(expr.RightExp)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitExpression(stmt As Lox.Ast.Expression) As Variant
 		  Call Evaluate stmt.Expression
 		End Function

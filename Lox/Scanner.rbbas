@@ -368,9 +368,17 @@ Protected Class Scanner
 		    Strings
 		    // strings
 		    
-		    // ternary
+		    // ternary, elvis
 		  Case "?"
-		    AddToken TokenType.QUESTION
+		    If Peek= ":" Then
+		      Call Advance
+		      AddToken TokenType.ELVIS
+		    ElseIf Peek= "." Then
+		      Call Advance
+		      AddToken TokenType.ELVIS_DOT
+		    Else
+		      AddToken TokenType.QUESTION
+		    End If
 		  Case ":"
 		    AddToken TokenType.COLON
 		    // ternary

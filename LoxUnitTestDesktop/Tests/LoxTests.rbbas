@@ -60,6 +60,14 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ElvisTest()
+		  // https://github.com/sravand123/TinkerScript.git
+		  
+		  DoRun kElvisSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub ExtendIdNamesTest()
 		  // emoji friendly!
 		  Dim snnipet As String= kExtendIdSnnipet.ReplaceAll("$emoji$", Encodings.UTF8.Chr(&h1f600))
@@ -301,12 +309,16 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub LamdaTest()
+		  // https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter10_functions.md
+		  
 		  DoRun kLamdaSnnipet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ModuleTest()
+		  // https://github.com/gkjpettet/roo
+		  
 		  DoRun kModuleSnnipet
 		End Sub
 	#tag EndMethod
@@ -385,6 +397,8 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub StaticMethodTest()
+		  // https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter12_classes.md
+		  
 		  DoRun kStaticMethodsSnnipet
 		End Sub
 	#tag EndMethod
@@ -447,6 +461,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kContinueSnnipet, Type = String, Dynamic = False, Default = \"var a \x3D 0;\rwhile (a < 10) {\r  a \x3D a + 1;\r  if (a\x3D\x3D 6) continue;\r  print a;\r}\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r// expect: 4.0\r// expect: 5.0\r// expect: 7.0\r// expect: 8.0\r// expect: 9.0\r// expect: 10.0\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kElvisSnnipet, Type = String, Dynamic = False, Default = \"var elvis \x3D true \?: false;\rprint elvis; // expect: true\rvar elvis2 \x3D false \?: true;\rprint elvis2; // expect: true\relvis\x3D false\?:false\?:true;\rprint elvis; // expect: true\r\rprint false\?.true; // expect: true\rprint nil\?.true; // expect: null\rprint true\?.nil\?.false\?.true; // expect: null\r\rprint (true\?.nil\?.false\?.true)\?:\"default\"; // expect: default\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kExtendIdSnnipet, Type = String, Dynamic = False, Default = \"var a\xC3\xB1o\x3D2024; print a\xC3\xB1o; // expect: 2024.0\rvar \xCE\xA3\x3D \"sigma\"; print \xCE\xA3; // expect: sigma\rvar $emoji$\x3D \"smileyface\";\rprint $emoji$; // expect: smileyface", Scope = Private

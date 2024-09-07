@@ -149,8 +149,9 @@ block          → "{" declaration* "}";
 expression     → assignment ;
 
 assignment     → ( call "." )? IDENTIFIER ("=" | "+=" | "-=" | "*=" | "/=")* assignment
-               | ternary ;
+               | elvis ;
 
+elvis          → ternary (("?:" | "?.") ternary)* ;
 ternary        → expression "?" expression ":" expression ";"
                | logic_or ;
 

@@ -233,6 +233,10 @@ Protected Module Lox
 		    Return "GREATER_GREATER"
 		  Case TokenType.STRING_INTERPOLATION
 		    Return "STRING_INTERPOLATION"
+		  Case TokenType.ELVIS
+		    Return "ELVIS"
+		  Case TokenType.ELVIS_DOT
+		    Return "ELVIS_DOT"
 		    
 		  Case Else
 		    Return "STRINGIFY->"
@@ -456,7 +460,9 @@ Protected Module Lox
 		  PIPE
 		  LESS_LESS
 		  GREATER_GREATER
-		STRING_INTERPOLATION
+		  STRING_INTERPOLATION
+		  ELVIS
+		ELVIS_DOT
 	#tag EndEnum
 
 

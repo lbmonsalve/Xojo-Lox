@@ -19,6 +19,18 @@ Protected Interface IExprVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitElvis(expr As Lox.Ast.Elvis) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitElvisDot(expr As Lox.Ast.ElvisDot) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitFunctionExpr(expr As Lox.Ast.FunctionExpr) As Variant
 		  
 		End Function
