@@ -1,31 +1,29 @@
 #tag Class
-Protected Class Get
-Inherits Lox.Ast.Expr
+Protected Class LoxRegExMatch
+Implements ICallable
 	#tag Method, Flags = &h0
-		Function Accept(visitor As IExprVisitor) As Variant
-		  Return visitor.VisitGet(Self)
+		Function Arity() As Integer
+		  
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1000
-		Sub Constructor(name As Lox.Token, obj As Expr, Optional idx As Expr)
-		  Self.Name= name
-		  Self.Obj= obj
-		  Self.Idx= idx
+	#tag Method, Flags = &h0
+		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		  Dim match As RegExMatch= mRegEx.Search(args(0))
+		  
+		  Return match.SubExpressionString(0)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Constructor(regex As RegEx)
+		  mRegEx= regex
 		End Sub
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h0
-		Idx As Expr
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		Name As Lox.Token
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		Obj As Expr
+	#tag Property, Flags = &h21
+		Private mRegEx As RegEx
 	#tag EndProperty
 
 

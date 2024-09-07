@@ -3,10 +3,15 @@
 //
 // to change:
 Dim tagsToChange() As Pair
+tagsToChange.Append New Pair(";UnitTest;", ";../../Xojo-UnitTest/UnitTest;")
+tagsToChange.Append New Pair(";UnitTest/", ";../../Xojo-UnitTest/UnitTest/")
 tagsToChange.Append New Pair(";Lox/", ";../Lox/")
+tagsToChange.Append New Pair(";API2Backward/", ";../../Xojo-API2Backward/API2Backward/")
 
 Dim foldersToMove() As Pair
+foldersToMove.Append New Pair("UnitTest", "../../Xojo-UnitTest/")
 foldersToMove.Append New Pair("Lox", "../")
+foldersToMove.Append New Pair("API2Backward", "../../Xojo-API2Backward")
 
 
 // dont change

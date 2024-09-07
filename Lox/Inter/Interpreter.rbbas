@@ -116,10 +116,28 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function NotStdLib(callee As ICallable) As Boolean
+		  If callee IsA Lox.Inter.Std.DateTime Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.LoxRegEx Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.LoxRegExMatch Then
+		    Return False
+		  End If
+		  
+		  Return True
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub Reset()
 		  mGlobals= New Environment
-		  mGlobals.Define("clock", New LoxClock)
+		  mGlobals.Define "clock", New LoxClock
+		  mGlobals.Define "osName", New Lox.Inter.Std.OSName
+		  mGlobals.Define "assert", New Lox.Inter.Std.Assert
+		  mGlobals.Define "datetime", New Lox.Inter.Std.DateTime
+		  mGlobals.Define "regEx", New Lox.Inter.Std.LoxRegEx
 		  
 		  mEnvironment= mGlobals
 		  
@@ -138,6 +156,24 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  'If obj.IsNull Then Return "nil"
 		  
 		  Return obj.ToStringLox
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitArrayAssign(expr As Lox.Ast.ArrayAssign) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitArrayExpr(expr As Lox.Ast.ArrayExpr) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitArrayLiteral(expr As Lox.Ast.ArrayLiteral) As Variant
+		  
 		End Function
 	#tag EndMethod
 
@@ -267,9 +303,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    "Can only call functions and classes.")
 		  End If
 		  
-		  Dim func As ICallable= ICallable(callee)
+		  Dim func As ICallable= callee
 		  
-		  If arguments.CountLox<> func.Arity Then
+		  // TODO: change
+		  If NotStdLib(func) And arguments.CountLox<> func.Arity Then
 		    HadRuntimeError= True
 		    #pragma BreakOnExceptions Off
 		    Raise New RuntimeError(expr.Paren, "Expected "+ _
@@ -327,6 +364,24 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function VisitContinueStmt(stmt As Lox.Ast.ContinueStmt) As Variant
 		  #pragma BreakOnExceptions Off
 		  Raise New ContinueExc
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitElvis(expr As Lox.Ast.Elvis) As Variant
+		  Dim condition As Variant= Evaluate(expr.Condition)
+		  If isTruthy(condition) Then Return condition
+		  
+		  Return Evaluate(expr.RightExp)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitElvisDot(expr As Lox.Ast.ElvisDot) As Variant
+		  Dim condition As Variant= Evaluate(expr.Condition)
+		  If condition.IsNull Then Return Nil
+		  
+		  Return Evaluate(expr.RightExp)
 		End Function
 	#tag EndMethod
 
@@ -504,7 +559,9 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Dim distance As Integer= mLocals.Value(expr)
 		  Dim superClass As LoxClass= LoxClass(mEnvironment.GetAt(distance, "super"))
 		  Dim obj As LoxInstance= LoxInstance(mEnvironment.GetAt(distance- 1, "this"))
-		  Dim method As LoxFunction= superClass.FindMethod(expr.Method.Lexeme)
+		  Dim methodObj As Variant= superClass.FindMethod(expr.Method.Lexeme)
+		  Dim method As LoxFunction
+		  If methodObj IsA LoxFunction Then method= LoxFunction(methodObj)
 		  
 		  If method Is Nil Then
 		    HadRuntimeError= True

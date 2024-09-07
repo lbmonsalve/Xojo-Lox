@@ -9,7 +9,29 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function assignment() As Lox.Ast.Expr
-		  Dim expr As Lox.Ast.Expr= ternary
+		  Dim expr As Lox.Ast.Expr= elvis
+		  
+		  If Match(TokenType.LEFT_BRACKET) Then
+		    Dim elems() As Lox.Ast.Expr
+		    
+		    If Not Check(TokenType.RIGHT_BRACKET) Then
+		      Do
+		        elems.Append logicOr
+		      Loop Until Not (Match(TokenType.COMMA))
+		    End If
+		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
+		    
+		    Dim value As Lox.Ast.Expr= New Lox.Ast.ArrayLiteral(elems)
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Token= Lox.Ast.Variable(expr).Name
+		      expr= New Lox.Ast.ArrayExpr(name, value)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      expr= New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
+		    End If
+		    
+		  End If
 		  
 		  If Match(TokenType.EQUAL) Then
 		    Dim equals As Token= Previous
@@ -21,6 +43,10 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Break
+		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -38,6 +64,9 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Break
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -55,6 +84,9 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Break
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -72,6 +104,9 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Break
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -89,6 +124,9 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Break
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -139,7 +177,7 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function call_() As Lox.Ast.Expr
-		  Dim expr As Lox.Ast.Expr= primary
+		  Dim expr As Lox.Ast.Expr= suscript
 		  
 		  While True
 		    If Match(TokenType.LEFT_PAREN) Then
@@ -245,6 +283,7 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function declaration() As Lox.Ast.Stmt
 		  Try
+		    If Match(TokenType.USING_) Then Return usingDeclaration
 		    If Match(TokenType.MODULE_) Then Return moduleDeclaration
 		    If Match(TokenType.CLASS_) Then Return classDeclaration
 		    If Check(TokenType.FUN) And CheckNext(TokenType.IDENTIFIER) Then
@@ -258,6 +297,25 @@ Protected Class Parser
 		    Synchronize
 		    Return Nil
 		  End Try
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function elvis() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= ternary
+		  
+		  While Match(TokenType.ELVIS, TokenType.ELVIS_DOT)
+		    Dim elvis As Token= Previous
+		    Dim right As Lox.Ast.Expr= ternary
+		    
+		    If elvis.TypeToken= TokenType.ELVIS Then
+		      expr= New Lox.Ast.Elvis(expr, elvis, right)
+		    Else
+		      expr= New Lox.Ast.ElvisDot(expr, elvis, right)
+		    End If
+		  Wend
+		  
+		  Return expr
 		End Function
 	#tag EndMethod
 
@@ -545,32 +603,24 @@ Protected Class Parser
 		Private Function postfix() As Lox.Ast.Expr
 		  Dim expr As Lox.Ast.Expr= call_
 		  
-		  If Match(TokenType.PLUS_PLUS) Then
+		  If Match(TokenType.PLUS_PLUS, TokenType.MINUS_MINUS) Then
 		    Dim prev As Token= Previous
-		    Dim oper As New Token(TokenType.PLUS, "+", Nil, prev.Line)
-		    Dim binn As New Lox.Ast.Binary(expr, oper, New Lox.Ast.Literal(1))
+		    Dim oper As Token
 		    
-		    If expr IsA Lox.Ast.Variable Then
-		      Dim name As Token= Lox.Ast.Variable(expr).Name
-		      Return New Lox.Ast.Assign(name, binn)
-		    ElseIf expr IsA Lox.Ast.Get Then
-		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    If prev.TypeToken= TokenType.PLUS_PLUS Then
+		      oper= New Token(TokenType.PLUS, "+", Nil, prev.Line)
+		    Else
+		      oper= New Token(TokenType.MINUS, "-", Nil, prev.Line)
 		    End If
 		    
-		    Error prev, "Invalid assignment target."
-		    HadError= True
-		  ElseIf Match(TokenType.MINUS_MINUS) Then
-		    Dim prev As Token= Previous
-		    Dim oper As New Token(TokenType.MINUS, "-", Nil, prev.Line)
-		    Dim binn As New Lox.Ast.Binary(expr, oper, New Lox.Ast.Literal(1))
+		    Dim right As New Lox.Ast.Binary(expr, oper, New Lox.Ast.Literal(1))
 		    
 		    If expr IsA Lox.Ast.Variable Then
 		      Dim name As Token= Lox.Ast.Variable(expr).Name
-		      Return New Lox.Ast.Assign(name, binn)
+		      Return New Lox.Ast.Assign(name, right)
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, right)
 		    End If
 		    
 		    Error prev, "Invalid assignment target."
@@ -597,6 +647,12 @@ Protected Class Parser
 		  
 		  If Match(TokenType.NUMBER, TokenType.STRING_) Then Return New Lox.Ast.Literal(Previous.Literal)
 		  
+		  If Match(TokenType.STRING_INTERPOLATION) Then
+		    Break
+		    // add strings until tok string
+		    // return ?
+		  End If
+		  
 		  If Match(TokenType.LEFT_PAREN) Then
 		    Dim expr As Lox.Ast.Expr= expression
 		    Call consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
@@ -612,6 +668,19 @@ Protected Class Parser
 		    Call consume TokenType.DOT, "Expect '.' after 'super'."
 		    Dim method As Token= consume(TokenType.IDENTIFIER, "Expect superclass method name.")
 		    Return New Lox.Ast.SuperExpr(keyword, method)
+		  End If
+		  
+		  If Match(TokenType.LEFT_BRACKET) Then
+		    Dim elems() As Lox.Ast.Expr
+		    
+		    If Not Check(TokenType.RIGHT_BRACKET) Then
+		      Do
+		        elems.Append logicOr
+		      Loop Until Not (Match(TokenType.COMMA))
+		    End If
+		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
+		    
+		    Return New Lox.Ast.ArrayLiteral(elems)
 		  End If
 		  
 		  HadError= True
@@ -653,6 +722,25 @@ Protected Class Parser
 		  If Match(TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(block)
 		  
 		  Return expressionStatement
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function suscript() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= primary
+		  
+		  If Match(TokenType.LEFT_BRACKET) Then
+		    // idx
+		    Dim idx As Lox.Ast.Expr= logicOr
+		    // idx
+		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      expr= New Lox.Ast.ArrayExpr(Lox.Ast.Variable(expr).Name, idx)
+		    End If
+		  End If
+		  
+		  Return expr
 		End Function
 	#tag EndMethod
 
@@ -713,6 +801,16 @@ Protected Class Parser
 		  End If
 		  
 		  Return postfix
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function usingDeclaration() As Lox.Ast.Stmt
+		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect variable name.")
+		  
+		  Call consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.")
+		  Break
+		  'Return New Lox.Ast.NativeFunction(name, Nil, Nil)
 		End Function
 	#tag EndMethod
 

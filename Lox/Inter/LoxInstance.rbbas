@@ -13,8 +13,12 @@ Protected Class LoxInstance
 		    Return mFields.Value(name.Lexeme)
 		  End If
 		  
-		  Dim method As LoxFunction= mClass.FindMethod(name.Lexeme)
+		  Dim methodObj As Variant= mClass.FindMethod(name.Lexeme)
+		  Dim method As LoxFunction
+		  If methodObj IsA LoxFunction Then method= LoxFunction(methodObj)
 		  If Not (method Is Nil) Then Return method.Bind(Self)
+		  
+		  If methodObj IsA ICallable Then Return methodObj
 		  
 		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(name, "Undefined property '" + name.lexeme + "'.")

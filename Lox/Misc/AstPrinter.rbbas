@@ -56,12 +56,33 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    ElseIf part IsA Lox.Token Then
 		      sb.Append Lox.Token(part).Lexeme
 		    ElseIf part.IsArray Then
-		      sb.Append "params..."
+		      Dim elems() As Lox.Ast.Expr= part
+		      For i As Integer= 0 To elems.Ubound
+		        sb.Append Print(elems(i))+ ", "
+		      Next
 		    Else
 		      sb.Append part.StringValue
 		    End If
 		  Next
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitArrayAssign(expr As Lox.Ast.ArrayAssign) As Variant
+		  Return Parenthesize2("array "+ expr.Operator.Lexeme, expr.Name.Lexeme, expr.Index, expr.Value)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitArrayExpr(expr As Lox.Ast.ArrayExpr) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitArrayLiteral(expr As Lox.Ast.ArrayLiteral) As Variant
+		  Return Parenthesize2("array", "", expr.Elements)
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -140,6 +161,34 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function VisitContinueStmt(stmt As Lox.Ast.ContinueStmt) As Variant
 		  Return "(continue)"
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitElvis(expr As Lox.Ast.Elvis) As Variant
+		  Dim sb() As String
+		  
+		  sb.Append "("
+		  sb.Append Parenthesize("elvis", expr.Condition)
+		  sb.Append Parenthesize2("", expr.RightExp)
+		  
+		  sb.Append ")"
+		  
+		  Return Join(sb, "")
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitElvisDot(expr As Lox.Ast.ElvisDot) As Variant
+		  Dim sb() As String
+		  
+		  sb.Append "("
+		  sb.Append Parenthesize("elvisDot", expr.Condition)
+		  sb.Append Parenthesize2("", expr.RightExp)
+		  
+		  sb.Append ")"
+		  
+		  Return Join(sb, "")
 		End Function
 	#tag EndMethod
 

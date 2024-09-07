@@ -289,6 +289,10 @@ Protected Class Scanner
 		    Else
 		      AddToken TokenType.RIGHT_BRACE
 		    End If
+		  Case "["
+		    AddToken TokenType.LEFT_BRACKET
+		  Case "]"
+		    AddToken TokenType.RIGHT_BRACKET
 		  Case ","
 		    AddToken TokenType.COMMA
 		  Case "."
@@ -368,9 +372,17 @@ Protected Class Scanner
 		    Strings
 		    // strings
 		    
-		    // ternary
+		    // ternary, elvis
 		  Case "?"
-		    AddToken TokenType.QUESTION
+		    If Peek= ":" Then
+		      Call Advance
+		      AddToken TokenType.ELVIS
+		    ElseIf Peek= "." Then
+		      Call Advance
+		      AddToken TokenType.ELVIS_DOT
+		    Else
+		      AddToken TokenType.QUESTION
+		    End If
 		  Case ":"
 		    AddToken TokenType.COLON
 		    // ternary
@@ -460,6 +472,7 @@ Protected Class Scanner
 			  mKeywords.Value("break")= TokenType.BREAK_
 			  mKeywords.Value("continue")= TokenType.CONTINUE_
 			  mKeywords.Value("module")= TokenType.MODULE_
+			  mKeywords.Value("using")= TokenType.USING_
 			  
 			  Return mKeywords
 			End Get

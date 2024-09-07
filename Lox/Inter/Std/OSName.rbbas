@@ -1,32 +1,23 @@
 #tag Class
-Protected Class Get
-Inherits Lox.Ast.Expr
+Protected Class OSName
+Implements ICallable
 	#tag Method, Flags = &h0
-		Function Accept(visitor As IExprVisitor) As Variant
-		  Return visitor.VisitGet(Self)
+		Function Arity() As Integer
+		  Return 0
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1000
-		Sub Constructor(name As Lox.Token, obj As Expr, Optional idx As Expr)
-		  Self.Name= name
-		  Self.Obj= obj
-		  Self.Idx= idx
-		End Sub
+	#tag Method, Flags = &h0
+		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		  Return "Windows"
+		End Function
 	#tag EndMethod
 
-
-	#tag Property, Flags = &h0
-		Idx As Expr
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		Name As Lox.Token
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		Obj As Expr
-	#tag EndProperty
+	#tag Method, Flags = &h0
+		Function ToString() As String
+		  Return "<fn osName>"
+		End Function
+	#tag EndMethod
 
 
 	#tag ViewBehavior
