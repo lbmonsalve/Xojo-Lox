@@ -35,6 +35,10 @@ Implements ICallable
 		    Return idxFound
 		  Case "map"
 		    Return DoMap(inter, args)
+		  Case "deleteAt"
+		    Dim elem As Variant= Owner.Elements(args(0))
+		    Owner.Elements.Remove args(0)
+		    Return elem
 		  End Select
 		End Function
 	#tag EndMethod
