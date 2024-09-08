@@ -161,19 +161,165 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function VisitArrayAssign(expr As Lox.Ast.ArrayAssign) As Variant
+		  // https://github.com/gkjpettet/roo/blob/master/src/core/Roo/Interpreter/RooInterpreter.xojo_xml_code
+		  // The user wants to assign a value to an element in an array.
+		  // The array's identifer is expr.Name
+		  // The index of the element to assign to is the expr.Index expression (to be evaluated).
+		  // The value to assign to the specified element is expr.Value
+		  // compound assignment is permitted (+=, -=, /=, *=, %=) as well as simple assignment (=).
 		  
+		  Dim current, newValue, assigneeVariant As Variant
+		  Dim index As Integer
+		  Dim assignee As LoxArray
+		  
+		  // Get the array we are assigning to.
+		  Dim distance As Integer= mLocals.Lookup(expr, -1)
+		  If distance= -1 Then // Global variable.
+		    assigneeVariant= Globals.Get(expr.Name)
+		  Else // Locally scoped variable.
+		    assigneeVariant= Environment.GetAt(distance, expr.Name.Lexeme)
+		  End If
+		  If assigneeVariant= Nil Then
+		    // Non-initialised variable. Initialise it as an empty array object.
+		    assigneeVariant = New LoxArray
+		  End If
+		  
+		  // Evaluate the right hand side of the assignment.
+		  newValue= Evaluate(expr.Value)
+		  
+		  // Help the Xojo compiler by telling it that we're working with a RooArray, not a Variant.
+		  assignee= LoxArray(assigneeVariant)
+		  
+		  Try
+		    index= Evaluate(expr.Index)
+		  Catch err
+		    Raise New RuntimeError(expr.Name, _
+		    "Expected an integer index value for the element to assign to.")
+		  End Try
+		  
+		  // Is there an element at this index?
+		  If index< 0 Then
+		    Raise New RuntimeError(expr.Name, "Expected an integer index >= 0.")
+		  ElseIf index<= assignee.Elements.Ubound Then
+		    current= assignee.Elements(index)
+		  Else
+		    current= Nil
+		  End If
+		  
+		  // Prohibit the compound assignment operators with non-existent elements.
+		  If current.IsNull And expr.Operator.TypeToken<> TokenType.EQUAL Then
+		    Raise New RuntimeError(expr.Name, "Cannot use a compound assigment operator on Nothing.")
+		  End If
+		  
+		  // What type of assignment is this?
+		  Select Case expr.Operator.TypeToken
+		  Case TokenType.PLUS_EQUAL
+		    If current.IsNumberLox And newValue.IsNumberLox Then
+		      // Arithmetic addition.
+		      newValue= current+ newValue
+		    Else // Text concatenation.
+		      newValue= current.StringValue+ newValue.StringValue
+		    End If
+		    
+		  Case TokenType.MINUS_EQUAL // Compound subtraction (-=).
+		    AssertAreNumbers expr.Operator, current, newValue
+		    newValue= current- newValue
+		    
+		  Case TokenType.SLASH_EQUAL // Compound division (/=).
+		    AssertAreNumbers expr.Operator, current, newValue
+		    If newValue= 0 Then Raise New RuntimeError(expr.Operator, "Division by zero")
+		    newValue= current/ newValue
+		    
+		  Case TokenType.STAR_EQUAL // Compound multiplication (*=).
+		    AssertAreNumbers expr.Operator, current, newValue
+		    newValue= current* newValue
+		    
+		    'Case Roo.TokenType.PERCENT_EQUAL // Compound modulo (%=).
+		    'Roo.AssertAreNumbers(expr.Operator, current, newValue)
+		    'If RooNumber(newValue).Value = 0 Then Raise New RooRuntimeError(expr.Operator, "Modulo with zero")
+		    'newValue = New RooNumber(RooNumber(current).Value Mod RooNumber(newValue).Value)
+		  End Select
+		  
+		  // Assign the new value to the correct element.
+		  If index> assignee.Elements.Ubound Then
+		    // Increase the size of this array to accomodate this new element, filling the
+		    // preceding elements with Nothing.
+		    Dim numNothings As Integer= index- assignee.Elements.Ubound
+		    For i As Integer= 1 To numNothings
+		      assignee.Elements.Append Nil
+		    Next i
+		  End If
+		  assignee.Elements(index)= newValue
+		  
+		  // Assign the newly updated array to the correct environment.
+		  If distance= -1 Then // Global variable.
+		    Globals.Assign expr.Name, assignee
+		  Else // Locally scoped variable.
+		    Environment.AssignAt distance, expr.Name, assignee
+		  End If
+		  
+		  // Return the value we assigned to the element to allow nesting (e.g: `print(a[2] = "hi")`)
+		  Return newValue
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function VisitArrayExpr(expr As Lox.Ast.ArrayExpr) As Variant
+		  // Return the requested element from this array.
+		  // The identifier of the array is expr.Name
+		  // The index of the element to return is the result of evaluating expr.Index
 		  
+		  Dim index As Variant
+		  Dim arr As LoxArray
+		  
+		  // Get the requested array.
+		  Try
+		    #pragma BreakOnExceptions Off
+		    arr= LookupVariable(expr.Name, expr)
+		  Catch
+		    Raise New RuntimeError(expr.Name, "You are treating `" + expr.Name.Lexeme + _
+		    "` like an array but it isn't one.")
+		  End Try
+		  
+		  // Evaluate the index.
+		  Try
+		    #pragma BreakOnExceptions Off
+		    index= Evaluate(expr.Index)
+		  Catch err As IllegalCastException
+		    Raise New RuntimeError(expr.Name, "Integer array index expected")
+		  End Try
+		  
+		  // Ensure that an integer index has been passed.
+		  If Not index.IsUIntegerLox Then
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(expr.Name, "Array indices must be integers, not fractional numbers.")
+		  End If
+		  
+		  // Return the correct element or Nothing if out of bounds.
+		  Try
+		    #pragma BreakOnExceptions Off
+		    Return arr.Elements(index)
+		  Catch OutOfBoundsException
+		    Return Nil
+		  End Try
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function VisitArrayLiteral(expr As Lox.Ast.ArrayLiteral) As Variant
+		  // The interpreter is visiting an array literal node. E.g:
+		  // [1, 2, "hello"]
+		  // a = ["a", True]
 		  
+		  // Create a new runtime representation for the array.
+		  Dim ret As New LoxArray
+		  
+		  // Evaluate each of the elements in the array literal.
+		  For Each element As Lox.Ast.Expr In expr.Elements
+		    ret.Elements.Append Evaluate(element)
+		  Next
+		  
+		  Return ret
 		End Function
 	#tag EndMethod
 

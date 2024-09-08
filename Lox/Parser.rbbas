@@ -44,7 +44,6 @@ Protected Class Parser
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Break
 		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
 		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
@@ -65,7 +64,6 @@ Protected Class Parser
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Break
 		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
@@ -85,7 +83,6 @@ Protected Class Parser
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Break
 		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
@@ -105,7 +102,6 @@ Protected Class Parser
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Break
 		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
@@ -125,7 +121,6 @@ Protected Class Parser
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Break
 		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
