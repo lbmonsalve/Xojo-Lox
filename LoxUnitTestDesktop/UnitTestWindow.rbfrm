@@ -497,6 +497,30 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
+		  Dim varts() As Variant
+		  Dim vart1 As Variant= "a"
+		  Dim vart2 As Variant= "b"
+		  Dim vart3 As Variant= "c"
+		  Dim vart4 As Variant= "d"
+		  
+		  varts.Append vart1
+		  varts.Append vart2
+		  varts.Append vart3
+		  varts.Append vart4
+		  
+		  Dim search As Variant= "c"
+		  Dim idx As Integer= varts.IndexOf(search)
+		  
+		  Dim idxFound As Integer
+		  For i As Integer= 0 To varts.Ubound
+		    If search.Equals(varts(i)) Then
+		      idxFound= i
+		      Exit
+		    End If
+		  Next
+		  
+		  Break
+		  
 		  Dim txtType As New FileType
 		  txtType.Name = "text/plain"
 		  txtType.MacType = "TXT "

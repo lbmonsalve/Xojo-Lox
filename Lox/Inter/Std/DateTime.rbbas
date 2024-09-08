@@ -1,6 +1,7 @@
 #tag Class
 Protected Class DateTime
-Inherits Lox.Inter.LoxInstance
+Inherits Lox.Inter.LoxClass
+Implements ICallable
 	#tag Method, Flags = &h0
 		Function Arity() As Integer
 		  
@@ -25,12 +26,14 @@ Inherits Lox.Inter.LoxInstance
 
 	#tag Method, Flags = &h1000
 		Sub Constructor()
-		  
+		  Super.Constructor Self
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Constructor(value As IDataDate)
+		  Constructor
+		  
 		  Self.Value= value
 		  
 		  // fields:

@@ -21,6 +21,18 @@ Implements ICallable
 		    Return arr
 		  Case "each"
 		    Return DoEach(inter, args)
+		  Case "indexOf"
+		    'Return Owner.Elements.IndexOf(args(0))
+		    Dim elems() As Variant= Owner.Elements
+		    Dim search As Variant= args(0)
+		    Dim idxFound As Integer
+		    For i As Integer= 0 To elems.Ubound
+		      If search.Equals(elems(i)) Then
+		        idxFound= i
+		        Exit
+		      End If
+		    Next
+		    Return idxFound
 		  End Select
 		End Function
 	#tag EndMethod
