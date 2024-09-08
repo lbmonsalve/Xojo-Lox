@@ -20,7 +20,7 @@ Protected Class LoxInstance
 		  
 		  If methodObj IsA ICallable Then Return ICallable(methodObj)
 		  
-		  Return methodObj
+		  If Not (methodObj Is Nil) Then Return methodObj
 		  
 		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(name, "Undefined property '" + name.lexeme + "'.")

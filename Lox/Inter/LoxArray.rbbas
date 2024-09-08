@@ -48,7 +48,7 @@ Inherits Lox.Inter.LoxClass
 		    Return Elements.Ubound= -1
 		  Case "length"
 		    Return Elements.Ubound+ 1
-		  Case "pop", "push"
+		  Case "pop", "push", "each"
 		    Return New Lox.Inter.LoxArrayMethods(name, Self)
 		  End Select
 		End Function
