@@ -1,5 +1,5 @@
 #tag Class
-Protected Class LoxRegExMatch
+Protected Class LoxArrayMethods
 Implements ICallable
 	#tag Method, Flags = &h0
 		Function Arity() As Integer
@@ -9,22 +9,34 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  Dim match As RegExMatch= mRegEx.Search(args(0))
-		  If match Is Nil Then Return Nil
-		  
-		  Return match.SubExpressionString(0)
+		  Select Case MethodName
+		  Case "pop"
+		    Return Owner.Elements.Pop
+		  Case "push"
+		    Dim arr As New Lox.Inter.LoxArray(Owner.Elements)
+		    Dim elems() As Variant= arr.Elements
+		    For Each arg As Variant In args
+		      elems.Append arg
+		    Next
+		    Return arr
+		  End Select
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(regex As RegEx)
-		  mRegEx= regex
+		Sub Constructor(methodName As String, owner As Lox.Inter.LoxArray)
+		  Self.MethodName= methodName
+		  Self.Owner= owner
 		End Sub
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h21
-		Private mRegEx As RegEx
+	#tag Property, Flags = &h0
+		MethodName As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Owner As Lox.Inter.LoxArray
 	#tag EndProperty
 
 
@@ -42,6 +54,11 @@ Implements ICallable
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="MethodName"
+			Group="Behavior"
+			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"

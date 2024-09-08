@@ -117,12 +117,16 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function NotStdLib(callee As ICallable) As Boolean
+		Private Function NotArbitraryArgs(callee As ICallable) As Boolean
 		  If callee IsA Lox.Inter.Std.DateTime Then
 		    Return False
 		  ElseIf callee IsA Lox.Inter.Std.LoxRegEx Then
 		    Return False
 		  ElseIf callee IsA Lox.Inter.Std.LoxRegExMatch Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.LoxArray Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.LoxArrayMethods Then
 		    Return False
 		  End If
 		  
@@ -449,16 +453,15 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    "Can only call functions and classes.")
 		  End If
 		  
-		  Dim func As ICallable= callee
+		  Dim func As ICallable= ICallable(callee)
 		  
-		  // TODO: change
-		  If NotStdLib(func) And arguments.CountLox<> func.Arity Then
+		  // TODO: change to chk arbitrary num args
+		  If NotArbitraryArgs(func) And arguments.CountLox<> func.Arity Then
 		    HadRuntimeError= True
 		    #pragma BreakOnExceptions Off
 		    Raise New RuntimeError(expr.Paren, "Expected "+ _
 		    Str(func.Arity)+ " arguments but got "+ Str(arguments.CountLox) + ".")
 		  End If
-		  
 		  
 		  Return func.Call_(Self, arguments)
 		End Function

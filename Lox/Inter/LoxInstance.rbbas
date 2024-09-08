@@ -18,7 +18,9 @@ Protected Class LoxInstance
 		  If methodObj IsA LoxFunction Then method= LoxFunction(methodObj)
 		  If Not (method Is Nil) Then Return method.Bind(Self)
 		  
-		  If methodObj IsA ICallable Then Return methodObj
+		  If methodObj IsA ICallable Then Return ICallable(methodObj)
+		  
+		  Return methodObj
 		  
 		  #pragma BreakOnExceptions Off
 		  Raise New RuntimeError(name, "Undefined property '" + name.lexeme + "'.")

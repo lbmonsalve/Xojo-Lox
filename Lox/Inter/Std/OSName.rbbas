@@ -3,13 +3,29 @@ Protected Class OSName
 Implements ICallable
 	#tag Method, Flags = &h0
 		Function Arity() As Integer
-		  Return 0
+		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  Return "Windows"
+		  Dim ret As String
+		  
+		  #if TargetWin32
+		    ret= "Windows"
+		  #elseif TargetMacOS
+		    ret= "MacOS"
+		  #else
+		    ret= "linux"
+		  #endif
+		  
+		  #if Target32Bit
+		    ret= ret+ " 32bit"
+		  #else
+		    ret= ret+ " 64bit"
+		  #endif
+		  
+		  Return ret
 		End Function
 	#tag EndMethod
 

@@ -45,7 +45,7 @@ Protected Class Parser
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
 		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
-		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -64,7 +64,7 @@ Protected Class Parser
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -83,7 +83,7 @@ Protected Class Parser
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -102,7 +102,7 @@ Protected Class Parser
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -121,7 +121,7 @@ Protected Class Parser
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
 		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."

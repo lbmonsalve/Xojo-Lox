@@ -79,6 +79,7 @@ Class=CSDictionary;../Lox/Misc/CSDictionary.rbbas;&h6253BFFF;&h216AFFFF;false
 Class=ModuleStmt;../Lox/Ast/ModuleStmt.rbbas;&h4DC50FFF;&h472807FF;false
 Class=LoxModule;../Lox/Inter/LoxModule.rbbas;&h1C409FFF;&h276F97FF;false
 Class=LoxArray;../Lox/Inter/LoxArray.rbbas;&h7073B7FF;&h276F97FF;false
+Class=LoxArrayMethods;../Lox/Inter/LoxArrayMethods.rbbas;&h3029EFFF;&h276F97FF;false
 Module=Std;../Lox/Inter/Std/Std.rbbas;&h335D97FF;&h276F97FF;false
 Class=OSName;../Lox/Inter/Std/OSName.rbbas;&h98FEFFF;&h335D97FF;false
 Class=Assert;../Lox/Inter/Std/Assert.rbbas;&h167F27FF;&h335D97FF;false

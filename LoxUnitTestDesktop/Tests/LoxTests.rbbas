@@ -10,6 +10,12 @@ Inherits TestGroup
 
 
 	#tag Method, Flags = &h0
+		Sub ArraysTest()
+		  DoRun kArraysSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub BitwiseTest()
 		  DoRun kBitwiseSnnipet
 		End Sub
@@ -376,6 +382,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub RegExTest()
+		  DoRun kRegExSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub ScannerTest()
 		  Dim files() As FolderItem= FindFiles("scanning")
 		  
@@ -457,6 +469,9 @@ Inherits TestGroup
 	#tag EndProperty
 
 
+	#tag Constant, Name = kArraysSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D[1\x2C2\x2C3];\rprint a.length; // expect: 3.0\rprint a.empty; // expect: false\rprint a[1]; // expect: 2.0\ra[0]\x3D4;\rprint a[0]; // expect: 4.0\r\rvar b\x3D[];\rprint b.length; // expect: 0.0\r\rvar foo\x3D [\"a\"\x2C \"b\"\x2C \"c\"];\rprint foo[2]; // // expect: c\r\rvar foo \x3D [1\x2C 1 + 1];\rprint foo; // expect: <class Array>\rprint foo[1]; // expect: 2.0\r\rfun add(a\x2Cb) { return a+ b; }\rprint foo[add(0\x2C 1)]; // expect: 2.0\r\r// pop\rvar c\x3D[4\x2C5\x2C6];\rvar elem\x3D c.pop();\rprint elem; // expect: 6.0\rprint c.length; // expect: 2.0\r\r// push\rvar b\x3D a.push(4\x2C5);\rprint a.length; // expect: 3.0\rprint b.length; // expect: 5.0", Scope = Private
+	#tag EndConstant
+
 	#tag Constant, Name = kBitwiseSnnipet, Type = String, Dynamic = False, Default = \"print 7 & 5;\rprint 7 | 5;\rprint 7 << 2;\rprint 40 >> 2;\r\r // expect: 5.0\r // expect: 7.0\r // expect: 28.0\r // expect: 10.0\r", Scope = Private
 	#tag EndConstant
 
@@ -491,6 +506,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0\r\rh\x3D0x1a2b3c4d5e6f;\rprint h; // expect: 28772997619311.0", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kRegExSnnipet, Type = String, Dynamic = False, Default = \"var r\x3D regEx(\"\\d+\");\rprint r.caseSensitive; // expect: false\rprint r.greedy; // expect: true\rprint r.match(\"10\"); // expect: 10\rprint r.match(\"rr\"); // expect: null", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kStaticMethodsSnnipet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private

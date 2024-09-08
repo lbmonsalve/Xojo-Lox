@@ -16,7 +16,7 @@ Inherits Lox.Inter.LoxClass
 	#tag Method, Flags = &h1000
 		Sub Constructor()
 		  // Calling the overridden superclass constructor.
-		  Constructor 0
+		  Constructor -1
 		  
 		End Sub
 	#tag EndMethod
@@ -24,24 +24,33 @@ Inherits Lox.Inter.LoxClass
 	#tag Method, Flags = &h1000
 		Sub Constructor(size As Integer)
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor Nil
+		  Super.Constructor Self
 		  
-		  If size>= 0 Then ReDim Elements(-1)
+		  If size>= 0 Then ReDim Elements(size)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
 		Sub Constructor(elements() As Variant)
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor Nil
+		  Super.Constructor Self
 		  
-		  Self.Elements= elements
+		  For Each element As Variant In elements
+		    Self.Elements.Append element
+		  Next
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function FindMethod(name As String) As Variant
-		  
+		  Select Case name
+		  Case "empty"
+		    Return Elements.Ubound= -1
+		  Case "length"
+		    Return Elements.Ubound+ 1
+		  Case "pop", "push"
+		    Return New Lox.Inter.LoxArrayMethods(name, Self)
+		  End Select
 		End Function
 	#tag EndMethod
 
