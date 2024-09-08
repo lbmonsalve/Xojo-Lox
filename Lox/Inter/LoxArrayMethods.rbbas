@@ -33,6 +33,8 @@ Implements ICallable
 		      End If
 		    Next
 		    Return idxFound
+		  Case "map"
+		    Return DoMap(inter, args)
 		  End Select
 		End Function
 	#tag EndMethod
@@ -75,6 +77,44 @@ Implements ICallable
 		    Call func.Call_(inter, funcArgs)
 		    funcArgs.Remove 0 // Remove this element from the argument list prior to the next iteration.
 		  Next i
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function DoMap(inter As Interpreter, args() As Variant) As Variant
+		  // Check that `func` is invokable.
+		  If Not args(0).IsCallableLox Then
+		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Expected an callable operand")
+		  End If
+		  
+		  Dim func As Lox.Inter.ICallable= args(0)
+		  
+		  // If a second argument has been passed, check that it's an Array object.
+		  Dim funcArgs() As Variant
+		  If args.Ubound>= 1 And args(1).IsArray Then
+		    // Get an array of the additional arguments to pass to the function we will invoke.
+		    Dim elems() As Variant= Lox.Inter.LoxArray(args(1)).Elements
+		    For Each elem As Variant In elems
+		      funcArgs.Append elem
+		    Next
+		  End If
+		  
+		  // Check that we have the correct number of arguments for `func`.
+		  // NB: +2 as we will pass in each element as the first argument.
+		  'If Not Interpreter.CorrectArity(func, funcArgs.Ubound+ 2) Then
+		  'Raise New RooRuntimeError(where, "Incorrect number of arguments passed to the " +_
+		  'Stringable(func).StringValue + " function.")
+		  'End If
+		  
+		  Dim result() As Variant
+		  
+		  For i As Integer= 0 To Owner.Elements.Ubound
+		    funcArgs.Insert 0, Owner.Elements(i) // Inject the element as the first argument to `func`.
+		    result.Append func.Call_(inter, funcArgs)
+		    funcArgs.Remove 0 // Remove this element from the argument list prior to the next iteration.
+		  Next
+		  
+		  Return New Lox.Inter.LoxArray(result)
 		End Function
 	#tag EndMethod
 
