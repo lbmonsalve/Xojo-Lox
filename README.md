@@ -148,7 +148,8 @@ block          → "{" declaration* "}";
 // expressions:
 expression     → assignment ;
 
-assignment     → ( call "." )? IDENTIFIER ("=" | "+=" | "-=" | "*=" | "/=")* assignment
+assignment     → ( call "." )? IDENTIFIER ( "[" logic_or "]" )*
+                 ("=" | "+=" | "-=" | "*=" | "/=")* assignment
                | elvis ;
 
 elvis          → ternary (("?:" | "?.") ternary)* ;
@@ -164,11 +165,12 @@ term           → factor ( ( "-" | "+" ) factor )* ;
 factor         → unary ( ( "/" | "*" ) unary )* ;
 
 unary          → ( "!" | "-" ) unary | postfix ;
-postfix        → call ("++" | "--")* ;
-call           → primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
+postfix        → call ("++" | "--")? ;
+call           → suscript ( "(" arguments? ")" | "." IDENTIFIER )* ;
+suscript       → primary ( "[" logic_or "]" )* ;
 primary        → "true" | "false" | "nil" | "this"
                | NUMBER | STRING | IDENTIFIER | "(" expression ")"
-               | "super" "." IDENTIFIER ;
+               | "super" "." IDENTIFIER | "[" arguments? "]" ;
 
 // utility rules:
 function       → IDENTIFIER "(" parameters? ")" block ;

@@ -11,6 +11,28 @@ Protected Class Parser
 		Private Function assignment() As Lox.Ast.Expr
 		  Dim expr As Lox.Ast.Expr= elvis
 		  
+		  If Match(TokenType.LEFT_BRACKET) Then
+		    Dim elems() As Lox.Ast.Expr
+		    
+		    If Not Check(TokenType.RIGHT_BRACKET) Then
+		      Do
+		        elems.Append logicOr
+		      Loop Until Not (Match(TokenType.COMMA))
+		    End If
+		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
+		    
+		    Dim value As Lox.Ast.Expr= New Lox.Ast.ArrayLiteral(elems)
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Token= Lox.Ast.Variable(expr).Name
+		      expr= New Lox.Ast.ArrayExpr(name, value)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      expr= New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
+		    End If
+		    
+		  End If
+		  
 		  If Match(TokenType.EQUAL) Then
 		    Dim equals As Token= Previous
 		    Dim value As Lox.Ast.Expr= assignment
@@ -21,6 +43,9 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -38,6 +63,8 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -55,6 +82,8 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -72,6 +101,8 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -89,6 +120,8 @@ Protected Class Parser
 		    ElseIf expr IsA Lox.Ast.Get Then
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
 		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Return New Lox.Ast.ArrayAssign(name, expr, equals, value)
 		    End If
 		    
 		    Error equals, "Invalid assignment target."
@@ -139,7 +172,7 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function call_() As Lox.Ast.Expr
-		  Dim expr As Lox.Ast.Expr= primary
+		  Dim expr As Lox.Ast.Expr= suscript
 		  
 		  While True
 		    If Match(TokenType.LEFT_PAREN) Then
@@ -245,6 +278,7 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function declaration() As Lox.Ast.Stmt
 		  Try
+		    If Match(TokenType.USING_) Then Return usingDeclaration
 		    If Match(TokenType.MODULE_) Then Return moduleDeclaration
 		    If Match(TokenType.CLASS_) Then Return classDeclaration
 		    If Check(TokenType.FUN) And CheckNext(TokenType.IDENTIFIER) Then
@@ -631,6 +665,19 @@ Protected Class Parser
 		    Return New Lox.Ast.SuperExpr(keyword, method)
 		  End If
 		  
+		  If Match(TokenType.LEFT_BRACKET) Then
+		    Dim elems() As Lox.Ast.Expr
+		    
+		    If Not Check(TokenType.RIGHT_BRACKET) Then
+		      Do
+		        elems.Append logicOr
+		      Loop Until Not (Match(TokenType.COMMA))
+		    End If
+		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
+		    
+		    Return New Lox.Ast.ArrayLiteral(elems)
+		  End If
+		  
 		  HadError= True
 		  #pragma BreakOnExceptions Off
 		  Raise Error(Peek, "Expect expression.")
@@ -670,6 +717,25 @@ Protected Class Parser
 		  If Match(TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(block)
 		  
 		  Return expressionStatement
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function suscript() As Lox.Ast.Expr
+		  Dim expr As Lox.Ast.Expr= primary
+		  
+		  If Match(TokenType.LEFT_BRACKET) Then
+		    // idx
+		    Dim idx As Lox.Ast.Expr= logicOr
+		    // idx
+		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      expr= New Lox.Ast.ArrayExpr(Lox.Ast.Variable(expr).Name, idx)
+		    End If
+		  End If
+		  
+		  Return expr
 		End Function
 	#tag EndMethod
 
@@ -730,6 +796,16 @@ Protected Class Parser
 		  End If
 		  
 		  Return postfix
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function usingDeclaration() As Lox.Ast.Stmt
+		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect variable name.")
+		  
+		  Call consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.")
+		  Break
+		  'Return New Lox.Ast.NativeFunction(name, Nil, Nil)
 		End Function
 	#tag EndMethod
 

@@ -513,6 +513,8 @@ End
 #tag Events PushButton2
 	#tag Event
 		Sub Action()
+		  'Dim ti As Introspection.TypeInfo= GetTypeInfo(Lox.Inter.Std.System)
+		  
 		  Lox.PrintOut= Self
 		  Lox.ErrorOut= Self
 		  

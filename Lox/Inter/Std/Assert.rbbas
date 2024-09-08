@@ -1,32 +1,34 @@
 #tag Class
-Protected Class Get
-Inherits Lox.Ast.Expr
+Protected Class Assert
+Implements ICallable
 	#tag Method, Flags = &h0
-		Function Accept(visitor As IExprVisitor) As Variant
-		  Return visitor.VisitGet(Self)
+		Function Arity() As Integer
+		  Return 2
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1000
-		Sub Constructor(name As Lox.Token, obj As Expr, Optional idx As Expr)
-		  Self.Name= name
-		  Self.Obj= obj
-		  Self.Idx= idx
-		End Sub
+	#tag Method, Flags = &h0
+		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		  Dim eval As Variant= args(0)
+		  Dim mess As String= args(1).StringValue
+		  
+		  If eval.IsNull Then
+		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Failed assertion: " + mess)
+		  End If
+		  
+		  If eval.BooleanValue= False Then
+		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Failed assertion: " + mess)
+		  End If
+		  
+		  Return True
+		End Function
 	#tag EndMethod
 
-
-	#tag Property, Flags = &h0
-		Idx As Expr
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		Name As Lox.Token
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		Obj As Expr
-	#tag EndProperty
+	#tag Method, Flags = &h0
+		Function ToString() As String
+		  Return "<fn assert>"
+		End Function
+	#tag EndMethod
 
 
 	#tag ViewBehavior

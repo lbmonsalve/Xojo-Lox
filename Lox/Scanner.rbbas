@@ -289,6 +289,10 @@ Protected Class Scanner
 		    Else
 		      AddToken TokenType.RIGHT_BRACE
 		    End If
+		  Case "["
+		    AddToken TokenType.LEFT_BRACKET
+		  Case "]"
+		    AddToken TokenType.RIGHT_BRACKET
 		  Case ","
 		    AddToken TokenType.COMMA
 		  Case "."
@@ -468,6 +472,7 @@ Protected Class Scanner
 			  mKeywords.Value("break")= TokenType.BREAK_
 			  mKeywords.Value("continue")= TokenType.CONTINUE_
 			  mKeywords.Value("module")= TokenType.MODULE_
+			  mKeywords.Value("using")= TokenType.USING_
 			  
 			  Return mKeywords
 			End Get

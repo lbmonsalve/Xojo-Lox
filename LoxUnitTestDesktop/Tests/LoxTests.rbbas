@@ -33,6 +33,12 @@ Inherits TestGroup
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub DateTimeTest()
+		  DoRun kDatetimeSnnipet
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Sub DoRun(snnipet As String)
 		  BufferPrint= ""
@@ -461,6 +467,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kContinueSnnipet, Type = String, Dynamic = False, Default = \"var a \x3D 0;\rwhile (a < 10) {\r  a \x3D a + 1;\r  if (a\x3D\x3D 6) continue;\r  print a;\r}\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r// expect: 4.0\r// expect: 5.0\r// expect: 7.0\r// expect: 8.0\r// expect: 9.0\r// expect: 10.0\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kDatetimeSnnipet, Type = String, Dynamic = False, Default = \"var d\x3D datetime();\r\rd\x3D datetime(2000\x2C 1\x2C 1);\rprint d.year;\rprint d.month;\rprint d.day;\rprint d.SQLDatetime;\r\r// expect: 2000.0\r// expect: 1.0\r// expect: 1.0\r// expect: 2000-01-01 00:00:00", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kElvisSnnipet, Type = String, Dynamic = False, Default = \"var elvis \x3D true \?: false;\rprint elvis; // expect: true\rvar elvis2 \x3D false \?: true;\rprint elvis2; // expect: true\relvis\x3D false\?:false\?:true;\rprint elvis; // expect: true\r\rprint false\?.true; // expect: true\rprint nil\?.true; // expect: null\rprint true\?.nil\?.false\?.true; // expect: null\r\rprint (true\?.nil\?.false\?.true)\?:\"default\"; // expect: default\r", Scope = Private

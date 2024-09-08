@@ -1,6 +1,24 @@
 #tag Interface
 Protected Interface IExprVisitor
 	#tag Method, Flags = &h0
+		Function VisitArrayAssign(expr As Lox.Ast.ArrayAssign) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitArrayExpr(expr As Lox.Ast.ArrayExpr) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitArrayLiteral(expr As Lox.Ast.ArrayLiteral) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitAssign(expr As Lox.Ast.Assign) As Variant
 		  
 		End Function

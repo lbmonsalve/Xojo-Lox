@@ -1,31 +1,36 @@
 #tag Class
-Protected Class Get
+Protected Class ArrayAssign
 Inherits Lox.Ast.Expr
 	#tag Method, Flags = &h0
 		Function Accept(visitor As IExprVisitor) As Variant
-		  Return visitor.VisitGet(Self)
+		  Return visitor.VisitArrayAssign(Self)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor(name As Lox.Token, obj As Expr, Optional idx As Expr)
+		Sub Constructor(name As Token, index As Lox.Ast.Expr, operator As Token, value As Lox.Ast.Expr)
 		  Self.Name= name
-		  Self.Obj= obj
-		  Self.Idx= idx
+		  Self.Index= index
+		  Self.Operator= operator
+		  Self.Value= value
 		End Sub
 	#tag EndMethod
 
 
 	#tag Property, Flags = &h0
-		Idx As Expr
+		Index As Expr
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		Name As Lox.Token
+		Name As Token
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		Obj As Expr
+		Operator As Token
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Value As Expr
 	#tag EndProperty
 
 
@@ -34,7 +39,6 @@ Inherits Lox.Ast.Expr
 			Name="Index"
 			Visible=true
 			Group="ID"
-			InitialValue="-2147483648"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty

@@ -1,69 +1,73 @@
 #tag Class
-Protected Class LoxClass
+Protected Class DateTime
 Inherits Lox.Inter.LoxInstance
-Implements ICallable
 	#tag Method, Flags = &h0
 		Function Arity() As Integer
-		  Dim initializerObj As Variant= FindMethod("init")
-		  Dim initializer As LoxFunction
-		  If initializerObj IsA LoxFunction Then initializer= LoxFunction(initializerObj)
 		  
-		  If initializer Is Nil Then Return 0
-		  
-		  Return initializer.Arity
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  Dim instance As New LoxInstance(Self)
-		  
-		  Dim initializerObj As Variant= FindMethod("init")
-		  Dim initializer As LoxFunction
-		  If initializerObj IsA LoxFunction Then initializer= LoxFunction(initializerObj)
-		  
-		  If Not (initializer Is Nil) Then
-		    Call initializer.Bind(instance).Call_(inter, args)
-		  End If
-		  
-		  Return instance
+		  Select Case args.Ubound
+		  Case -1
+		    Return New Lox.Inter.Std.DateTime(DataDate.Now)
+		  Case 0
+		    Return New Lox.Inter.Std.DateTime(DataDate.From(args(0).UInt64Value))
+		  Case 2
+		    Return New Lox.Inter.Std.DateTime(New DataDate(New Date(args(0), args(1), args(2))))
+		  Case 5
+		    Dim d1 As New Date(args(0), args(1), args(2), args(3), args(4), args(5))
+		    Return New Lox.Inter.Std.DateTime(New DataDate(d1))
+		  End Select
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Constructor(metaclass As LoxClass, name As String, superClass As LoxClass, methods As Lox.Misc.CSDictionary)
-		  Self.Name= name
-		  Self.SuperClass= superClass
-		  mMethods= methods
+	#tag Method, Flags = &h1000
+		Sub Constructor()
 		  
-		  Super.Constructor metaclass
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Constructor(value As IDataDate)
+		  Self.Value= value
+		  
+		  // fields:
+		  Fields.Value("year")= Value.Year
+		  Fields.Value("month")= Value.Month
+		  Fields.Value("day")= Value.Day
+		  
+		  Fields.Value("hour")= Value.Hour
+		  Fields.Value("minute")= Value.Minute
+		  Fields.Value("second")= Value.Second
+		  
+		  Fields.Value("SQLDate")= Value.SQLDate
+		  Fields.Value("SQLDatetime")= Value.SQLDateTime
+		  
+		  Fields.Value("toString")= Value.ToString
+		  
+		  Fields.Value("dayOfWeek")= Value.DayOfWeek
+		  Fields.Value("dayOfYear")= Value.DayOfYear
+		  Fields.Value("weekOfYear")= Value.WeekOfYear
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function FindMethod(name As String) As Variant
-		  If mMethods.HasKey(name) Then Return mMethods.Value(name)
-		  If Not (SuperClass Is Nil) Then Return SuperClass.FindMethod(name)
+		  Break
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  Return "<class "+ Name+ ">"
+		  Return "<class DateTime>"
 		End Function
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h21
-		Private mMethods As Lox.Misc.CSDictionary
-	#tag EndProperty
-
 	#tag Property, Flags = &h0
-		Name As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		SuperClass As LoxClass
+		Value As IDataDate
 	#tag EndProperty
 
 

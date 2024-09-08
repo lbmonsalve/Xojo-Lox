@@ -12,6 +12,18 @@ Protected Module Lox
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub AssertAreNumbers(where As Token, ParamArray operands As Variant)
+		  // Asserts that the passed operands are Numbers. If any aren't, raise an error.
+		  
+		  For Each operand As Variant In operands
+		    If Not operand.IsNumberLox Then
+		      Raise New RuntimeError(where, "Expected a number operand.")
+		    End If
+		  Next
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function Count(Extends obj() As Token) As Integer
 		  Return obj.Ubound+ 1
@@ -237,6 +249,12 @@ Protected Module Lox
 		    Return "ELVIS"
 		  Case TokenType.ELVIS_DOT
 		    Return "ELVIS_DOT"
+		  Case TokenType.USING_
+		    Return "USING"
+		  Case TokenType.LEFT_BRACKET
+		    Return "LEFT_BRACKET"
+		  Case TokenType.RIGHT_BRACKET
+		    Return "RIGHT_BRACKET"
 		    
 		  Case Else
 		    Return "STRINGIFY->"
@@ -264,7 +282,8 @@ Protected Module Lox
 		  Case 9 // obj TODO: cache methods
 		    Dim ti As Introspection.TypeInfo= Introspection.GetType(obj)
 		    Dim methods() As Introspection.MethodInfo= ti.GetMethods
-		    For Each method As Introspection.MethodInfo In methods
+		    For i As Integer= methods.Ubound DownTo 0
+		      Dim method As Introspection.MethodInfo= methods(i)
 		      If method.ReturnType Is Nil Then Continue
 		      Dim mathodParams() As Introspection.ParameterInfo= method.GetParameters
 		      If method.Name.Lowercase= "tostring" And _
@@ -274,6 +293,8 @@ Protected Module Lox
 		        Return method.Invoke(obj, params)
 		      End If
 		    Next
+		    'For Each method As Introspection.MethodInfo In methods
+		    'Next
 		    Return ti.FullName
 		  Case Else
 		    Return "other"
@@ -462,7 +483,10 @@ Protected Module Lox
 		  GREATER_GREATER
 		  STRING_INTERPOLATION
 		  ELVIS
-		ELVIS_DOT
+		  ELVIS_DOT
+		  USING_
+		  LEFT_BRACKET
+		RIGHT_BRACKET
 	#tag EndEnum
 
 
