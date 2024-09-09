@@ -802,11 +802,18 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  Dim distance As Integer= mLocals.Lookup(expr, -1)
 		  
+		  Dim valueAssign As Variant= value
+		  If expr.Operator.TypeToken= TokenType.PLUS_PLUS Then
+		    valueAssign= valueAssign+ 1
+		  Else // MINUS_MINUS
+		    valueAssign= valueAssign- 1
+		  End If
+		  
 		  // Assign the newly updated hash to the correct environment.
 		  If distance= -1 Then
-		    Globals.Assign(expr.Name, value+ 1)
+		    Globals.Assign(expr.Name, valueAssign)
 		  Else
-		    Environment.AssignAt(distance, expr.Name, value+ 1)
+		    Environment.AssignAt(distance, expr.Name, valueAssign)
 		  End If
 		  
 		  Return value
