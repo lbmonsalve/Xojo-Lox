@@ -67,6 +67,24 @@ Protected Interface IExprVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitHashMapAssign(expr As Lox.Ast.HashMapAssign) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapExpr(expr As Lox.Ast.HashMapExpr) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapLiteral(expr As Lox.Ast.HashMapLiteral) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitLiteral(expr As Lox.Ast.Literal) As Variant
 		  
 		End Function

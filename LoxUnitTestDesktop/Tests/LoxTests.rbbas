@@ -230,6 +230,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub HashMapsTest()
+		  DoRun kHashMapSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub IfOrElseTest()
 		  DoRun kIfOrElseSnnipet
 		End Sub
@@ -494,6 +500,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kFuntionsSnnipet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6.0\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: null\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1.0\rcounter(); // expect: 2.0", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kHashMapSnnipet, Type = String, Dynamic = False, Default = \"var hm\x3D #{\"a\"\x3D>1\x2C\"b\"\x3D>2\x2C \"c\"\x3D>100};\rprint hm#{\"b\"}; // expect: 2.0\r\rhm#{\"a\"}\x3D 3;\rprint hm#{\"a\"}; // expect: 3.0\r\rvar a\x3D hm.delete(\"a\");\r\rprint a; // expect: 3.0\rprint hm.length; // expect: 2.0\r\rprint hm.value(\"b\"); // expect: 2.0\rprint hm.value(\"c\"); // expect: 100.0\rprint hm.value(\"d\"); // expect: null\r\rhm.put(1\x2C 200);\r\rvar one\x3D hm.value(1);\rprint one; // expect: 200.0\r\rfun foo(k\x2Cv) { print k; print v; }\rhm.each(foo);\r\r// expect: c\r// expect: 100.0\r// expect: b\r// expect: 2.0\r// expect: 1.0\r// expect: 200.0", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kIfOrElseSnnipet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private

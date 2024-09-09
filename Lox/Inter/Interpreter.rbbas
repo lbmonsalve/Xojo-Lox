@@ -128,6 +128,11 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return False
 		  ElseIf callee IsA Lox.Inter.LoxArrayMethods Then
 		    Return False
+		  ElseIf callee IsA Lox.Inter.LoxHashMap Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.LoxHashMapMethods Then
+		    Return False
+		    
 		  End If
 		  
 		  Return True
@@ -570,6 +575,136 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function VisitGrouping(expr As Lox.Ast.Grouping) As Variant
 		  Return Evaluate(expr.Expression)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapAssign(expr As Lox.Ast.HashMapAssign) As Variant
+		  // The user wants to assign a value to a Hash.
+		  // The Hash's identifer is expr.Name
+		  // The key to assign to is expr.Key (to be evaluated).
+		  // The value to assign to the specified key is expr.Value
+		  // Shorthand assignment is permitted (+=, -=, /=, *=, %=) as well as simple assignment (=).
+		  
+		  // Evaluate the right hand side of the assignment.
+		  Dim value As Variant= Evaluate(expr.Value)
+		  
+		  // Get this hash variable.
+		  Dim variable As Variant
+		  Dim distance As Integer= mLocals.Lookup(expr, -1)
+		  If distance= -1 Then
+		    // Global variable.
+		    variable= mGlobals.Get(expr.Name)
+		  Else
+		    // Locally scoped variable.
+		    variable= Environment.GetAt(distance, expr.Name.Lexeme)
+		  End If
+		  
+		  If variable.IsNull Then
+		    Raise New RuntimeError(expr.Name, "Error retrieving hash variable `" + expr.Name.Lexeme + "`.")
+		  End If
+		  
+		  // Cast to a LoxHash to help the Xojo IDE with autocompletion, etc.
+		  Dim h As Lox.Inter.LoxHashMap= Lox.Inter.LoxHashMap(variable)
+		  
+		  // Get the key to assign to.
+		  // Remember, we use the raw value of RooText, RooNumber and RooBoolean objects as
+		  // the key. For other types, we use the actual object.
+		  Dim key As Variant= Evaluate(expr.Key)
+		  
+		  Dim current As Variant
+		  
+		  // Does this key exist? If so, get the current value of it.
+		  If h.HashMap.HasKey(key) Then current= h.HashMap.Value(key) Else current= Nil
+		  
+		  // Prevent the use of the compound assignment operators (+', -=, /=, *=) on non-existent keys.
+		  If current.IsNull And expr.Operator.TypeToken<> TokenType.EQUAL Then
+		    Raise New RuntimeError(expr.name, "Cannot use a compound assigment operator on Nothing.")
+		  end if
+		  
+		  // What type of assignment is this?
+		  Select Case expr.Operator.TypeToken
+		  Case TokenType.PLUS_EQUAL
+		    If current.IsNumberLox And value.IsNumberLox Then
+		      // Arithmetic addition.
+		      value= current+ value
+		    Else // Text concatenation.
+		      value= current.StringValue+ value.StringValue
+		    End If
+		    
+		  Case TokenType.PLUS_EQUAL // Compound subtraction (-=).
+		    AssertAreNumbers(expr.Operator, current, value)
+		    value= current- value
+		    
+		  Case TokenType.SLASH_EQUAL // Compound division (/=).
+		    AssertAreNumbers(expr.Operator, current, value)
+		    If value= 0 Then Raise New RuntimeError(expr.Operator, "Division by zero")
+		    value= current/ value
+		    
+		  Case TokenType.STAR_EQUAL // Compound multiplication (*=).
+		    AssertAreNumbers(expr.Operator, current, value)
+		    value= current* value
+		    
+		  End Select
+		  
+		  // Assign the new value to this key.
+		  h.HashMap.Value(key)= value
+		  
+		  // Assign the newly updated hash to the correct environment.
+		  If distance= -1 Then
+		    Globals.Assign(expr.Name, h)
+		  Else
+		    Environment.AssignAt(distance, expr.Name, h)
+		  End If
+		  
+		  // Return the value we assigned to the key to allow nesting (e.g: `print(h{"name"} = "Garry")`)
+		  Return value
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapExpr(expr As Lox.Ast.HashMapExpr) As Variant
+		  // Return the value associated with the specified key for this Hash.
+		  // The identifier of the Hash is expr.Name
+		  // The key is the result of evaluating expr.Key
+		  
+		  Dim keyValue As Variant
+		  Dim hash As Lox.Inter.LoxHashMap
+		  
+		  // Get this Hash
+		  Try
+		    hash= LookupVariable(expr.Name, expr)
+		  Catch
+		    Raise New RuntimeError(expr.Name, "You are treating `" + expr.Name.Lexeme + _
+		    "` like a Hash but it isn't one.")
+		  End Try
+		  
+		  // Evaluate the key.
+		  keyValue= Evaluate(expr.Key)
+		  
+		  // Return the requested value or Nothing if it doesn't exist.
+		  // Try a speedy object lookup first.
+		  If hash.HashMAp.HasKey(keyValue) Then Return hash.HashMap.Value(keyValue)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapLiteral(expr As Lox.Ast.HashMapLiteral) As Variant
+		  // The interpreter has encountered a hash literal (e.g: {"name" => "value"}).
+		  
+		  // Create a new runtime representation for the hash.
+		  Dim h As New Lox.Inter.LoxHashMap
+		  Dim key, value As Variant
+		  
+		  Dim entry As Lox.Misc.CSDictionary= expr.HashMap
+		  For i As Integer= 0 To entry.Count- 1
+		    key= Evaluate(entry.Key(i))
+		    value= Evaluate(entry.Value(entry.Key(i)))
+		    
+		    h.HashMap.Value(key)= value
+		  Next
+		  
+		  Return h
 		End Function
 	#tag EndMethod
 

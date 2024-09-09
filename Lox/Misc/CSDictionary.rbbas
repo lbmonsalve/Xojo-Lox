@@ -1,6 +1,17 @@
 #tag Class
 Protected Class CSDictionary
 Inherits Dictionary
+	#tag Method, Flags = &h1000
+		Sub Constructor(ParamArray entries() As Pair)
+		  // Calling the overridden superclass constructor.
+		  Super.Constructor
+		  
+		  For Each entry As Pair In entries
+		    Value(entry.Left)= entry.Right
+		  Next
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function HasKey(key As Variant) As Boolean
 		  If key.Type= 8 Then key= EncodeHex(key.StringValue)

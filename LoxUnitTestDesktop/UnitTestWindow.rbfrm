@@ -497,29 +497,29 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  Dim varts() As Variant
-		  Dim vart1 As Variant= "a"
-		  Dim vart2 As Variant= "b"
-		  Dim vart3 As Variant= "c"
-		  Dim vart4 As Variant= "d"
+		  // test:
 		  
-		  varts.Append vart1
-		  varts.Append vart2
-		  varts.Append vart3
-		  varts.Append vart4
-		  
-		  Dim search As Variant= "c"
-		  Dim idx As Integer= varts.IndexOf(search)
-		  
-		  Dim idxFound As Integer
-		  For i As Integer= 0 To varts.Ubound
-		    If search.Equals(varts(i)) Then
-		      idxFound= i
-		      Exit
-		    End If
-		  Next
-		  
-		  Break
+		  'Dim varts() As Variant
+		  'Dim vart1 As Variant= "a"
+		  'Dim vart2 As Variant= "b"
+		  'Dim vart3 As Variant= "c"
+		  'Dim vart4 As Variant= "d"
+		  '
+		  'varts.Append vart1
+		  'varts.Append vart2
+		  'varts.Append vart3
+		  'varts.Append vart4
+		  '
+		  'Dim hm As New Lox.Misc.CSDictionary
+		  'hm.Value(vart1)= 1
+		  'hm.Value(vart2)= 2
+		  'hm.Value(vart3)= 3
+		  '
+		  'Dim found As Variant= hm.Lookup(vart1, -1)
+		  'vart1= 4
+		  'found= hm.Lookup(vart1, -2)
+		  '
+		  'Break
 		  
 		  Dim txtType As New FileType
 		  txtType.Name = "text/plain"

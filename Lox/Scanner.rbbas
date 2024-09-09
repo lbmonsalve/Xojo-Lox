@@ -297,6 +297,11 @@ Protected Class Scanner
 		    AddToken TokenType.COMMA
 		  Case "."
 		    AddToken TokenType.DOT
+		  Case "#"
+		    If Peek= "{" Then
+		      Call Advance
+		      AddToken TokenType.HASHTAG_BRACE
+		    End If
 		    
 		    // 2-char operators
 		  Case "-"
@@ -332,7 +337,12 @@ Protected Class Scanner
 		  Case "!"
 		    AddToken IIf(Match("="), TokenType.BANG_EQUAL, TokenType.BANG)
 		  Case "="
-		    AddToken IIf(Match("="), TokenType.EQUAL_EQUAL, TokenType.EQUAL)
+		    If Peek= ">" Then
+		      Call Advance
+		      AddToken TokenType.FAT_ARROW
+		    Else
+		      AddToken IIf(Match("="), TokenType.EQUAL_EQUAL, TokenType.EQUAL)
+		    End If
 		  Case "<"
 		    If Peek= "<" Then
 		      Call Advance

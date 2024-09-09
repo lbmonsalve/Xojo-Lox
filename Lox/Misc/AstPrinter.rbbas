@@ -75,7 +75,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function VisitArrayExpr(expr As Lox.Ast.ArrayExpr) As Variant
-		  
+		  Return Parenthesize2("array", "", expr.Name, expr.Index)
 		End Function
 	#tag EndMethod
 
@@ -236,6 +236,24 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function VisitGrouping(expr As Lox.Ast.Grouping) As Variant
 		  Return Parenthesize("group", expr.Expression)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapAssign(expr As Lox.Ast.HashMapAssign) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapExpr(expr As Lox.Ast.HashMapExpr) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapLiteral(expr As Lox.Ast.HashMapLiteral) As Variant
+		  
 		End Function
 	#tag EndMethod
 

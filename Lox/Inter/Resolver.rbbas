@@ -270,6 +270,30 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitHashMapAssign(expr As Lox.Ast.HashMapAssign) As Variant
+		  resolve expr.Value
+		  resolveLocal expr, expr.Name
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapExpr(expr As Lox.Ast.HashMapExpr) As Variant
+		  resolveLocal expr, expr.Name
+		  resolve expr.Key
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitHashMapLiteral(expr As Lox.Ast.HashMapLiteral) As Variant
+		  Dim hashMap As Lox.Misc.CSDictionary= expr.HashMap
+		  For i As Integer= 0 To hashMap.Count- 1
+		    resolve lox.Ast.Expr(hashMap.Key(i))
+		    resolve lox.Ast.Expr(hashMap.Value(hashMap.Key(i)))
+		  Next
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitIfStmt(stmt As Lox.Ast.IfStmt) As Variant
 		  resolve stmt.Condition
 		  resolve stmt.ThenBranch

@@ -11,121 +11,46 @@ Protected Class Parser
 		Private Function assignment() As Lox.Ast.Expr
 		  Dim expr As Lox.Ast.Expr= elvis
 		  
-		  If Match(TokenType.LEFT_BRACKET) Then
-		    Dim elems() As Lox.Ast.Expr
-		    
-		    If Not Check(TokenType.RIGHT_BRACKET) Then
-		      Do
-		        elems.Append logicOr
-		      Loop Until Not (Match(TokenType.COMMA))
-		    End If
+		  If Match(TokenType.LEFT_BRACKET) Then // array?
+		    Break
+		    // idx
+		    Dim idx As Lox.Ast.Expr= elvis
+		    // idx
 		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
 		    
-		    Dim value As Lox.Ast.Expr= New Lox.Ast.ArrayLiteral(elems)
-		    
 		    If expr IsA Lox.Ast.Variable Then
-		      Dim name As Token= Lox.Ast.Variable(expr).Name
-		      expr= New Lox.Ast.ArrayExpr(name, value)
+		      expr= New Lox.Ast.ArrayExpr(Lox.Ast.Variable(expr).Name, idx)
 		    ElseIf expr IsA Lox.Ast.Get Then
+		      'expr= New Lox.Ast.ArrayExpr(Lox.Ast.Get(expr).Name, idx)
+		      Break // TODO:
 		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      expr= New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
+		      Dim arrExpr As New Lox.Ast.ArrayExpr(getExpr.Name, idx)
+		      expr= New Lox.Ast.Set(getExpr.Obj, getExpr.Name, arrExpr)
+		    Else
+		      Break // TODO:
 		    End If
 		    
 		  End If
 		  
-		  If Match(TokenType.EQUAL) Then
-		    Dim equals As Token= Previous
-		    Dim value As Lox.Ast.Expr= assignment
+		  If Match(TokenType.HASHTAG_BRACE) Then // hashmap?
+		    // idx
+		    Dim idx As Lox.Ast.Expr= elvis
+		    // idx
+		    Call consume TokenType.RIGHT_BRACE, "Expect '}' after elements."
 		    
 		    If expr IsA Lox.Ast.Variable Then
-		      Dim name As Token= Lox.Ast.Variable(expr).Name
-		      Return New Lox.Ast.Assign(name, value)
+		      expr= New Lox.Ast.HashMapExpr(Lox.Ast.Variable(expr).Name, idx)
 		    ElseIf expr IsA Lox.Ast.Get Then
-		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
-		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
-		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
+		      Break // TODO:
+		    Else
+		      Break // TODO:
 		    End If
+		  End If
+		  
+		  If Match(TokenType.EQUAL, TokenType.PLUS_EQUAL, TokenType.MINUS_EQUAL, _
+		    TokenType.STAR_EQUAL, TokenType.SLASH_EQUAL) Then
 		    
-		    Error equals, "Invalid assignment target."
-		    HadError= True
-		  ElseIf Match(TokenType.PLUS_EQUAL) Then
-		    Dim equals As Token= Previous
-		    Dim value As Lox.Ast.Expr= assignment
-		    
-		    Dim name As Token= Lox.Ast.Variable(expr).Name
-		    Dim oper As New Token(TokenType.PLUS, "+", Nil, name.Line)
-		    Dim binn As New Lox.Ast.Binary(expr, oper, value)
-		    
-		    If expr IsA Lox.Ast.Variable Then
-		      Return New Lox.Ast.Assign(name, binn)
-		    ElseIf expr IsA Lox.Ast.Get Then
-		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
-		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
-		    End If
-		    
-		    Error equals, "Invalid assignment target."
-		    HadError= True
-		  ElseIf Match(TokenType.MINUS_EQUAL) Then
-		    Dim equals As Token= Previous
-		    Dim value As Lox.Ast.Expr= assignment
-		    
-		    Dim name As Token= Lox.Ast.Variable(expr).Name
-		    Dim oper As New Token(TokenType.MINUS, "-", Nil, name.Line)
-		    Dim binn As New Lox.Ast.Binary(expr, oper, value)
-		    
-		    If expr IsA Lox.Ast.Variable Then
-		      Return New Lox.Ast.Assign(name, binn)
-		    ElseIf expr IsA Lox.Ast.Get Then
-		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
-		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
-		    End If
-		    
-		    Error equals, "Invalid assignment target."
-		    HadError= True
-		  ElseIf Match(TokenType.STAR_EQUAL) Then
-		    Dim equals As Token= Previous
-		    Dim value As Lox.Ast.Expr= assignment
-		    
-		    Dim name As Token= Lox.Ast.Variable(expr).Name
-		    Dim oper As New Token(TokenType.STAR, "*", Nil, name.Line)
-		    Dim binn As New Lox.Ast.Binary(expr, oper, value)
-		    
-		    If expr IsA Lox.Ast.Variable Then
-		      Return New Lox.Ast.Assign(name, binn)
-		    ElseIf expr IsA Lox.Ast.Get Then
-		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
-		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
-		    End If
-		    
-		    Error equals, "Invalid assignment target."
-		    HadError= True
-		  ElseIf Match(TokenType.SLASH_EQUAL) Then
-		    Dim equals As Token= Previous
-		    Dim value As Lox.Ast.Expr= assignment
-		    
-		    Dim name As Token= Lox.Ast.Variable(expr).Name
-		    Dim oper As New Token(TokenType.SLASH, "/", Nil, name.Line)
-		    Dim binn As New Lox.Ast.Binary(expr, oper, value)
-		    
-		    If expr IsA Lox.Ast.Variable Then
-		      Return New Lox.Ast.Assign(name, binn)
-		    ElseIf expr IsA Lox.Ast.Get Then
-		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
-		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
-		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
-		    End If
-		    
-		    Error equals, "Invalid assignment target."
-		    HadError= True
+		    expr= GetAssignmentOper(expr, Previous)
 		  End If
 		  
 		  Return expr
@@ -453,6 +378,143 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function GetAssignmentOper(expr As Lox.Ast.Expr, equals As Token) As Lox.Ast.Expr
+		  // TODO: refactory this
+		  
+		  If equals.TypeToken= TokenType.EQUAL Then
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Token= Lox.Ast.Variable(expr).Name
+		      Return New Lox.Ast.Assign(name, value)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, value)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, value)
+		    ElseIf expr IsA Lox.Ast.HashMapExpr Then
+		      Dim name As Token= Lox.Ast.HashMapExpr(expr).Name
+		      Return New Lox.Ast.HashMapAssign(name, Lox.Ast.HashMapExpr(expr).Key, equals, value)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		    HadError= True
+		  ElseIf equals.TypeToken= TokenType.PLUS_EQUAL Then
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Token= Lox.Ast.Variable(expr).Name
+		      Dim oper As New Token(TokenType.PLUS, "+", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Dim oper As New Token(TokenType.PLUS, "+", Nil, getExpr.Name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
+		      Dim oper As New Token(TokenType.PLUS, "+", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, binn)
+		    ElseIf expr IsA Lox.Ast.HashMapExpr Then
+		      Dim name As Token= Lox.Ast.HashMapExpr(expr).Name
+		      Dim oper As New Token(TokenType.PLUS, "+", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.HashMapAssign(name, Lox.Ast.HashMapExpr(expr).Key, equals, binn)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		    HadError= True
+		  ElseIf equals.TypeToken= TokenType.MINUS_EQUAL Then
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Token= Lox.Ast.Variable(expr).Name
+		      Dim oper As New Token(TokenType.MINUS, "-", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Dim oper As New Token(TokenType.MINUS, "-", Nil, getExpr.Name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
+		      Dim oper As New Token(TokenType.MINUS, "-", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, binn)
+		    ElseIf expr IsA Lox.Ast.HashMapExpr Then
+		      Dim name As Token= Lox.Ast.HashMapExpr(expr).Name
+		      Dim oper As New Token(TokenType.MINUS, "-", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.HashMapAssign(name, Lox.Ast.HashMapExpr(expr).Key, equals, binn)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		    HadError= True
+		  ElseIf equals.TypeToken= TokenType.STAR_EQUAL Then
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Token= Lox.Ast.Variable(expr).Name
+		      Dim oper As New Token(TokenType.STAR, "*", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Dim oper As New Token(TokenType.STAR, "*", Nil, getExpr.name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
+		      Dim oper As New Token(TokenType.STAR, "*", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, binn)
+		    ElseIf expr IsA Lox.Ast.HashMapExpr Then
+		      Dim name As Token= Lox.Ast.HashMapExpr(expr).Name
+		      Dim oper As New Token(TokenType.STAR, "*", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.HashMapAssign(name, Lox.Ast.HashMapExpr(expr).Key, equals, binn)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		    HadError= True
+		  ElseIf equals.TypeToken= TokenType.SLASH_EQUAL Then
+		    Dim value As Lox.Ast.Expr= assignment
+		    
+		    If expr IsA Lox.Ast.Variable Then
+		      Dim name As Token= Lox.Ast.Variable(expr).Name
+		      Dim oper As New Token(TokenType.SLASH, "/", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.Assign(name, binn)
+		    ElseIf expr IsA Lox.Ast.Get Then
+		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
+		      Dim oper As New Token(TokenType.SLASH, "/", Nil, getExpr.name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, binn)
+		    ElseIf expr IsA Lox.Ast.ArrayExpr Then
+		      Dim name As Token= Lox.Ast.ArrayExpr(expr).Name
+		      Dim oper As New Token(TokenType.SLASH, "/", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.ArrayAssign(name, Lox.Ast.ArrayExpr(expr).Index, equals, binn)
+		    ElseIf expr IsA Lox.Ast.HashMapExpr Then
+		      Dim name As Token= Lox.Ast.HashMapExpr(expr).Name
+		      Dim oper As New Token(TokenType.SLASH, "/", Nil, name.Line)
+		      Dim binn As New Lox.Ast.Binary(expr, oper, value)
+		      Return New Lox.Ast.HashMapAssign(name, Lox.Ast.HashMapExpr(expr).Key, equals, binn)
+		    End If
+		    
+		    Error equals, "Invalid assignment target."
+		    HadError= True
+		  End If
+		  
+		  Return expr
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function ifStatement() As Lox.Ast.Stmt
 		  Call consume TokenType.LEFT_PAREN, "Expect '(' after 'if'."
 		  Dim condition As Lox.Ast.Expr= expression
@@ -642,12 +704,6 @@ Protected Class Parser
 		  
 		  If Match(TokenType.NUMBER, TokenType.STRING_) Then Return New Lox.Ast.Literal(Previous.Literal)
 		  
-		  If Match(TokenType.STRING_INTERPOLATION) Then
-		    Break
-		    // add strings until tok string
-		    // return ?
-		  End If
-		  
 		  If Match(TokenType.LEFT_PAREN) Then
 		    Dim expr As Lox.Ast.Expr= expression
 		    Call consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
@@ -665,17 +721,42 @@ Protected Class Parser
 		    Return New Lox.Ast.SuperExpr(keyword, method)
 		  End If
 		  
+		  // Array literal? (E.g: [1, 3, "a"]).
 		  If Match(TokenType.LEFT_BRACKET) Then
 		    Dim elems() As Lox.Ast.Expr
 		    
 		    If Not Check(TokenType.RIGHT_BRACKET) Then
 		      Do
-		        elems.Append logicOr
+		        elems.Append elvis
 		      Loop Until Not (Match(TokenType.COMMA))
 		    End If
 		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
 		    
 		    Return New Lox.Ast.ArrayLiteral(elems)
+		  End If
+		  
+		  // Hash literal? (E.g: {"a" => 1, "b" => 2}).
+		  If Match(TokenType.HASHTAG_BRACE) Then
+		    Dim keyValues() As Pair
+		    
+		    If Not Check(TokenType.RIGHT_BRACE) Then
+		      Do
+		        Dim key As Lox.Ast.Expr= elvis
+		        Call Consume(TokenType.FAT_ARROW, "Expected `=>` operator after hash key.")
+		        Dim value As Lox.Ast.Expr= expression
+		        
+		        keyValues.Append New Pair(key, value)
+		      Loop Until Not (Match(TokenType.COMMA))
+		    End If
+		    Call consume TokenType.RIGHT_BRACE, "Expect '}' after elements."
+		    
+		    Return New Lox.Ast.HashMapLiteral(keyValues)
+		  End If
+		  
+		  If Match(TokenType.STRING_INTERPOLATION) Then
+		    Break
+		    // add strings until tok string
+		    // return ?
 		  End If
 		  
 		  HadError= True
@@ -726,7 +807,7 @@ Protected Class Parser
 		  
 		  If Match(TokenType.LEFT_BRACKET) Then
 		    // idx
-		    Dim idx As Lox.Ast.Expr= logicOr
+		    Dim idx As Lox.Ast.Expr= elvis
 		    // idx
 		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
 		    
@@ -734,6 +815,19 @@ Protected Class Parser
 		      expr= New Lox.Ast.ArrayExpr(Lox.Ast.Variable(expr).Name, idx)
 		    End If
 		  End If
+		  
+		  'If Match(TokenType.HASHTAG_BRACE) Then
+		  '// idx
+		  'Dim idx As Lox.Ast.Expr= elvis
+		  '// idx
+		  'Call consume TokenType.RIGHT_BRACE, "Expect '}' after elements."
+		  '
+		  'If expr IsA Lox.Ast.Variable Then
+		  'expr= New Lox.Ast.HashMapExpr(Lox.Ast.Variable(expr).Name, idx)
+		  'Else
+		  'Break
+		  'End If
+		  'End If
 		  
 		  Return expr
 		End Function

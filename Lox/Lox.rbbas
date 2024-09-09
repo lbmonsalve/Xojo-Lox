@@ -263,6 +263,10 @@ Protected Module Lox
 		    Return "LEFT_BRACKET"
 		  Case TokenType.RIGHT_BRACKET
 		    Return "RIGHT_BRACKET"
+		  Case TokenType.FAT_ARROW
+		    Return "FAT_ARROW"
+		  Case TokenType.HASHTAG_BRACE
+		    Return "HASHTAG_BRACE"
 		    
 		  Case Else
 		    Return "STRINGIFY->"
@@ -430,7 +434,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240905", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240909", Scope = Public
 	#tag EndConstant
 
 
@@ -494,7 +498,9 @@ Protected Module Lox
 		  ELVIS_DOT
 		  USING_
 		  LEFT_BRACKET
-		RIGHT_BRACKET
+		  RIGHT_BRACKET
+		  FAT_ARROW
+		HASHTAG_BRACE
 	#tag EndEnum
 
 
