@@ -1,5 +1,5 @@
 ﻿# Xojo-Lox
-Lox language implementation in Xojo. Taken from the [Crafting Interpreters](http://craftinginterpreters.com/) Book
+Lox language implementation in Xojo. Taken from the [Crafting Interpreters](http://craftinginterpreters.com/) Book. JUST FOR LEARNING, NO for production.
 
 ## The Language
 
@@ -97,8 +97,141 @@ var after = clock();
 print after - before;
 
 ```
+### syntactic sugar
 
-[grammar](https://craftinginterpreters.com/appendix-i.html)
+#### Identifiers extended. emoji's friendly.
+
+```cpp
+var año=2024; print año; // expect: 2024.0
+var Σ= "sigma"; print Σ; // expect: sigma
+var 😃= "smileyface";
+print 😃; // expect: smileyface
+```
+
+#### HEX, OCT, BIN literals.
+
+```cpp
+var h=0x2324; 
+var o=0o1056; 
+var b=0b1110;
+```
+
+#### Bitwise.
+
+```cpp
+print 7 & 5;
+print 7 | 5;
+print 7 << 2;
+print 40 >> 2;
+```
+
+#### Compound assingnment.
+
+```cpp
+var a=5;
+a+=5;
+print a; // expect: 10.0
+a-=3;
+print a; // expect: 7.0
+a*=5;
+print a; // expect: 35.0
+a/=2;
+print a; // expect: 17.5
+```
+
+
+#### Postfix.
+
+```cpp
+var i=1; i++;
+print i;
+
+i--;
+print i;
+```
+
+
+#### Ternary.
+
+```cpp
+a>b ? 1 : 2
+```
+
+
+#### Elvis operator.
+
+```cpp
+print false?.true; // expect: true
+print nil?.true; // expect: null
+print true?.nil?.false?.true; // expect: null
+```
+
+
+#### Break, continue keywords.
+
+```cpp
+var bb=0;
+while (true) {
+  if (bb=10) break;
+  bb++;
+}
+print bb; // expect: 10.0
+
+var a = 0;
+while (a < 10) {
+  a = a + 1;
+  if (a== 6) continue;
+  print a;
+}
+```
+
+#### if or else.
+
+```cpp
+if (false) {print "if";}
+  or (true) {print "or";} // expect: or
+  else {print "else";} 
+```
+
+
+#### Modules.
+
+```cpp
+module M {
+  class C {
+    parse(cc) {print cc;}
+  }
+  fun F() {print "hello";}
+  fun hello() {return "hello!";}
+}
+M.hello2= "hello2";
+
+M.F();
+var a= M.C();
+a.parse("b");
+
+var hello= M.hello();
+print hello;
+print M.hello2;
+```
+
+#### Datetime, arrays, hashmaps, regex.
+
+```cpp
+var d= datetime();
+
+var a=[1,2,3];
+
+var hm= #{"a"=>1,"b"=>2, "c"=>100};
+
+var r= regEx("\d+");
+print r.caseSensitive; // expect: false
+print r.greedy; // expect: true
+print r.match("10"); // expect: 10
+print r.match("rr"); // expect: null
+```
+
+## [grammar](https://craftinginterpreters.com/appendix-i.html)
 
 ```antlr
 // syntax grammar:
@@ -136,7 +269,7 @@ forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
                  expression? ";"
                  expression? ")" statement ;
 ifStmt         → "if" "(" expression ")" statement
-               ( "or" statement )?
+               ( "or" statement )*
                ( "else" statement )? ;
 printStmt      → "print" expression ";" ;
 returnStmt     → "return" expression? ";" ;
