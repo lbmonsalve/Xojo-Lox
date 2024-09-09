@@ -661,27 +661,16 @@ Protected Class Parser
 		  Dim expr As Lox.Ast.Expr= call_
 		  
 		  If Match(TokenType.PLUS_PLUS, TokenType.MINUS_MINUS) Then
-		    Dim prev As Token= Previous
-		    Dim oper As Token
-		    
-		    If prev.TypeToken= TokenType.PLUS_PLUS Then
-		      oper= New Token(TokenType.PLUS, "+", Nil, prev.Line)
-		    Else
-		      oper= New Token(TokenType.MINUS, "-", Nil, prev.Line)
-		    End If
-		    
-		    Dim right As New Lox.Ast.Binary(expr, oper, New Lox.Ast.Literal(1))
+		    Dim name As Token
+		    Dim oper As Token= Previous
 		    
 		    If expr IsA Lox.Ast.Variable Then
-		      Dim name As Token= Lox.Ast.Variable(expr).Name
-		      Return New Lox.Ast.Assign(name, right)
-		    ElseIf expr IsA Lox.Ast.Get Then
-		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      Return New Lox.Ast.Set(getExpr.Obj, getExpr.Name, right)
+		      name= Lox.Ast.Variable(expr).Name
+		    Else
+		      Break
 		    End If
 		    
-		    Error prev, "Invalid assignment target."
-		    HadError= True
+		    expr= New Lox.Ast.Postfix(name, oper, expr)
 		  End If
 		  
 		  Return expr

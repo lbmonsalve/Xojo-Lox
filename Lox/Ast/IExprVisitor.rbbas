@@ -97,6 +97,12 @@ Protected Interface IExprVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitPostfix(expr As Lox.Ast.Postfix) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitSet(expr As Lox.Ast.Set) As Variant
 		  
 		End Function

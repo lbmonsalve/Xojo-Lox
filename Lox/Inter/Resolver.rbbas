@@ -347,6 +347,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitPostfix(expr As Lox.Ast.Postfix) As Variant
+		  resolve expr.Left
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitPrint(stmt As Lox.Ast.Print) As Variant
 		  resolve stmt.Expression
 		End Function

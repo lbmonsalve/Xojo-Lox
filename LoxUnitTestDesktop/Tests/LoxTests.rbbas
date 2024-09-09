@@ -343,41 +343,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub PostfixExprTest()
-		  Dim snnipet As String= "var i=1; i++; print i;"
-		  
-		  BufferPrint= ""
-		  Lox.Interpreter.Reset
-		  
-		  Dim scanner As New Lox.Scanner(snnipet)
-		  Dim tokens() As Lox.Token= scanner.Scan
-		  
-		  Dim parser As New Lox.Parser(tokens)
-		  Dim statements() As Lox.Ast.Stmt= parser.Parse
-		  
-		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
-		  resolver.Resolve(statements)
-		  
-		  Lox.Interpreter.Interpret(statements)
-		  
-		  Dim actual As String= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
-		  Assert.AreEqual "2.0", actual, ".AreEqual ""2.0"", actual"
-		  
-		  
-		  BufferPrint= ""
-		  
-		  snnipet= "i--; print i;"
-		  
-		  scanner= New Lox.Scanner(snnipet)
-		  parser= New Lox.Parser(scanner.Scan)
-		  statements= parser.Parse
-		  'resolver= New Lox.Inter.Resolver(Lox.Interpreter)
-		  resolver.Resolve(statements)
-		  Lox.Interpreter.Interpret(statements)
-		  
-		  actual= BufferPrint.Left(BufferPrint.InStr(EndOfLine)- 1)
-		  Assert.AreEqual "1.0", actual, ".AreEqual ""1.0"", actual"
-		  
-		  'Break
+		  DoRun kPostfixSnnipet
 		End Sub
 	#tag EndMethod
 
@@ -512,6 +478,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kModuleSnnipet, Type = String, Dynamic = False, Default = \"module M {\r  class C {\r    parse(cc) {print cc;}\r  }\r  fun F() {print \"hello\";}\r  fun hello() {return \"hello!\";}\r}\rM.hello2\x3D \"hello2\";\r\rM.F();\rvar a\x3D M.C();\ra.parse(\"b\");\r\rvar hello\x3D M.hello();\rprint hello;\rprint M.hello2;\r\r// expect: hello\r// expect: b\r// expect: hello!\r// expect: hello2\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kPostfixSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D5;\rvar b\x3D a++;\rprint a; // expect: 6.0\rprint b; // expect: 5.0\r\rvar c\x3D b--;\rprint c; // expect: 5.0\rprint b; // expect: 6.0\r\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0\r\rh\x3D0x1a2b3c4d5e6f;\rprint h; // expect: 28772997619311.0", Scope = Private

@@ -797,6 +797,23 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitPostfix(expr As Lox.Ast.Postfix) As Variant
+		  Dim value As Variant= Evaluate(expr.Left)
+		  
+		  Dim distance As Integer= mLocals.Lookup(expr, -1)
+		  
+		  // Assign the newly updated hash to the correct environment.
+		  If distance= -1 Then
+		    Globals.Assign(expr.Name, value+ 1)
+		  Else
+		    Environment.AssignAt(distance, expr.Name, value+ 1)
+		  End If
+		  
+		  Return value
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitPrint(stmt As Lox.Ast.Print) As Variant
 		  Dim value As Variant= Evaluate(stmt.Expression)
 		  Dim msg As String= Stringify(value)

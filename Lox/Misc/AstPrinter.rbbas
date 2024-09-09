@@ -81,7 +81,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function VisitArrayLiteral(expr As Lox.Ast.ArrayLiteral) As Variant
-		  Return Parenthesize2("array", "", expr.Elements)
+		  Return Parenthesize2("array", expr.Elements)
 		End Function
 	#tag EndMethod
 
@@ -241,19 +241,19 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function VisitHashMapAssign(expr As Lox.Ast.HashMapAssign) As Variant
-		  
+		  Return Parenthesize2("hashMap "+ expr.Name.Lexeme, expr.Key, expr.Operator.Lexeme, expr.Value)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function VisitHashMapExpr(expr As Lox.Ast.HashMapExpr) As Variant
-		  
+		  Return Parenthesize2("hashMap", "", expr.Name, expr.Key)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function VisitHashMapLiteral(expr As Lox.Ast.HashMapLiteral) As Variant
-		  
+		  Return Parenthesize2("hashMap", expr.HashMap.Count)
 		End Function
 	#tag EndMethod
 
@@ -313,6 +313,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  sb.Append ")"
 		  
 		  Return Join(sb, "")
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitPostfix(expr As Lox.Ast.Postfix) As Variant
+		  
 		End Function
 	#tag EndMethod
 

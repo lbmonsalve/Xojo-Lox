@@ -53,6 +53,7 @@ Class=ArrayAssign;../Lox/Ast/ArrayAssign.rbbas;&h16E577FF;&h472807FF;false
 Class=HashMapLiteral;../Lox/Ast/HashMapLiteral.rbbas;&h184FA7FF;&h472807FF;false
 Class=HashMapExpr;../Lox/Ast/HashMapExpr.rbbas;&h62D2FFFF;&h472807FF;false
 Class=HashMapAssign;../Lox/Ast/HashMapAssign.rbbas;&h62E377FF;&h472807FF;false
+Class=Postfix;../Lox/Ast/Postfix.rbbas;&h5306DFFF;&h472807FF;false
 Interface=IStmtVisitor;../Lox/Ast/IStmtVisitor.rbbas;&h67EDD7FF;&h472807FF;false
 Class=Stmt;../Lox/Ast/Stmt.rbbas;&h3D24D7FF;&h472807FF;false
 Class=Block;../Lox/Ast/Block.rbbas;&h7EEB07FF;&h472807FF;false
