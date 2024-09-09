@@ -711,6 +711,8 @@ Protected Class Parser
 		  End If
 		  
 		  // Array literal? (E.g: [1, 3, "a"]).
+		  // https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter13_inheritance/3.md
+		  // https://calebschoepp.com/blog/2020/adding-a-list-data-type-to-lox/
 		  If Match(TokenType.LEFT_BRACKET) Then
 		    Dim elems() As Lox.Ast.Expr
 		    
@@ -725,6 +727,7 @@ Protected Class Parser
 		  End If
 		  
 		  // Hash literal? (E.g: {"a" => 1, "b" => 2}).
+		  // https://github.com/gkjpettet/roo/blob/master/docs/The%20Roo%20Standard%20Library.md#regular-expressions
 		  If Match(TokenType.HASHTAG_BRACE) Then
 		    Dim keyValues() As Pair
 		    
@@ -742,6 +745,7 @@ Protected Class Parser
 		    Return New Lox.Ast.HashMapLiteral(keyValues)
 		  End If
 		  
+		  // https://github.com/luke-gru/clox
 		  If Match(TokenType.STRING_INTERPOLATION) Then
 		    Break
 		    // add strings until tok string
