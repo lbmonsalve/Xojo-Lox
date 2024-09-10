@@ -167,9 +167,33 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h21
 		Private Function Stringify(obj As Variant) As String
-		  'If obj.IsNull Then Return "nil"
+		  If obj.Type= 8 Then
+		    If obj.StringValue.InStr("${")= 0 Then Return obj.ToStringLox
+		  Else
+		    Return obj.ToStringLox
+		  End If
 		  
-		  Return obj.ToStringLox
+		  // string interpolation (?<=\{).+?(?=\})
+		  Dim buffer As String= obj.StringValue
+		  
+		  Dim rg as New RegEx
+		  rg.SearchPattern= "(?<=\{).+?(?=\})"
+		  
+		  Dim varNames() As String
+		  Dim match As RegExMatch= rg.search(buffer)
+		  While match<> Nil
+		    varNames.Append match.SubExpressionString(0)
+		    match= rg.search
+		  Wend
+		  
+		  For Each varName As String In varNames
+		    Dim tok As New Token(TokenType.IDENTIFIER, varName.Trim, Nil, -1)
+		    Dim expr As New Lox.Ast.Variable(tok)
+		    Dim value As Variant= lookUpVariable(expr.Name, expr)
+		    buffer= buffer.Replace("${"+ varName+ "}", value.ToStringLox)
+		  Next
+		  
+		  Return buffer
 		End Function
 	#tag EndMethod
 

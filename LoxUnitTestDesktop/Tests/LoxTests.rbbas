@@ -400,6 +400,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub StringInterpolationTest()
+		  DoRun kStringInterpolationSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub TernaryTest()
 		  Dim snnipet As String= "var a=1; var b=2; var c=a>b?1:2; print c;"
 		  
@@ -499,6 +505,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kStaticMethodsSnnipet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kStringInterpolationSnnipet, Type = String, Dynamic = False, Default = \"var name\x3D\"luis\";\rprint \"welcome ${name}!\";\r\r// expect: welcome luis!\r", Scope = Private
 	#tag EndConstant
 
 

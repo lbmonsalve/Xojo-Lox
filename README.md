@@ -231,6 +231,28 @@ print r.match("10"); // expect: 10
 print r.match("rr"); // expect: null
 ```
 
+#### File.
+
+```cpp
+var f1= File("test1.txt");
+f1.write("hello");
+print f1.length;
+
+var txt= f1.read();
+
+var f2= File("test2.txt");
+f2.write(txt+ " world");
+print f2.length;
+```
+
+#### String interpolation.
+
+```cpp
+var name="luis";
+print "welcome ${name}!";
+```
+
+
 ## [grammar](https://craftinginterpreters.com/appendix-i.html)
 
 ```antlr
