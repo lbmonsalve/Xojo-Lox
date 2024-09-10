@@ -108,6 +108,12 @@ Inherits TestGroup
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub FileTest()
+		  DoRun kFileSnnipet
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function FindFiles(folderName As String) As FolderItem()
 		  Dim parent As FolderItem= app.ExecutableFile.Parent
@@ -463,6 +469,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kExtendIdSnnipet, Type = String, Dynamic = False, Default = \"var a\xC3\xB1o\x3D2024; print a\xC3\xB1o; // expect: 2024.0\rvar \xCE\xA3\x3D \"sigma\"; print \xCE\xA3; // expect: sigma\rvar $emoji$\x3D \"smileyface\";\rprint $emoji$; // expect: smileyface", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kFileSnnipet, Type = String, Dynamic = False, Default = \"var f1\x3D File(\"test1.txt\");\rf1.write(\"hello\");\rprint f1.length;\r\rvar txt\x3D f1.read();\r\rvar f2\x3D File(\"test2.txt\");\rf2.write(txt+ \" world\");\rprint f2.length;\r\r// expect: 5.0\r// expect: 11.0\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kFuntionsSnnipet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6.0\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: null\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1.0\rcounter(); // expect: 2.0", Scope = Private
