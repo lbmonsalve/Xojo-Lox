@@ -1,5 +1,5 @@
 #tag Class
-Protected Class LoxRegExMatch
+Protected Class RegExLoxMatch
 Implements ICallable
 	#tag Method, Flags = &h0
 		Function Arity() As Integer

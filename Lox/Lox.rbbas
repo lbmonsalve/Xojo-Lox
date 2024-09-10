@@ -251,8 +251,6 @@ Protected Module Lox
 		    Return "LESS_LESS"
 		  Case TokenType.GREATER_GREATER
 		    Return "GREATER_GREATER"
-		  Case TokenType.STRING_INTERPOLATION
-		    Return "STRING_INTERPOLATION"
 		  Case TokenType.ELVIS
 		    Return "ELVIS"
 		  Case TokenType.ELVIS_DOT
@@ -493,7 +491,6 @@ Protected Module Lox
 		  PIPE
 		  LESS_LESS
 		  GREATER_GREATER
-		  STRING_INTERPOLATION
 		  ELVIS
 		  ELVIS_DOT
 		  USING_

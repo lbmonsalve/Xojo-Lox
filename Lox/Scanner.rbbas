@@ -283,12 +283,7 @@ Protected Class Scanner
 		  Case "{"
 		    AddToken TokenType.LEFT_BRACE
 		  Case "}"
-		    If mStringInterpolation Then
-		      Strings
-		      mStringInterpolation= False
-		    Else
-		      AddToken TokenType.RIGHT_BRACE
-		    End If
+		    AddToken TokenType.RIGHT_BRACE
 		  Case "["
 		    AddToken TokenType.LEFT_BRACKET
 		  Case "]"
@@ -428,16 +423,7 @@ Protected Class Scanner
 		  
 		  While Peek<> """" And Not IsAtEnd
 		    If Peek= Chr(EOL) Then mLine= mLine+ 1
-		    'Call Advance
-		    
-		    Dim c As String= Advance
-		    If c= "$" And Peek= "{" Then
-		      mStringInterpolation= True
-		      Call Advance
-		      AddToken TokenType.STRING_INTERPOLATION, mSource.SubstringLox(mStart+ 1, mCurrent- 2)
-		      Return
-		    End If
-		    
+		    Call Advance
 		  Wend
 		  
 		  If IsAtEnd Then
@@ -508,10 +494,6 @@ Protected Class Scanner
 
 	#tag Property, Flags = &h21
 		Private mStart As Integer
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mStringInterpolation As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

@@ -120,9 +120,9 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Function NotArbitraryArgs(callee As ICallable) As Boolean
 		  If callee IsA Lox.Inter.Std.DateTime Then
 		    Return False
-		  ElseIf callee IsA Lox.Inter.Std.LoxRegEx Then
+		  ElseIf callee IsA Lox.Inter.Std.RegExLox Then
 		    Return False
-		  ElseIf callee IsA Lox.Inter.Std.LoxRegExMatch Then
+		  ElseIf callee IsA Lox.Inter.Std.RegExLoxMatch Then
 		    Return False
 		  ElseIf callee IsA Lox.Inter.LoxArray Then
 		    Return False
@@ -131,6 +131,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  ElseIf callee IsA Lox.Inter.LoxHashMap Then
 		    Return False
 		  ElseIf callee IsA Lox.Inter.LoxHashMapMethods Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.File Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.FileMethods Then
 		    Return False
 		    
 		  End If
@@ -146,7 +150,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mGlobals.Define "osName", New Lox.Inter.Std.OSName
 		  mGlobals.Define "assert", New Lox.Inter.Std.Assert
 		  mGlobals.Define "datetime", New Lox.Inter.Std.DateTime
-		  mGlobals.Define "regEx", New Lox.Inter.Std.LoxRegEx
+		  mGlobals.Define "regEx", New Lox.Inter.Std.RegExLox
+		  mGlobals.Define "File", New Lox.Inter.Std.File
 		  
 		  mEnvironment= mGlobals
 		  

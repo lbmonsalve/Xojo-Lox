@@ -745,13 +745,6 @@ Protected Class Parser
 		    Return New Lox.Ast.HashMapLiteral(keyValues)
 		  End If
 		  
-		  // https://github.com/luke-gru/clox
-		  If Match(TokenType.STRING_INTERPOLATION) Then
-		    Break
-		    // add strings until tok string
-		    // return ?
-		  End If
-		  
 		  HadError= True
 		  #pragma BreakOnExceptions Off
 		  Raise Error(Peek, "Expect expression.")

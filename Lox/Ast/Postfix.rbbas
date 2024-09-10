@@ -41,7 +41,6 @@ Inherits Lox.Ast.Expr
 			Name="Left"
 			Visible=true
 			Group="Position"
-			InitialValue="0"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
