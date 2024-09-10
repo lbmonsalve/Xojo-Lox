@@ -1,5 +1,5 @@
 #tag Class
-Protected Class OSName
+Protected Class SystemMethods
 Implements ICallable
 	#tag Method, Flags = &h0
 		Function Arity() As Integer
@@ -9,31 +9,45 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  Dim ret As String
-		  
-		  #if TargetWin32
-		    ret= "Windows"
-		  #elseif TargetMacOS
-		    ret= "MacOS"
-		  #else
-		    ret= "linux"
-		  #endif
-		  
-		  #if Target32Bit
-		    ret= ret+ " 32bit"
-		  #else
-		    ret= ret+ " 64bit"
-		  #endif
-		  
-		  Return ret
+		  Select Case mMethodName
+		  Case "osEnvVar"
+		    Return System.EnvironmentVariable(args(0))
+		  Case "debugLog"
+		    System.DebugLog(args(0))
+		    Return mSystem
+		  Case "assert"
+		    Dim eval As Variant= args(0)
+		    Dim mess As String= args(1).StringValue
+		    
+		    If eval.IsNull Then
+		      Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Failed assertion: " + mess)
+		    End If
+		    
+		    If eval.BooleanValue= False Then
+		      Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Failed assertion: " + mess)
+		    End If
+		    
+		    Return True
+		    
+		  End Select
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function ToString() As String
-		  Return "<fn osName>"
-		End Function
+		Sub Constructor(methodName As String, sys As Lox.Inter.Std.System)
+		  mMethodName= methodName
+		  mSystem= sys
+		End Sub
 	#tag EndMethod
+
+
+	#tag Property, Flags = &h21
+		Private mMethodName As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mSystem As Lox.Inter.Std.System
+	#tag EndProperty
 
 
 	#tag ViewBehavior

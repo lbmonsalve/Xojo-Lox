@@ -136,6 +136,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return False
 		  ElseIf callee IsA Lox.Inter.Std.FileMethods Then
 		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.System Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.SystemMethods Then
+		    Return False
 		    
 		  End If
 		  
@@ -147,8 +151,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Sub Reset()
 		  mGlobals= New Environment
 		  mGlobals.Define "clock", New LoxClock
-		  mGlobals.Define "osName", New Lox.Inter.Std.OSName
-		  mGlobals.Define "assert", New Lox.Inter.Std.Assert
+		  mGlobals.Define "System", New Lox.Inter.Std.System
 		  mGlobals.Define "datetime", New Lox.Inter.Std.DateTime
 		  mGlobals.Define "regEx", New Lox.Inter.Std.RegExLox
 		  mGlobals.Define "File", New Lox.Inter.Std.File
