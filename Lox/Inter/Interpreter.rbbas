@@ -829,7 +829,19 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function VisitPostfix(expr As Lox.Ast.Postfix) As Variant
 		  Dim value As Variant= Evaluate(expr.Left)
 		  
-		  Dim distance As Integer= mLocals.Lookup(expr, -1)
+		  // debug
+		  'Dim keys() As Variant= mLocals.Keys
+		  'Dim values() As Variant= mLocals.Values
+		  'dim vart As Variant= expr.Left
+		  'Dim hashExpr As Integer= vart.Hash
+		  '
+		  'For Each key As Variant in keys
+		  'Dim hashKey As Integer= key.Hash
+		  'Break
+		  'Next
+		  // debug
+		  
+		  Dim distance As Integer= mLocals.Lookup(expr.Left, -1)
 		  
 		  Dim valueAssign As Variant= value
 		  If expr.Operator.TypeToken= TokenType.PLUS_PLUS Then

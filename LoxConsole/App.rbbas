@@ -46,7 +46,7 @@ Inherits ConsoleApplication
 		Private Sub PrintWelcome()
 		  Dim msg As String= ExecutableFile.DisplayName+ " "+ _
 		  Str(MajorVersion)+ "."+ Str(MinorVersion)+ ".240910"+ _
-		  " (4d909a1) type .help for more information"
+		  " (22daae8) type .help for more information"
 		  
 		  Print msg
 		End Sub

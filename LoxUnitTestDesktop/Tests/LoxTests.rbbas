@@ -495,7 +495,7 @@ Inherits TestGroup
 	#tag Constant, Name = kModuleSnnipet, Type = String, Dynamic = False, Default = \"module M {\r  class C {\r    parse(cc) {print cc;}\r  }\r  fun F() {print \"hello\";}\r  fun hello() {return \"hello!\";}\r}\rM.hello2\x3D \"hello2\";\r\rM.F();\rvar a\x3D M.C();\ra.parse(\"b\");\r\rvar hello\x3D M.hello();\rprint hello;\rprint M.hello2;\r\r// expect: hello\r// expect: b\r// expect: hello!\r// expect: hello2\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kPostfixSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D5;\rvar b\x3D a++;\rprint a; // expect: 6.0\rprint b; // expect: 5.0\r\rvar c\x3D b--;\rprint c; // expect: 5.0\rprint b; // expect: 4.0\r", Scope = Private
+	#tag Constant, Name = kPostfixSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D5;\rvar b\x3D a++;\rprint a; // expect: 6.0\rprint b; // expect: 5.0\r{\r  var a\x3D10;\r  var b\x3D a++;\r  print a; // expect: 11.0\r  print b; // expect: 10.0\r}\r\rvar c\x3D b--;\rprint c; // expect: 5.0\rprint b; // expect: 4.0\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0\r\rh\x3D0x1a2b3c4d5e6f;\rprint h; // expect: 28772997619311.0", Scope = Private
