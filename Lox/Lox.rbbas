@@ -36,6 +36,18 @@ Protected Module Lox
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub DbgLog(msg As String)
+		  System.DebugLog msg
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function EnvVar(name As String) As String
+		  Return System.EnvironmentVariable(name)
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Sub Error(line As Integer, message As String)
 		  Report line, "", message

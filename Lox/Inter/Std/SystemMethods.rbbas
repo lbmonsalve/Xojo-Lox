@@ -11,9 +11,9 @@ Implements ICallable
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
 		  Select Case mMethodName
 		  Case "osEnvVar"
-		    Return System.EnvironmentVariable(args(0))
+		    Return EnvVar(args(0)) // conflict in v2022
 		  Case "debugLog"
-		    System.DebugLog(args(0))
+		    DbgLog(args(0)) // conflict in v2022
 		    Return mSystem
 		  Case "assert"
 		    Dim eval As Variant= args(0)
