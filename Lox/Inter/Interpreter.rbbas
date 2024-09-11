@@ -81,7 +81,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Catch exc As RuntimeError
 		    RuntimeError exc
 		  Catch exc As RuntimeException
-		    System.DebugLog CurrentMethodName+ " unexpected error"
+		    DbgLog CurrentMethodName+ " unexpected error"
 		  End Try
 		End Sub
 	#tag EndMethod
@@ -152,8 +152,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mGlobals= New Environment
 		  mGlobals.Define "clock", New LoxClock
 		  mGlobals.Define "System", New Lox.Inter.Std.System
-		  mGlobals.Define "datetime", New Lox.Inter.Std.DateTime
-		  mGlobals.Define "regEx", New Lox.Inter.Std.RegExLox
+		  mGlobals.Define "DateTime", New Lox.Inter.Std.DateTime
+		  mGlobals.Define "RegEx", New Lox.Inter.Std.RegExLox
 		  mGlobals.Define "File", New Lox.Inter.Std.File
 		  
 		  mEnvironment= mGlobals
@@ -832,18 +832,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Function VisitPostfix(expr As Lox.Ast.Postfix) As Variant
 		  Dim value As Variant= Evaluate(expr.Left)
 		  
-		  // debug
-		  'Dim keys() As Variant= mLocals.Keys
-		  'Dim values() As Variant= mLocals.Values
-		  'dim vart As Variant= expr.Left
-		  'Dim hashExpr As Integer= vart.Hash
-		  '
-		  'For Each key As Variant in keys
-		  'Dim hashKey As Integer= key.Hash
-		  'Break
-		  'Next
-		  // debug
-		  
 		  Dim distance As Integer= mLocals.Lookup(expr.Left, -1)
 		  
 		  Dim valueAssign As Variant= value
@@ -871,7 +859,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  // TODO: add logging system
 		  If PrintOut Is Nil Then
-		    System.DebugLog msg
+		    DbgLog msg
 		  Else
 		    PrintOut.Write msg+ EndOfLine
 		  End If
@@ -987,7 +975,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		        #pragma BreakOnExceptions Off
 		        Raise exc
 		      Catch exc As ContinueExc
-		        'System.DebugLog CurrentMethodName+ " continue!"
+		        'DbgLog CurrentMethodName+ " continue!"
 		      End Try
 		    Wend
 		  Catch exc As BreakExc

@@ -43,7 +43,7 @@ Inherits Lox.Inter.LoxClass
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  Return "<class HashMAp>"
+		  Return "<class HashMap>"
 		End Function
 	#tag EndMethod
 
