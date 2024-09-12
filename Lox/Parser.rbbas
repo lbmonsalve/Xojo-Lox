@@ -87,7 +87,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function breakStatement() As Lox.Ast.Stmt
+		Private Function breakStmt() As Lox.Ast.Stmt
 		  Dim keyword As Token= Previous
 		  Call consume TokenType.SEMICOLON, "Expect ';' after return value."
 		  
@@ -132,7 +132,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function classDeclaration() As Lox.Ast.Stmt
+		Private Function classDecl() As Lox.Ast.Stmt
 		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect class name.")
 		  
 		  Dim superClass As Lox.Ast.Variable
@@ -149,9 +149,9 @@ Protected Class Parser
 		  While Not Check(TokenType.RIGHT_BRACE) And Not IsAtEnd
 		    Dim isClassMethod As Boolean= Match(TokenType.CLASS_)
 		    If isClassMethod Then
-		      classMethods.Append function_("method")
+		      classMethods.Append funDecl("method")
 		    Else
-		      methods.Append function_("method")
+		      methods.Append funDecl("method")
 		    End If
 		  Wend
 		  
@@ -192,7 +192,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function continueStatement() As Lox.Ast.Stmt
+		Private Function continueStmt() As Lox.Ast.Stmt
 		  Dim keyword As Token= Previous
 		  Call consume TokenType.SEMICOLON, "Expect ';' after return value."
 		  
@@ -203,14 +203,14 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function declaration() As Lox.Ast.Stmt
 		  Try
-		    If Match(TokenType.USING_) Then Return usingDeclaration
-		    If Match(TokenType.MODULE_) Then Return moduleDeclaration
-		    If Match(TokenType.CLASS_) Then Return classDeclaration
+		    If Match(TokenType.USING_) Then Return usingDecl // TODO:
+		    If Match(TokenType.MODULE_) Then Return moduleDecl
+		    If Match(TokenType.CLASS_) Then Return classDecl
 		    If Check(TokenType.FUN) And CheckNext(TokenType.IDENTIFIER) Then
 		      Call consume TokenType.FUN, ""
-		      Return function_("function")
+		      Return funDecl("function")
 		    End If
-		    If Match(TokenType.VAR_) Then Return varDeclaration
+		    If Match(TokenType.VAR_) Then Return varDecl
 		    
 		    Return statement
 		  Catch exc As ParseError
@@ -260,7 +260,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function expressionStatement() As Lox.Ast.Stmt
+		Private Function exprStmt() As Lox.Ast.Stmt
 		  Dim expr As Lox.Ast.Expr= expression
 		  
 		  If mAllowExpression And IsAtEnd Then
@@ -313,9 +313,9 @@ Protected Class Parser
 		  Dim initializer As Lox.Ast.Stmt
 		  If Match(TokenType.SEMICOLON) Then
 		  ElseIf Match(TokenType.VAR_) Then
-		    initializer= varDeclaration
+		    initializer= varDecl
 		  Else
-		    initializer= expressionStatement
+		    initializer= exprStmt
 		  End If
 		  
 		  Dim condition As Lox.Ast.Expr
@@ -371,7 +371,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function function_(kind As String) As Lox.Ast.FunctionStmt
+		Private Function funDecl(kind As String) As Lox.Ast.FunctionStmt
 		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect "+ kind+ " name.")
 		  Return New Lox.Ast.FunctionStmt(name, functionBody(kind))
 		End Function
@@ -515,7 +515,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function ifStatement() As Lox.Ast.Stmt
+		Private Function ifStmt() As Lox.Ast.Stmt
 		  Call consume TokenType.LEFT_PAREN, "Expect '(' after 'if'."
 		  Dim condition As Lox.Ast.Expr= expression
 		  Call consume TokenType.RIGHT_PAREN, "Expect ')' after if condition."
@@ -587,7 +587,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function moduleDeclaration() As Lox.Ast.Stmt
+		Private Function moduleDecl() As Lox.Ast.Stmt
 		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect module name.")
 		  
 		  Call consume TokenType.LEFT_BRACE, "Expect '{' before class body."
@@ -599,13 +599,13 @@ Protected Class Parser
 		  While Not Check(TokenType.RIGHT_BRACE) And Not IsAtEnd
 		    If Check(TokenType.MODULE_) Then
 		      Call Advance
-		      modules.Append Lox.Ast.ModuleStmt(moduleDeclaration)
+		      modules.Append Lox.Ast.ModuleStmt(moduleDecl)
 		    ElseIf Check(TokenType.CLASS_) Then
 		      Call Advance
-		      classes.Append Lox.Ast.ClassStmt(classDeclaration)
+		      classes.Append Lox.Ast.ClassStmt(classDecl)
 		    ElseIf Check(TokenType.FUN) Then
 		      Call Advance
-		      functio.Append function_("function")
+		      functio.Append funDecl("function")
 		    Else
 		      Error Peek, "Expected a module, class or method definition."
 		      HadError= True
@@ -752,7 +752,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function printStatement() As Lox.Ast.Stmt
+		Private Function printStmt() As Lox.Ast.Stmt
 		  Dim value As Lox.Ast.Expr= expression
 		  Call consume TokenType.SEMICOLON, "Expect ';' after value."
 		  
@@ -761,7 +761,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function returnStatement() As Lox.Ast.Stmt
+		Private Function returnStmt() As Lox.Ast.Stmt
 		  Dim keyword As Token= Previous
 		  Dim value As Lox.Ast.Expr
 		  If Not Check(TokenType.SEMICOLON) Then value= expression
@@ -775,15 +775,15 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function statement() As Lox.Ast.Stmt
 		  If Match(TokenType.FOR_) Then Return forStatement
-		  If Match(TokenType.IF_) Then Return ifStatement
-		  If Match(TokenType.PRINT_) Then Return printStatement
-		  If Match(TokenType.RETURN_) Then Return returnStatement
-		  If Match(TokenType.WHILE_) Then Return whileStatement
-		  If Match(TokenType.BREAK_) Then Return breakStatement
-		  If Match(TokenType.CONTINUE_) Then Return continueStatement
+		  If Match(TokenType.IF_) Then Return ifStmt
+		  If Match(TokenType.PRINT_) Then Return printStmt
+		  If Match(TokenType.RETURN_) Then Return returnStmt
+		  If Match(TokenType.WHILE_) Then Return whileStmt
+		  If Match(TokenType.BREAK_) Then Return breakStmt
+		  If Match(TokenType.CONTINUE_) Then Return continueStmt
 		  If Match(TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(block)
 		  
-		  Return expressionStatement
+		  Return exprStmt
 		End Function
 	#tag EndMethod
 
@@ -880,7 +880,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function usingDeclaration() As Lox.Ast.Stmt
+		Private Function usingDecl() As Lox.Ast.Stmt
 		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect variable name.")
 		  
 		  Call consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.")
@@ -890,7 +890,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function varDeclaration() As Lox.Ast.Stmt
+		Private Function varDecl() As Lox.Ast.Stmt
 		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect variable name.")
 		  
 		  Dim initializer As Lox.Ast.Expr
@@ -902,7 +902,7 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function whileStatement() As Lox.Ast.Stmt
+		Private Function whileStmt() As Lox.Ast.Stmt
 		  Call consume TokenType.LEFT_PAREN, "Expect '(' after 'while'."
 		  Dim condition As Lox.Ast.Expr= expression
 		  Call consume TokenType.RIGHT_PAREN, "Expect ')' after condition."

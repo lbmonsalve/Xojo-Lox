@@ -417,9 +417,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    
 		    If left.IsNumeric And right.IsNumeric Then
 		      Return left.DoubleValue+ right.DoubleValue
-		    End If
-		    If left.IsStringLox And right.IsStringLox Then
-		      Return left.StringValue+ right.StringValue
+		    ElseIf left.IsNull Or right.IsNull Then
+		    ElseIf left.IsBooleanLox Or right.IsBooleanLox Then
+		    Else // otherwise returns string
+		      Return left.ToStringLox+ right.ToStringLox
 		    End If
 		    
 		    HadRuntimeError= True

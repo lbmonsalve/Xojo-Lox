@@ -79,6 +79,13 @@ Protected Module Lox
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function IsBooleanLox(Extends vart As Variant) As Boolean
+		  If vart.Type= 11 Then Return True
+		  Return False
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function IsCallableLox(Extends obj As Variant) As Boolean
 		  If obj IsA lox.Inter.ICallable Then Return True
 		  

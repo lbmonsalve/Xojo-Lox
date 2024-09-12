@@ -96,6 +96,11 @@ print fib(10);
 var after = clock();
 print after - before;
 
+print System.osName;
+print System.osEnvVar("HOMEPATH"); // windows
+print System.assert(true, "pass");
+print System.debugLog("test");
+
 ```
 ### syntactic sugar
 
@@ -164,6 +169,8 @@ a>b ? 1 : 2
 print false?.true; // expect: true
 print nil?.true; // expect: null
 print true?.nil?.false?.true; // expect: null
+
+print true?.false?.nil?.true?:"default"; // expect: default
 ```
 
 
@@ -218,13 +225,13 @@ print M.hello2;
 #### Datetime, arrays, hashmaps, regex.
 
 ```cpp
-var d= datetime();
+var d= DateTime();
 
-var a=[1,2,3];
+var a=[1,2,3]; // array
 
-var hm= #{"a"=>1,"b"=>2, "c"=>100};
+var hm= #{"a"=>1,"b"=>2, "c"=>100}; // hashmap
 
-var r= regEx("\d+");
+var r= RegEx("\d+");
 print r.caseSensitive; // expect: false
 print r.greedy; // expect: true
 print r.match("10"); // expect: 10
@@ -271,8 +278,8 @@ moduleDecl     → "module" IDENTIFIER "{"
                  "}" ;
 
 classDecl      → "class" IDENTIFIER ( "<" IDENTIFIER )?
-                 "{" function* "}" ;
-funDecl        → "fun" function ;
+                 "{" functionBody* "}" ;
+funDecl        → "fun" functionBody ;
 varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
 
 // statements:
@@ -328,7 +335,7 @@ primary        → "true" | "false" | "nil" | "this"
                | "super" "." IDENTIFIER | "[" arguments? "]" ;
 
 // utility rules:
-function       → IDENTIFIER "(" parameters? ")" block ;
+functionBody   → IDENTIFIER "(" parameters? ")" block ;
 parameters     → IDENTIFIER ( "," IDENTIFIER )* ;
 arguments      → expression ( "," expression )* ;
 
