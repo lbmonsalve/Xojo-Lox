@@ -330,7 +330,7 @@ unary          → ( "!" | "-" ) unary | postfix ;
 postfix        → call ("++" | "--")? ;
 call           → suscript ( "(" arguments? ")" | "." IDENTIFIER )* ;
 suscript       → primary ( "[" elvis "]" )? ;
-primary        → "true" | "false" | "nil" | "this"
+primary        → "true" | "false" | "nil" | "this" | "fun" "(" parameters? ")" block
                | NUMBER | STRING | IDENTIFIER | "(" expression ")"
                | "super" "." IDENTIFIER | "[" arguments? "]" ;
 

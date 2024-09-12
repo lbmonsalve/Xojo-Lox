@@ -244,7 +244,18 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function VisitFunctionExpr(expr As Lox.Ast.FunctionExpr) As Variant
+		  Dim enclosingFunction As FunctionType= mCurrentFunction
+		  mCurrentFunction= FunctionType.FUNC
 		  
+		  beginScope
+		  For Each param As Token In expr.Parameters
+		    declare_ param
+		    define param
+		  Next
+		  resolve expr.Body
+		  endScope
+		  
+		  mCurrentFunction= enclosingFunction
 		End Function
 	#tag EndMethod
 

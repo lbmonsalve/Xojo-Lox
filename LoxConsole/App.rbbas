@@ -45,7 +45,7 @@ Inherits ConsoleApplication
 	#tag Method, Flags = &h21
 		Private Sub PrintWelcome()
 		  Dim msg As String= ExecutableFile.DisplayName+ " "+ _
-		  Str(MajorVersion)+ "."+ Str(MinorVersion)+ ".240911"+ _
+		  Str(MajorVersion)+ "."+ Str(MinorVersion)+ ".240912"+ _
 		  " (f5b283f) type .help for more information"
 		  
 		  Print msg
