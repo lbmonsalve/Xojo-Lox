@@ -331,7 +331,8 @@ postfix        → call ("++" | "--")? ;
 call           → suscript ( "(" arguments? ")" | "." IDENTIFIER )* ;
 suscript       → primary ( "[" elvis "]" )? ;
 primary        → "true" | "false" | "nil" | "this" | "fun" "(" parameters? ")" block
-               | NUMBER | STRING | IDENTIFIER | "(" expression ")"
+               | NUMBER | IDENTIFIER | "(" expression ")"
+               | STRING ("${" expression "}" STRING?)*
                | "super" "." IDENTIFIER | "[" arguments? "]" ;
 
 // utility rules:

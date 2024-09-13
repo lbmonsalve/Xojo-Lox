@@ -763,6 +763,18 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitInterpolatedStr(expr As Lox.Ast.InterpolatedStr) As Variant
+		  Dim sb() As String
+		  
+		  For Each part As Lox.Ast.Expr In expr.Parts
+		    sb.Append Evaluate(part).ToStringLox
+		  Next
+		  
+		  Return Join(sb, "")
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitLiteral(expr As Lox.Ast.Literal) As Variant
 		  Return expr.Value
 		End Function

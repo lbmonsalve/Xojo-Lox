@@ -244,37 +244,6 @@ Protected Class Scanner
 		  
 		  Dim c As String= Advance
 		  
-		  If c= "0" Then // 0base prefixed number
-		    Dim base As String= Peek
-		    
-		    Select Case base
-		    Case "x"
-		      Call Advance
-		      While IsHexadecimal(Peek)
-		        Call Advance
-		      Wend
-		      Dim value As Double= mSource.SubstringLox(mStart+ 2, mCurrent).ValHexLox
-		      AddToken TokenType.NUMBER, value
-		      Return
-		    Case "o"
-		      Call Advance
-		      While IsOctal(Peek)
-		        Call Advance
-		      Wend
-		      Dim value As Double= Val("&o"+ mSource.SubstringLox(mStart+ 2, mCurrent))
-		      AddToken TokenType.NUMBER, value
-		      Return
-		    Case "b"
-		      Call Advance
-		      While IsBinnary(Peek)
-		        Call Advance
-		      Wend
-		      Dim value As Double= Val("&b"+ mSource.SubstringLox(mStart+ 2, mCurrent))
-		      AddToken TokenType.NUMBER, value
-		      Return
-		    End Select
-		  End If
-		  
 		  Select Case c
 		  Case "("
 		    AddToken TokenType.LEFT_PAREN
@@ -284,6 +253,10 @@ Protected Class Scanner
 		    AddToken TokenType.LEFT_BRACE
 		  Case "}"
 		    AddToken TokenType.RIGHT_BRACE
+		    If mInterpolationStr> 0 Then
+		      mInterpolationStr= mInterpolationStr- 1
+		      StringsInterpolated
+		    End If
 		  Case "["
 		    AddToken TokenType.LEFT_BRACKET
 		  Case "]"
@@ -369,12 +342,23 @@ Protected Class Scanner
 		  Case Chr(EOL)
 		    mLine= mLine+ 1
 		    
-		  Case " ", Chr(13), Chr(9), Chr(10)
+		  Case " ", Chr(9), Chr(13), Chr(10)
 		    // whitespaces, tab, newlines, etc
+		    
+		    // string interpolation
+		    'Case "$"
+		    'If Peek= """" Then
+		    'Call Advance
+		    'StringsInterpolated
+		    'ElseIf Peek= "{" Then
+		    'Call Advance
+		    'AddToken TokenType.RIGHT_BRACE
+		    'End If
+		    // string interpolation
 		    
 		    // strings
 		  Case """"
-		    Strings
+		    StringsInterpolated
 		    // strings
 		    
 		    // ternary, elvis
@@ -400,6 +384,37 @@ Protected Class Scanner
 		    // bitwise & |
 		    
 		  Case Else
+		    If c= "0" Then // 0base prefixed number
+		      Dim base As String= Peek
+		      
+		      Select Case base
+		      Case "x"
+		        Call Advance
+		        While IsHexadecimal(Peek)
+		          Call Advance
+		        Wend
+		        Dim value As Double= mSource.SubstringLox(mStart+ 2, mCurrent).ValHexLox
+		        AddToken TokenType.NUMBER, value
+		        Return
+		      Case "o"
+		        Call Advance
+		        While IsOctal(Peek)
+		          Call Advance
+		        Wend
+		        Dim value As Double= Val("&o"+ mSource.SubstringLox(mStart+ 2, mCurrent))
+		        AddToken TokenType.NUMBER, value
+		        Return
+		      Case "b"
+		        Call Advance
+		        While IsBinnary(Peek)
+		          Call Advance
+		        Wend
+		        Dim value As Double= Val("&b"+ mSource.SubstringLox(mStart+ 2, mCurrent))
+		        AddToken TokenType.NUMBER, value
+		        Return
+		      End Select
+		    End If
+		    
 		    If IsDigit(c) Then
 		      Number
 		    ElseIf isAlpha(c) Then
@@ -423,6 +438,36 @@ Protected Class Scanner
 		  
 		  While Peek<> """" And Not IsAtEnd
 		    If Peek= Chr(EOL) Then mLine= mLine+ 1
+		    Call Advance
+		  Wend
+		  
+		  If IsAtEnd Then
+		    Error mLine, "Unterminated string."
+		    HadError= True
+		    Return
+		  End If
+		  
+		  Call Advance
+		  AddToken TokenType.STRING_, mSource.SubstringLox(mStart+ 1, mCurrent- 1)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub StringsInterpolated()
+		  #if TargetConsole
+		    Const EOL= 10 // LF
+		  #else
+		    Const EOL= 13 // CR
+		  #endif
+		  
+		  While Peek<> """" And Not IsAtEnd
+		    If Peek= Chr(EOL) Then mLine= mLine+ 1
+		    If Peek= "$" And PeekNext= "{" Then
+		      Call Advance
+		      AddToken TokenType.STRING_INTERPOLATION, mSource.SubstringLox(mStart+ 1, mCurrent- 1)
+		      mInterpolationStr= mInterpolationStr+ 1
+		      Return
+		    End If
 		    Call Advance
 		  Wend
 		  
@@ -478,6 +523,10 @@ Protected Class Scanner
 
 	#tag Property, Flags = &h21
 		Private mCurrent As Integer = 1
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mInterpolationStr As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

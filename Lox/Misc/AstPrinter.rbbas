@@ -281,6 +281,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitInterpolatedStr(expr As Lox.Ast.InterpolatedStr) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitLiteral(expr As Lox.Ast.Literal) As Variant
 		  Return expr.Value.ToStringLox
 		End Function

@@ -540,6 +540,29 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function interpolatedStr() As Lox.Ast.Expr
+		  Dim expressions() As Lox.Ast.Expr
+		  expressions.Append New Lox.Ast.Literal(Previous.Literal)
+		  
+		  While True
+		    
+		    If Match(TokenType.STRING_INTERPOLATION) Then
+		      expressions.Append New Lox.Ast.Literal(Previous.Literal)
+		    ElseIf Match(TokenType.LEFT_BRACE) Then
+		      expressions.Append expression
+		      Call consume TokenType.RIGHT_BRACE, "Expect '}' after elements."
+		    ElseIf Match(TokenType.STRING_) Then
+		      expressions.Append New Lox.Ast.Literal(Previous.Literal)
+		      Exit
+		    End If
+		    
+		  Wend
+		  
+		  Return New Lox.Ast.InterpolatedStr(expressions)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function IsAtEnd() As Boolean
 		  Return Peek.TypeToken= TokenType.EOF
 		End Function
@@ -692,6 +715,8 @@ Protected Class Parser
 		  If Match(TokenType.FUN) Then Return functionBody("function")
 		  
 		  If Match(TokenType.NUMBER, TokenType.STRING_) Then Return New Lox.Ast.Literal(Previous.Literal)
+		  
+		  If Match(TokenType.STRING_INTERPOLATION) Then Return interpolatedStr
 		  
 		  If Match(TokenType.LEFT_PAREN) Then
 		    Dim expr As Lox.Ast.Expr= expression

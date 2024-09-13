@@ -284,6 +284,8 @@ Protected Module Lox
 		    Return "FAT_ARROW"
 		  Case TokenType.HASHTAG_BRACE
 		    Return "HASHTAG_BRACE"
+		  Case TokenType.STRING_INTERPOLATION
+		    Return "STRING_INTERPOLATION"
 		    
 		  Case Else
 		    Return "STRINGIFY->"
@@ -451,7 +453,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240912", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240913", Scope = Public
 	#tag EndConstant
 
 
@@ -516,7 +518,8 @@ Protected Module Lox
 		  LEFT_BRACKET
 		  RIGHT_BRACKET
 		  FAT_ARROW
-		HASHTAG_BRACE
+		  HASHTAG_BRACE
+		STRING_INTERPOLATION
 	#tag EndEnum
 
 
