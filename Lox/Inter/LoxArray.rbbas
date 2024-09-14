@@ -9,7 +9,12 @@ Inherits Lox.Inter.LoxClass
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  
+		  Select Case args.Ubound
+		  Case -1
+		    Return New Lox.Inter.LoxArray
+		  Case 0
+		    Return New Lox.Inter.LoxArray(args(0).IntegerValue)
+		  End Select
 		End Function
 	#tag EndMethod
 

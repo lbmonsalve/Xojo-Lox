@@ -236,12 +236,6 @@ Protected Class Scanner
 
 	#tag Method, Flags = &h21
 		Private Sub ScanToken()
-		  #if TargetConsole
-		    Const EOL= 10 // LF
-		  #else
-		    Const EOL= 13 // CR
-		  #endif
-		  
 		  Dim c As String= Advance
 		  
 		  Select Case c
@@ -345,17 +339,6 @@ Protected Class Scanner
 		  Case " ", Chr(9), Chr(13), Chr(10)
 		    // whitespaces, tab, newlines, etc
 		    
-		    // string interpolation
-		    'Case "$"
-		    'If Peek= """" Then
-		    'Call Advance
-		    'StringsInterpolated
-		    'ElseIf Peek= "{" Then
-		    'Call Advance
-		    'AddToken TokenType.RIGHT_BRACE
-		    'End If
-		    // string interpolation
-		    
 		    // strings
 		  Case """"
 		    StringsInterpolated
@@ -430,12 +413,6 @@ Protected Class Scanner
 
 	#tag Method, Flags = &h21
 		Private Sub Strings()
-		  #if TargetConsole
-		    Const EOL= 10 // LF
-		  #else
-		    Const EOL= 13 // CR
-		  #endif
-		  
 		  While Peek<> """" And Not IsAtEnd
 		    If Peek= Chr(EOL) Then mLine= mLine+ 1
 		    Call Advance
@@ -454,15 +431,10 @@ Protected Class Scanner
 
 	#tag Method, Flags = &h21
 		Private Sub StringsInterpolated()
-		  #if TargetConsole
-		    Const EOL= 10 // LF
-		  #else
-		    Const EOL= 13 // CR
-		  #endif
-		  
 		  While Peek<> """" And Not IsAtEnd
-		    If Peek= Chr(EOL) Then mLine= mLine+ 1
-		    If Peek= "$" And PeekNext= "{" Then
+		    If Peek= Chr(EOL) Then
+		      mLine= mLine+ 1
+		    ElseIf Peek= "$" And PeekNext= "{" Then
 		      Call Advance
 		      AddToken TokenType.STRING_INTERPOLATION, mSource.SubstringLox(mStart+ 1, mCurrent- 1)
 		      mInterpolationStr= mInterpolationStr+ 1
@@ -482,6 +454,19 @@ Protected Class Scanner
 		End Sub
 	#tag EndMethod
 
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  #if TargetConsole
+			    Return 10 // LF
+			  #else
+			    Return 13 // CR
+			  #endif
+			End Get
+		#tag EndGetter
+		Shared EOL As Integer
+	#tag EndComputedProperty
 
 	#tag Property, Flags = &h0
 		HadError As Boolean

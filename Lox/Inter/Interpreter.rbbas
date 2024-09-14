@@ -151,6 +151,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Sub Reset()
 		  mGlobals= New Environment
 		  mGlobals.Define "clock", New LoxClock
+		  mGlobals.Define "Array", New LoxArray
+		  mGlobals.Define "HashMap", New LoxHashMap
 		  mGlobals.Define "System", New Lox.Inter.Std.System
 		  mGlobals.Define "DateTime", New Lox.Inter.Std.DateTime
 		  mGlobals.Define "RegEx", New Lox.Inter.Std.RegExLox

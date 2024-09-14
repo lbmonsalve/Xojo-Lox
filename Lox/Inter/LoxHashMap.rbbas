@@ -1,6 +1,15 @@
 #tag Class
 Protected Class LoxHashMap
 Inherits Lox.Inter.LoxClass
+	#tag Method, Flags = &h0
+		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		  Select Case args.Ubound
+		  Case -1
+		    Return New Lox.Inter.LoxHashMap
+		  End Select
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1000
 		Sub Constructor()
 		  // Calling the overridden superclass constructor.

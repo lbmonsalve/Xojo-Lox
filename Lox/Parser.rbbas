@@ -544,7 +544,7 @@ Protected Class Parser
 		  Dim expressions() As Lox.Ast.Expr
 		  expressions.Append New Lox.Ast.Literal(Previous.Literal)
 		  
-		  While True
+		  Do
 		    
 		    If Match(TokenType.STRING_INTERPOLATION) Then
 		      expressions.Append New Lox.Ast.Literal(Previous.Literal)
@@ -556,7 +556,7 @@ Protected Class Parser
 		      Exit
 		    End If
 		    
-		  Wend
+		  Loop
 		  
 		  Return New Lox.Ast.InterpolatedStr(expressions)
 		End Function

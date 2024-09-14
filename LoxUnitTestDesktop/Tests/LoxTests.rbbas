@@ -507,7 +507,7 @@ Inherits TestGroup
 	#tag Constant, Name = kStaticMethodsSnnipet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kStringInterpolationSnnipet, Type = String, Dynamic = False, Default = \"var name\x3D\"luis\";\rprint \"welcome ${name}!\";\r\r// expect: welcome luis!\r", Scope = Private
+	#tag Constant, Name = kStringInterpolationSnnipet, Type = String, Dynamic = False, Default = \"var name\x3D\"luis\";\rprint \"welcome ${name}!\";\r\r// expect: welcome luis!\r\rprint \"one plus two times tree: ${1+2*3}.\";\r\r// expect: one plus two times tree: 7.0.", Scope = Private
 	#tag EndConstant
 
 
