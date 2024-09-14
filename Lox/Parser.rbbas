@@ -554,6 +554,10 @@ Protected Class Parser
 		    ElseIf Match(TokenType.STRING_) Then
 		      expressions.Append New Lox.Ast.Literal(Previous.Literal)
 		      Exit
+		    Else
+		      Error Peek, "Unexpected token in interpolation."
+		      HadError= True
+		      Exit
 		    End If
 		    
 		  Loop
@@ -690,7 +694,7 @@ Protected Class Parser
 		    If expr IsA Lox.Ast.Variable Then
 		      name= Lox.Ast.Variable(expr).Name
 		    Else
-		      Break
+		      Break // TODO: 
 		    End If
 		    
 		    expr= New Lox.Ast.Postfix(name, oper, expr)

@@ -109,7 +109,7 @@ Inherits ConsoleApplication
 		  Dim multiLine As Boolean
 		  Dim source As String
 		  
-		  While True
+		  Do
 		    If Not multiLine Then StdOut.Write "> "
 		    
 		    #if TargetWin32
@@ -150,7 +150,7 @@ Inherits ConsoleApplication
 		        run line
 		      End If
 		    End Select
-		  Wend
+		  Loop
 		End Sub
 	#tag EndMethod
 

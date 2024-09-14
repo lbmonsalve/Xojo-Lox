@@ -8,7 +8,7 @@ A dynamic typing, automatic memory management, 'first class' functions and objec
 [The Lox Language](https://craftinginterpreters.com/the-lox-language.html)
 
 Example:
-```cpp
+```c
 // Your first Lox program!
 print "Hello, world!";
 
@@ -106,7 +106,7 @@ print System.debugLog("test");
 
 #### Identifiers extended. emoji's friendly.
 
-```cpp
+```c
 var año=2024; print año; // expect: 2024.0
 var Σ= "sigma"; print Σ; // expect: sigma
 var 😃= "smileyface";
@@ -115,15 +115,15 @@ print 😃; // expect: smileyface
 
 #### HEX, OCT, BIN literals.
 
-```cpp
-var h=0x2324; 
-var o=0o1056; 
-var b=0b1110;
+```c
+var h = 0x2324; 
+var o = 0o1056; 
+var b = 0b1110;
 ```
 
 #### Bitwise.
 
-```cpp
+```c
 print 7 & 5;
 print 7 | 5;
 print 7 << 2;
@@ -132,7 +132,7 @@ print 40 >> 2;
 
 #### Compound assingnment.
 
-```cpp
+```c
 var a=5;
 a+=5;
 print a; // expect: 10.0
@@ -147,7 +147,7 @@ print a; // expect: 17.5
 
 #### Postfix.
 
-```cpp
+```c
 var i=1; i++;
 print i;
 
@@ -158,14 +158,14 @@ print i;
 
 #### Ternary.
 
-```cpp
+```c
 a>b ? 1 : 2
 ```
 
 
 #### Elvis operator.
 
-```cpp
+```c
 print false?.true; // expect: true
 print nil?.true; // expect: null
 print true?.nil?.false?.true; // expect: null
@@ -176,7 +176,7 @@ print true?.false?.nil?.true?:"default"; // expect: default
 
 #### Break, continue keywords.
 
-```cpp
+```c
 var bb=0;
 while (true) {
   if (bb=10) break;
@@ -194,7 +194,7 @@ while (a < 10) {
 
 #### if or else.
 
-```cpp
+```c
 if (false) {print "if";}
   or (true) {print "or";} // expect: or
   else {print "else";} 
@@ -203,7 +203,7 @@ if (false) {print "if";}
 
 #### Modules.
 
-```cpp
+```c
 module M {
   class C {
     parse(cc) {print cc;}
@@ -224,7 +224,7 @@ print M.hello2;
 
 #### Datetime, arrays, hashmaps, regex.
 
-```cpp
+```c
 var d= DateTime();
 
 var a=[1,2,3]; // array
@@ -240,7 +240,7 @@ print r.match("rr"); // expect: null
 
 #### File.
 
-```cpp
+```c
 var f1= File("test1.txt");
 f1.write("hello");
 print f1.length;
@@ -254,7 +254,7 @@ print f2.length;
 
 #### String interpolation.
 
-```cpp
+```c
 var name="luis";
 print "welcome ${name}!";
 ```
@@ -311,7 +311,7 @@ block          → "{" declaration* "}";
 expression     → assignment ;
 
 assignment     → ( call "." )? IDENTIFIER ( "[" elvis "]" )?
-                 ("=" | "+=" | "-=" | "*=" | "/=")* assignment
+                 ("=" | "+=" | "-=" | "*=" | "/=") assignment
                | elvis ;
 
 elvis          → ternary (("?:" | "?.") ternary)* ;
@@ -332,7 +332,7 @@ call           → suscript ( "(" arguments? ")" | "." IDENTIFIER )* ;
 suscript       → primary ( "[" elvis "]" )? ;
 primary        → "true" | "false" | "nil" | "this" | "fun" "(" parameters? ")" block
                | NUMBER | IDENTIFIER | "(" expression ")"
-               | STRING ("${" expression "}" STRING?)*
+               | STRING ( "${" expression "}" STRING? )*
                | "super" "." IDENTIFIER | "[" arguments? "]" ;
 
 // utility rules:
