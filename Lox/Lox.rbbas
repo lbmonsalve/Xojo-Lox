@@ -17,7 +17,7 @@ Protected Module Lox
 		  Try
 		    #pragma BreakOnExceptions Off
 		    folder= New FolderItem(path)
-		  Catch exc
+		  Catch
 		    Return
 		  End Try
 		  
@@ -113,9 +113,16 @@ Protected Module Lox
 		Private Function FindFile(name As String) As FolderItem
 		  ChkSearchPaths
 		  
-		  If name.InStr(".lox")= 0 Then name= name+ ".lox"
+		  If name.InStr(".")= 0 Then name= name+ ".lox"
 		  
-		  Dim file As New FolderItem(name) // full path
+		  Dim file As FolderItem
+		  Try
+		    #pragma BreakOnExceptions Off
+		    file= New FolderItem(name) // full path
+		  Catch
+		    Return file
+		  End Try
+		  
 		  If Not (file Is Nil) And file.Exists Then Return file
 		  
 		  For Each path As FolderItem In mSearchPaths // search paths

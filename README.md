@@ -259,6 +259,11 @@ var name="luis";
 print "welcome ${name}!";
 ```
 
+#### import lox file.
+
+```c
+import "a"; // import a.lox file from searchPath
+```
 
 ## [grammar](https://craftinginterpreters.com/appendix-i.html)
 
@@ -267,12 +272,14 @@ print "welcome ${name}!";
 program        → declaration* EOF ;
 
 // declarations:
-declaration    → moduleDecl
+declaration    → importDecl
+               | moduleDecl
                | classDecl
                | funDecl
                | varDecl
                | statement ;
 
+importDecl     → "import" STRING ";" ;
 moduleDecl     → "module" IDENTIFIER "{" 
                  classDecl+ | funDecl+ | moduleDecl+
                  "}" ;

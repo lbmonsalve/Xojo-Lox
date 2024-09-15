@@ -785,8 +785,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  For Each statement As Lox.Ast.Stmt In statements
 		    execute statement
 		  Next
-		  
-		  Return Nil
 		End Function
 	#tag EndMethod
 
