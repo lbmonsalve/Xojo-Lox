@@ -203,7 +203,7 @@ Protected Class Parser
 	#tag Method, Flags = &h21
 		Private Function declaration() As Lox.Ast.Stmt
 		  Try
-		    If Match(TokenType.USING_) Then Return usingDecl // TODO:
+		    If Match(TokenType.IMPORT) Then Return importDecl
 		    If Match(TokenType.MODULE_) Then Return moduleDecl
 		    If Match(TokenType.CLASS_) Then Return classDecl
 		    If Check(TokenType.FUN) And CheckNext(TokenType.IDENTIFIER) Then
@@ -540,6 +540,15 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function importDecl() As Lox.Ast.Stmt
+		  Dim name As Token= consume(TokenType.STRING_, "Expect import name.")
+		  
+		  Call consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.")
+		  Return New Lox.Ast.Import(name)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function interpolatedStr() As Lox.Ast.Expr
 		  Dim expressions() As Lox.Ast.Expr
 		  expressions.Append New Lox.Ast.Literal(Previous.Literal)
@@ -694,7 +703,7 @@ Protected Class Parser
 		    If expr IsA Lox.Ast.Variable Then
 		      name= Lox.Ast.Variable(expr).Name
 		    Else
-		      Break // TODO: 
+		      Break // TODO:
 		    End If
 		    
 		    expr= New Lox.Ast.Postfix(name, oper, expr)
@@ -905,16 +914,6 @@ Protected Class Parser
 		  End If
 		  
 		  Return postfix
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Function usingDecl() As Lox.Ast.Stmt
-		  Dim name As Token= consume(TokenType.IDENTIFIER, "Expect variable name.")
-		  
-		  Call consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.")
-		  Break
-		  'Return New Lox.Ast.NativeFunction(name, Nil, Nil)
 		End Function
 	#tag EndMethod
 

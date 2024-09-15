@@ -498,7 +498,7 @@ Protected Class Scanner
 			  mKeywords.Value("break")= TokenType.BREAK_
 			  mKeywords.Value("continue")= TokenType.CONTINUE_
 			  mKeywords.Value("module")= TokenType.MODULE_
-			  mKeywords.Value("using")= TokenType.USING_
+			  mKeywords.Value("import")= TokenType.IMPORT
 			  
 			  Return mKeywords
 			End Get

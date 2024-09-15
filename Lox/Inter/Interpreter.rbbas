@@ -52,7 +52,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Catch exp As StackOverflowException
 		    HadRuntimeError= True
 		    #pragma BreakOnExceptions Off
-		    Raise New RuntimeError(New Token(Lox.TokenType.EOF, "",Nil,  -1), _
+		    Raise New RuntimeError(New Token(Lox.TokenType.NIL_, "",Nil,  -1), _
 		    "StackOverflowException")
 		  Finally
 		    mEnvironment= previous
@@ -161,6 +161,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mEnvironment= mGlobals
 		  
 		  mLocals= New Lox.Misc.CSDictionary
+		  
+		  mImportFiles= New Dictionary
 		End Sub
 	#tag EndMethod
 
@@ -765,6 +767,30 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitImport(stmt As Lox.Ast.Import) As Variant
+		  Dim file As FolderItem= Findfile(stmt.Name.Literal.StringValue)
+		  If file Is Nil Or Not file.Exists Then
+		    HadRuntimeError= True
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(stmt.Name, "Couldn't find a module on "+ _
+		    file.AbsoluteNativePathLox+ ".")
+		  End If
+		  
+		  If mImportFiles.HasKey(file.AbsoluteNativePathLox) Then Return Nil
+		  
+		  Dim statements() As Lox.Ast.Stmt= ResolveFile(file, stmt.Name, Self)
+		  
+		  mImportFiles.Value(file.AbsoluteNativePathLox)= True
+		  
+		  For Each statement As Lox.Ast.Stmt In statements
+		    execute statement
+		  Next
+		  
+		  Return Nil
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitInterpolatedStr(expr As Lox.Ast.InterpolatedStr) As Variant
 		  Dim sb() As String
 		  
@@ -1033,6 +1059,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Property, Flags = &h21
 		Private mGlobals As Environment
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mImportFiles As Dictionary
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

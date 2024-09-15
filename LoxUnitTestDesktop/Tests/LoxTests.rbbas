@@ -248,6 +248,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ImportTest()
+		  DoRun kImportSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub InterpreterTest()
 		  Dim folders() As String= FindFolders
 		  
@@ -257,6 +263,7 @@ Inherits TestGroup
 		    If folder= "expressions" Then Continue // other test
 		    If folder= "scanning" Then Continue // other test
 		    If folder= "limit" Then Continue
+		    If folder= "import" Then Continue
 		    
 		    Dim files() As FolderItem= FindFiles(folder)
 		    
@@ -487,6 +494,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kIfOrElseSnnipet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kImportSnnipet, Type = String, Dynamic = False, Default = \"import \"a\";\r\r// expect: a.lox\r// expect: b.lox\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kLamdaSnnipet, Type = String, Dynamic = False, Default = \"// https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter10_functions.md\r\rfun whichFn(fn) {\r  fn(\"world\");\r}\r\rwhichFn(fun (a) {\r print \"hello \"+ a; // expect: hello world\r});\r\rfun named(a) { print a; }\rwhichFn(named);\r\r// expect: world\r\rfun whichFn(fn) {\r  for (var i \x3D 1; i <\x3D 3; i \x3D i + 1) {\r    fn(i);\r  }\r}\r\rwhichFn(fun (a) { print a; });\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r", Scope = Private

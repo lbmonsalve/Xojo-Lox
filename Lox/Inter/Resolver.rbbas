@@ -313,6 +313,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitImport(stmt As Lox.Ast.Import) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitInterpolatedStr(expr As Lox.Ast.InterpolatedStr) As Variant
 		  For Each part As Lox.Ast.Expr In expr.Parts
 		    resolve part

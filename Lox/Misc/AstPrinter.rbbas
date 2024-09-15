@@ -281,8 +281,24 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitImport(stmt As Lox.Ast.Import) As Variant
+		  Return Parenthesize2("import", stmt.Name)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitInterpolatedStr(expr As Lox.Ast.InterpolatedStr) As Variant
+		  Dim sb() As String
 		  
+		  sb.Append "(interpolated str "
+		  
+		  For Each part As Lox.Ast.Expr In expr.Parts
+		    sb.Append part.Accept(Self)
+		  Next
+		  
+		  sb.Append ")"
+		  
+		  Return Join(sb, "")
 		End Function
 	#tag EndMethod
 
@@ -324,7 +340,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function VisitPostfix(expr As Lox.Ast.Postfix) As Variant
-		  
+		  Return Parenthesize2("postfix", expr.Name, expr.Operator, expr.Left)
 		End Function
 	#tag EndMethod
 

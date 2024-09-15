@@ -1,5 +1,34 @@
 #tag Module
 Protected Module Lox
+	#tag Method, Flags = &h0
+		Function AbsoluteNativePathLox(Extends obj As FolderItem) As String
+		  #if RBVersion< 2013
+		    Return obj.AbsolutePath
+		  #else
+		    Return obj.NativePath
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub AddSearchPath(path As String)
+		  Dim folder As FolderItem
+		  
+		  Try
+		    #pragma BreakOnExceptions Off
+		    folder= New FolderItem(path)
+		  Catch exc
+		    Return
+		  End Try
+		  
+		  If Not folder.Directory Then Return
+		  
+		  ChkSearchPaths
+		  
+		  mSearchPaths.Append folder
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function AreEqual(expected As Double, actual As Double, tolerance As Double = 0.000001) As Boolean
 		  Dim diff As Double= Abs(expected- actual)
@@ -21,6 +50,14 @@ Protected Module Lox
 		      Raise New RuntimeError(where, "Expected a number operand.")
 		    End If
 		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub ChkSearchPaths()
+		  If mSearchPaths.Ubound= -1 Then
+		    mSearchPaths.Append app.ExecutableFile.Parent
+		  End If
 		End Sub
 	#tag EndMethod
 
@@ -69,6 +106,24 @@ Protected Module Lox
 		  Error token, message
 		  
 		  Return New ParseError
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function FindFile(name As String) As FolderItem
+		  ChkSearchPaths
+		  
+		  If name.InStr(".lox")= 0 Then name= name+ ".lox"
+		  
+		  Dim file As New FolderItem(name) // full path
+		  If Not (file Is Nil) And file.Exists Then Return file
+		  
+		  For Each path As FolderItem In mSearchPaths // search paths
+		    file= path.Child(name)
+		    If Not (file Is Nil) And file.Exists Then Return file
+		  Next
+		  
+		  Return file
 		End Function
 	#tag EndMethod
 
@@ -137,6 +192,38 @@ Protected Module Lox
 		    ErrorOut.Write msg+ EndOfLine
 		  End If
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function ResolveFile(file As FolderItem, tok As Token, interp As Lox.Inter.Interpreter) As Lox.Ast.Stmt()
+		  Dim ti As TextInputStream= TextInputStream.Open(file)
+		  
+		  Dim scanner As New Lox.Scanner(ti.ReadAll)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  If scanner.HadError Then
+		    interp.HadRuntimeError= True
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(tok, "scanner.HadError.")
+		  End If
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  If parser.HadError Then
+		    interp.HadRuntimeError= True
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(tok, "parser.HadError.")
+		  End If
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  If resolver.HadError Then
+		    interp.HadRuntimeError= True
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(tok, "resolver.HadError.")
+		  End If
+		  
+		  Return statements
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
@@ -274,8 +361,6 @@ Protected Module Lox
 		    Return "ELVIS"
 		  Case TokenType.ELVIS_DOT
 		    Return "ELVIS_DOT"
-		  Case TokenType.USING_
-		    Return "USING"
 		  Case TokenType.LEFT_BRACKET
 		    Return "LEFT_BRACKET"
 		  Case TokenType.RIGHT_BRACKET
@@ -286,6 +371,8 @@ Protected Module Lox
 		    Return "HASHTAG_BRACE"
 		  Case TokenType.STRING_INTERPOLATION
 		    Return "STRING_INTERPOLATION"
+		  Case TokenType.IMPORT
+		    Return "IMPORT"
 		    
 		  Case Else
 		    Return "STRINGIFY->"
@@ -434,6 +521,10 @@ Protected Module Lox
 		Private mPrintOut As Writeable
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private mSearchPaths() As FolderItem
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
@@ -453,7 +544,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240913", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240915", Scope = Public
 	#tag EndConstant
 
 
@@ -514,12 +605,12 @@ Protected Module Lox
 		  GREATER_GREATER
 		  ELVIS
 		  ELVIS_DOT
-		  USING_
 		  LEFT_BRACKET
 		  RIGHT_BRACKET
 		  FAT_ARROW
 		  HASHTAG_BRACE
-		STRING_INTERPOLATION
+		  STRING_INTERPOLATION
+		IMPORT
 	#tag EndEnum
 
 

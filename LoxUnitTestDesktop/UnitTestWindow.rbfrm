@@ -442,6 +442,8 @@ End
 		Sub Open()
 		  Lox.PrintOut= Self
 		  Lox.ErrorOut= Self
+		  
+		  Lox.AddSearchPath FindFolder("Examples").Child("import").AbsoluteNativePathLox
 		End Sub
 	#tag EndEvent
 
@@ -472,6 +474,26 @@ End
 		End Function
 	#tag EndMenuHandler
 
+
+	#tag Method, Flags = &h21
+		Private Function FindFolder(folderName As String) As FolderItem
+		  Dim parent As FolderItem= app.ExecutableFile.Parent
+		  Dim folder As FolderItem, found As Boolean
+		  
+		  While parent<> Nil
+		    
+		    folder= parent.Child(folderName)
+		    If folder.Exists And folder.Directory Then
+		      found= True
+		      Exit
+		    End If
+		    
+		    parent= parent.Parent
+		  Wend
+		  
+		  Return folder
+		End Function
+	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Flush()

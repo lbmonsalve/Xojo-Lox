@@ -43,6 +43,12 @@ Protected Interface IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitImport(stmt As Lox.Ast.Import) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitModuleStmt(stmt As Lox.Ast.ModuleStmt) As Variant
 		  
 		End Function

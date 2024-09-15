@@ -101,6 +101,7 @@ Interface=IDataSet;../../Xojo-API2Backward/API2Backward/IDataSet.rbbas;&h6768A7F
 Class=DataDate;../../Xojo-API2Backward/API2Backward/DataDate.rbbas;&h67A6E7FF;&h6ED707FF;false
 Class=DataField;../../Xojo-API2Backward/API2Backward/DataField.rbbas;&h46036FFF;&h6ED707FF;false
 Class=DataRecordSet;../../Xojo-API2Backward/API2Backward/DataRecordSet.rbbas;&h2538FFFF;&h6ED707FF;false
+Class=Import;../Lox/Ast/Import.rbbas;&h5CD317FF;&h472807FF;false
 DefaultWindow=UnitTestWindow
 AppMenuBar=UnitTestMenuBar
 MajorVersion=1
