@@ -9,27 +9,33 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  Select Case mMethodName
-		  Case "osEnvVar"
-		    Return EnvVar(args(0)) // conflict in v2022
-		  Case "debugLog"
-		    DbgLog(args(0)) // conflict in v2022
-		    Return mSystem
-		  Case "assert"
-		    Dim eval As Variant= args(0)
-		    Dim mess As String= args(1).StringValue
-		    
-		    If eval.IsNull Then
-		      Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Failed assertion: " + mess)
-		    End If
-		    
-		    If eval.BooleanValue= False Then
-		      Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Failed assertion: " + mess)
-		    End If
-		    
-		    Return True
-		    
-		  End Select
+		  Try
+		    #pragma BreakOnExceptions Off
+		    Select Case mMethodName
+		    Case "osEnvVar"
+		      Return EnvVar(args(0)) // conflict in v2022
+		    Case "debugLog"
+		      DbgLog(args(0)) // conflict in v2022
+		      Return mSystem
+		    Case "assert"
+		      Dim eval As Variant= args(0)
+		      Dim mess As String= args(1).StringValue
+		      
+		      If eval.IsNull Then
+		        Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Failed assertion: " + mess)
+		      End If
+		      
+		      If eval.BooleanValue= False Then
+		        Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Failed assertion: " + mess)
+		      End If
+		      
+		      Return True
+		      
+		    End Select
+		  Catch
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "mismatch in num/type of arguments.")
+		  End Try
 		End Function
 	#tag EndMethod
 

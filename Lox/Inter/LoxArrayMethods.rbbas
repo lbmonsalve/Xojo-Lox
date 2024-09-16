@@ -9,37 +9,43 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  Select Case MethodName
-		  Case "pop"
-		    Return Owner.Elements.Pop
-		  Case "push"
-		    Dim arr As New Lox.Inter.LoxArray(Owner.Elements)
-		    Dim elems() As Variant= arr.Elements
-		    For Each arg As Variant In args
-		      elems.Append arg
-		    Next
-		    Return arr
-		  Case "each"
-		    Return DoEach(inter, args)
-		  Case "indexOf"
-		    'Return Owner.Elements.IndexOf(args(0))
-		    Dim elems() As Variant= Owner.Elements
-		    Dim search As Variant= args(0)
-		    Dim idxFound As Integer
-		    For i As Integer= 0 To elems.Ubound
-		      If search.Equals(elems(i)) Then
-		        idxFound= i
-		        Exit
-		      End If
-		    Next
-		    Return idxFound
-		  Case "map"
-		    Return DoMap(inter, args)
-		  Case "deleteAt"
-		    Dim elem As Variant= Owner.Elements(args(0))
-		    Owner.Elements.Remove args(0)
-		    Return elem
-		  End Select
+		  Try
+		    #pragma BreakOnExceptions Off
+		    Select Case MethodName
+		    Case "pop"
+		      Return Owner.Elements.Pop
+		    Case "push"
+		      Dim arr As New Lox.Inter.LoxArray(Owner.Elements)
+		      Dim elems() As Variant= arr.Elements
+		      For Each arg As Variant In args
+		        elems.Append arg
+		      Next
+		      Return arr
+		    Case "each"
+		      Return DoEach(inter, args)
+		    Case "indexOf"
+		      'Return Owner.Elements.IndexOf(args(0))
+		      Dim elems() As Variant= Owner.Elements
+		      Dim search As Variant= args(0)
+		      Dim idxFound As Integer
+		      For i As Integer= 0 To elems.Ubound
+		        If search.Equals(elems(i)) Then
+		          idxFound= i
+		          Exit
+		        End If
+		      Next
+		      Return idxFound
+		    Case "map"
+		      Return DoMap(inter, args)
+		    Case "deleteAt"
+		      Dim elem As Variant= Owner.Elements(args(0))
+		      Owner.Elements.Remove args(0)
+		      Return elem
+		    End Select
+		  Catch
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "mismatch in num/type of arguments.")
+		  End Try
 		End Function
 	#tag EndMethod
 

@@ -9,27 +9,33 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  Select Case MethodName
-		  Case "delete"
-		    Try
-		      Dim value As Variant= Owner.HashMap.Lookup(args(0), Nil)
-		      Owner.HashMap.Remove args(0)
-		      Return value
-		    Catch exc As KeyNotFoundException
-		      inter.HadRuntimeError= True
-		      #pragma BreakOnExceptions Off
-		      Raise New RuntimeError(New Token(Lox.TokenType.NIL_, "",Nil,  -1), _
-		      "KeyNotFoundException")
-		    End Try
-		  Case "each"
-		    Call DoEach(inter, args)
-		    Return Owner
-		  Case "value"
-		    Return Owner.HashMap.Lookup(args(0), Nil)
-		  Case "put"
-		    Owner.HashMap.Value(args(0))= args(1)
-		    Return Owner
-		  End Select
+		  Try
+		    #pragma BreakOnExceptions Off
+		    Select Case MethodName
+		    Case "delete"
+		      Try
+		        Dim value As Variant= Owner.HashMap.Lookup(args(0), Nil)
+		        Owner.HashMap.Remove args(0)
+		        Return value
+		      Catch exc As KeyNotFoundException
+		        inter.HadRuntimeError= True
+		        #pragma BreakOnExceptions Off
+		        Raise New RuntimeError(New Token(Lox.TokenType.NIL_, "",Nil,  -1), _
+		        "KeyNotFoundException")
+		      End Try
+		    Case "each"
+		      Call DoEach(inter, args)
+		      Return Owner
+		    Case "value"
+		      Return Owner.HashMap.Lookup(args(0), Nil)
+		    Case "put"
+		      Owner.HashMap.Value(args(0))= args(1)
+		      Return Owner
+		    End Select
+		  Catch
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "mismatch in num/type of arguments.")
+		  End Try
 		End Function
 	#tag EndMethod
 

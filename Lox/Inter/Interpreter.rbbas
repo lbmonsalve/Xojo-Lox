@@ -140,6 +140,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return False
 		  ElseIf callee IsA Lox.Inter.Std.SystemMethods Then
 		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.Math Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.MathMethods Then
+		    Return False
 		    
 		  End If
 		  
@@ -154,6 +158,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mGlobals.Define "Array", New LoxArray
 		  mGlobals.Define "HashMap", New LoxHashMap
 		  mGlobals.Define "System", New Lox.Inter.Std.System
+		  mGlobals.Define "Math", New Lox.Inter.Std.Math
+		  mGlobals.Define "Text", New Lox.Inter.Std.Text
 		  mGlobals.Define "DateTime", New Lox.Inter.Std.DateTime
 		  mGlobals.Define "RegEx", New Lox.Inter.Std.RegExLox
 		  mGlobals.Define "File", New Lox.Inter.Std.File
