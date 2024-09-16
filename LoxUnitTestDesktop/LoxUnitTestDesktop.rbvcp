@@ -93,6 +93,7 @@ Class=SystemMethods;../Lox/Inter/Std/SystemMethods.rbbas;&hA2D47FF;&h335D97FF;fa
 Class=Math;../Lox/Inter/Std/Math.rbbas;&h5795C7FF;&h335D97FF;false
 Class=MathMethods;../Lox/Inter/Std/MathMethods.rbbas;&h53119FFF;&h335D97FF;false
 Class=Text;../Lox/Inter/Std/Text.rbbas;&h4559FFF;&h335D97FF;false
+Class=TextMethods;../Lox/Inter/Std/TextMethods.rbbas;&h4E81CFFF;&h335D97FF;false
 Class=DateTime;../Lox/Inter/Std/DateTime.rbbas;&h745EFFFF;&h335D97FF;false
 Class=RegExLox;../Lox/Inter/Std/RegExLox.rbbas;&h3A7CD7FF;&h335D97FF;false
 Class=RegExLoxMatch;../Lox/Inter/Std/RegExLoxMatch.rbbas;&h3DBAB7FF;&h335D97FF;false

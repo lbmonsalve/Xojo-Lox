@@ -144,6 +144,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return False
 		  ElseIf callee IsA Lox.Inter.Std.MathMethods Then
 		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.Text Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.TextMethods Then
+		    Return False
 		    
 		  End If
 		  

@@ -13,6 +13,19 @@ Inherits Lox.Inter.LoxClass
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function FindMethod(name As String) As Variant
+		  Select Case name
+		  Case "asc", "chr", "decodeHex", "encodeBase64", "encodeHex", "inStr", "left", "len", "lower"
+		    Return New Lox.Inter.Std.TextMethods(name, Self)
+		    
+		  Case "mid", "nthField", "replace", "replaceAll", "right", "titleCase", "trim", "upper"
+		    Return New Lox.Inter.Std.TextMethods(name, Self)
+		    
+		  End Select
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function ToString() As String
 		  Return "<class Text>"
 		End Function
