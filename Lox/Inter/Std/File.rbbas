@@ -8,7 +8,7 @@ Inherits Lox.Inter.LoxClass
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Select Case args.Ubound
 		  Case -1
 		    #pragma BreakOnExceptions Off

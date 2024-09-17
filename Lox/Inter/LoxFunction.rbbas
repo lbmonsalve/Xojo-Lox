@@ -16,7 +16,7 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Dim env As New Environment(mClosure)
 		  
 		  For i As Integer= 0 To mDeclaration.Parameters.Ubound

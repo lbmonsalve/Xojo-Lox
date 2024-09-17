@@ -8,7 +8,7 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Return Microseconds/ 1000
 		End Function
 	#tag EndMethod

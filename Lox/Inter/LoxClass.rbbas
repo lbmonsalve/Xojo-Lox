@@ -15,7 +15,7 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Dim instance As New LoxInstance(Self)
 		  
 		  Dim initializerObj As Variant= FindMethod("init")
@@ -23,7 +23,7 @@ Implements ICallable
 		  If initializerObj IsA LoxFunction Then initializer= LoxFunction(initializerObj)
 		  
 		  If Not (initializer Is Nil) Then
-		    Call initializer.Bind(instance).Call_(inter, args)
+		    Call initializer.Bind(instance).Call_(inter, args, tok)
 		  End If
 		  
 		  Return instance

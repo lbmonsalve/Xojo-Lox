@@ -2,7 +2,7 @@
 Protected Class LoxHashMap
 Inherits Lox.Inter.LoxClass
 	#tag Method, Flags = &h0
-		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Select Case args.Ubound
 		  Case -1
 		    Return New Lox.Inter.LoxHashMap

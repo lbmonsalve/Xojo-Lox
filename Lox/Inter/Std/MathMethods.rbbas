@@ -8,7 +8,7 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Const kPiDiv180= 0.01745329251
 		  Const k180DivPI= 57.2957795131
 		  
@@ -92,7 +92,7 @@ Implements ICallable
 		    End Select
 		  Catch
 		    #pragma BreakOnExceptions Off
-		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "mismatch in num/type of arguments.")
+		    Raise New RuntimeError(tok, "mismatch in num/type of arguments.")
 		  End Try
 		End Function
 	#tag EndMethod

@@ -9,9 +9,9 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  // Disallow instantiation of modules.
-		  Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Cannot create an instance of a module.")
+		  Raise New RuntimeError(tok, "Cannot create an instance of a module.")
 		End Function
 	#tag EndMethod
 

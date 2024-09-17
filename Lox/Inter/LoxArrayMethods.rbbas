@@ -8,7 +8,7 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Call_(inter As Interpreter, args() As Variant) As Variant
+		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Try
 		    #pragma BreakOnExceptions Off
 		    Select Case MethodName
@@ -22,7 +22,7 @@ Implements ICallable
 		      Next
 		      Return arr
 		    Case "each"
-		      Return DoEach(inter, args)
+		      Return DoEach(inter, args, tok)
 		    Case "indexOf"
 		      'Return Owner.Elements.IndexOf(args(0))
 		      Dim elems() As Variant= Owner.Elements
@@ -36,7 +36,7 @@ Implements ICallable
 		      Next
 		      Return idxFound
 		    Case "map"
-		      Return DoMap(inter, args)
+		      Return DoMap(inter, args, tok)
 		    Case "deleteAt"
 		      Dim elem As Variant= Owner.Elements(args(0))
 		      Owner.Elements.Remove args(0)
@@ -44,7 +44,7 @@ Implements ICallable
 		    End Select
 		  Catch
 		    #pragma BreakOnExceptions Off
-		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "mismatch in num/type of arguments.")
+		    Raise New RuntimeError(tok, "mismatch in num/type of arguments.")
 		  End Try
 		End Function
 	#tag EndMethod
@@ -57,10 +57,10 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function DoEach(inter As Interpreter, args() As Variant) As Variant
+		Private Function DoEach(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  // Check that `func` is invokable.
 		  If Not args(0).IsCallableLox Then
-		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Expected an callable operand")
+		    Raise New RuntimeError(tok, "Expected an callable operand")
 		  End If
 		  
 		  Dim func As Lox.Inter.ICallable= args(0)
@@ -84,17 +84,17 @@ Implements ICallable
 		  
 		  For i As Integer= 0 To Owner.Elements.Ubound
 		    funcArgs.Insert 0, Owner.Elements(i) // Inject the element as the first argument to `func`.
-		    Call func.Call_(inter, funcArgs)
+		    Call func.Call_(inter, funcArgs, tok)
 		    funcArgs.Remove 0 // Remove this element from the argument list prior to the next iteration.
 		  Next i
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function DoMap(inter As Interpreter, args() As Variant) As Variant
+		Private Function DoMap(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  // Check that `func` is invokable.
 		  If Not args(0).IsCallableLox Then
-		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "Expected an callable operand")
+		    Raise New RuntimeError(tok, "Expected an callable operand")
 		  End If
 		  
 		  Dim func As Lox.Inter.ICallable= args(0)
@@ -120,7 +120,7 @@ Implements ICallable
 		  
 		  For i As Integer= 0 To Owner.Elements.Ubound
 		    funcArgs.Insert 0, Owner.Elements(i) // Inject the element as the first argument to `func`.
-		    result.Append func.Call_(inter, funcArgs)
+		    result.Append func.Call_(inter, funcArgs, tok)
 		    funcArgs.Remove 0 // Remove this element from the argument list prior to the next iteration.
 		  Next
 		  

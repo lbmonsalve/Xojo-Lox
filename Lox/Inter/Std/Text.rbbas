@@ -18,7 +18,7 @@ Inherits Lox.Inter.LoxClass
 		  Case "asc", "chr", "decodeHex", "encodeBase64", "encodeHex", "inStr", "left", "len", "lower"
 		    Return New Lox.Inter.Std.TextMethods(name, Self)
 		    
-		  Case "mid", "nthField", "replace", "replaceAll", "right", "titleCase", "trim", "upper"
+		  Case "mid", "nthField", "replace", "replaceAll", "right", "titleCase", "trim", "upper", "eol"
 		    Return New Lox.Inter.Std.TextMethods(name, Self)
 		    
 		  End Select

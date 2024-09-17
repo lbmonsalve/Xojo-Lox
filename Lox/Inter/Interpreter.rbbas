@@ -501,8 +501,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  If Not (callee IsA ICallable) Then
 		    HadRuntimeError= True
 		    #pragma BreakOnExceptions Off
-		    Raise New RuntimeError(expr.Paren, _
-		    "Can only call functions and classes.")
+		    Raise New RuntimeError(expr.Paren, "Can only call functions and classes.")
 		  End If
 		  
 		  Dim func As ICallable= ICallable(callee)
@@ -515,7 +514,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Str(func.Arity)+ " arguments but got "+ Str(arguments.CountLox) + ".")
 		  End If
 		  
-		  Return func.Call_(Self, arguments)
+		  Return func.Call_(Self, arguments, expr.Paren)
 		End Function
 	#tag EndMethod
 
