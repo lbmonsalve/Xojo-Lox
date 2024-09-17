@@ -250,6 +250,24 @@ var txt= f1.read();
 var f2= File("test2.txt");
 f2.write(txt+ " world");
 print f2.length;
+
+
+var file= File();
+var parent= file.parent;
+
+var n= parent.count;
+for (var i=1;i<=n;i++) {
+  print parent.item(i).name;
+}
+
+var docs= File.documents;
+print docs.count;
+
+var temps= File.temp;
+print temps.count;
+
+var appdata= File.appdata;
+print appdata.count;
 ```
 
 #### String interpolation.

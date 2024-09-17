@@ -551,7 +551,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240916", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.240917", Scope = Public
 	#tag EndConstant
 
 

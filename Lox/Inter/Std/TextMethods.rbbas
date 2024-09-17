@@ -13,10 +13,10 @@ Implements ICallable
 		    #pragma BreakOnExceptions Off
 		    Select Case mMethodName
 		    Case "asc"
-		      Return asc(args(0).StringValue)
+		      Return Asc(args(0).StringValue)
 		      
 		    Case "chr"
-		      Return chr(args(0).IntegerValue)
+		      Return Encodings.UTF8.Chr(args(0).IntegerValue)
 		      
 		    Case "decodeHex"
 		      Return DecodeHex(args(0).StringValue)

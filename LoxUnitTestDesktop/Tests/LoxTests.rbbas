@@ -65,7 +65,7 @@ Inherits TestGroup
 		  Dim actual() As String= Split(BufferPrint, EndOfLine)
 		  If actual.Ubound> -1 Then
 		    actual.Remove actual.Ubound
-		    Assert.AreEqual expect, actual, "AreEqual expect, actual"
+		    Assert.AreEqual expect, actual, "AreEqual expect, actual. "+ Str(actual.Ubound+ 1)
 		  End If
 		  
 		End Sub

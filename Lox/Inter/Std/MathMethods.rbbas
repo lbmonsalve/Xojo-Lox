@@ -27,7 +27,6 @@ Implements ICallable
 		    Case "sqrt"
 		      Return sqrt(args(0).DoubleValue)
 		      
-		      
 		    Case "abs"
 		      Return abs(args(0).DoubleValue)
 		      

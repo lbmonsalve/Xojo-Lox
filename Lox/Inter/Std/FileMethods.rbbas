@@ -21,11 +21,19 @@ Implements ICallable
 		      
 		      Dim tt As TextOutputStream= TextOutputStream.Create(mFile.FileItem)
 		      tt.Write source
+		      
+		    Case "item"
+		      Dim item As FolderItem= mFile.FileItem.Item(args(0).IntegerValue)
+		      Return New Lox.Inter.Std.File(item)
+		      
+		    Case "child"
+		      Dim item As FolderItem= mFile.FileItem.Child(args(0).StringValue)
+		      Return New Lox.Inter.Std.File(item)
+		      
 		    End Select
 		  Catch exc As IOException
 		    #pragma BreakOnExceptions Off
-		    Raise New RuntimeError(New Token(Lox.TokenType.NIL_, "",Nil,  -1), _
-		    "IOException")
+		    Raise New RuntimeError(tok, "IOException")
 		  Catch
 		    #pragma BreakOnExceptions Off
 		    Raise New RuntimeError(tok, "mismatch in num/type of arguments.")
