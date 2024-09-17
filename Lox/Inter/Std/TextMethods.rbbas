@@ -18,6 +18,9 @@ Implements ICallable
 		    Case "chr"
 		      Return Encodings.UTF8.Chr(args(0).IntegerValue)
 		      
+		    Case "decodeBase64"
+		      Return DecodeBase64(args(0).StringValue)
+		      
 		    Case "decodeHex"
 		      Return DecodeHex(args(0).StringValue)
 		      
