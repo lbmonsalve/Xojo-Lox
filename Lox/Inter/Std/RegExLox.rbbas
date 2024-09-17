@@ -9,17 +9,23 @@ Inherits Lox.Inter.LoxClass
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  Select Case args.Ubound
-		  Case 0
-		    Return New Lox.Inter.Std.RegExLox(args(0).StringValue)
-		  End Select
+		  Try
+		    #pragma BreakOnExceptions Off
+		    Select Case args.Ubound
+		    Case 0
+		      Return New Lox.Inter.Std.RegExLox(args(0).StringValue)
+		      
+		    End Select
+		  Catch
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "mismatch in num/type of arguments.")
+		  End Try
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
 		Sub Constructor()
-		  
-		  
+		  Super.Constructor Self
 		End Sub
 	#tag EndMethod
 
@@ -30,22 +36,25 @@ Inherits Lox.Inter.LoxClass
 		  // Possible constructor calls:
 		  // Constructor(metaclass As LoxClass, name As String, superClass As LoxClass, methods As Lox.Misc.CSDictionary) -- From LoxClass
 		  // Constructor(klass As LoxClass) -- From LoxInstance
-		  Super.Constructor Self
+		  Constructor
 		  
 		  mRegEx= New RegEx
 		  mRegEx.SearchPattern= pattern
-		  
-		  // fields:
-		  Fields.Value("caseSensitive")= mRegEx.Options.CaseSensitive
-		  Fields.Value("greedy")= mRegEx.Options.Greedy
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function FindMethod(name As String) As Variant
 		  Select Case name
+		  Case "caseSensitive"
+		    Return mRegEx.Options.CaseSensitive
+		    
+		  Case "greedy"
+		    Return mRegEx.Options.Greedy
+		    
 		  Case "match"
 		    Return New Lox.Inter.Std.RegExLoxMatch(mRegEx)
+		    
 		  End Select
 		End Function
 	#tag EndMethod

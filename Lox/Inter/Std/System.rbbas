@@ -36,6 +36,7 @@ Inherits Lox.Inter.LoxClass
 		    
 		  Case "osEnvVar", "debugLog", "assert"
 		    Return New Lox.Inter.Std.SystemMethods(name, Self)
+		    
 		  End Select
 		End Function
 	#tag EndMethod

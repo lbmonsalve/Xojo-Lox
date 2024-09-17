@@ -9,10 +9,16 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant) As Variant
-		  Dim match As RegExMatch= mRegEx.Search(args(0))
-		  If match Is Nil Then Return Nil
-		  
-		  Return match.SubExpressionString(0)
+		  Try
+		    #pragma BreakOnExceptions Off
+		    Dim match As RegExMatch= mRegEx.Search(args(0))
+		    If match Is Nil Then Return Nil
+		    
+		    Return match.SubExpressionString(0)
+		  Catch
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "mismatch in num/type of arguments.")
+		  End Try
 		End Function
 	#tag EndMethod
 

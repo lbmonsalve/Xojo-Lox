@@ -13,37 +13,23 @@ Implements ICallable
 		    #pragma BreakOnExceptions Off
 		    Select Case mMethodName
 		    Case "read"
-		      Try
-		        #pragma BreakOnExceptions Off
-		        Dim ti As TextInputStream= TextInputStream.Open(mFile.FileItem)
-		        Return ti.ReadAll(Encodings.UTF8)
-		        #pragma BreakOnExceptions Default
-		      Catch exc As IOException
-		        #pragma BreakOnExceptions Off
-		        Raise New RuntimeError(New Token(Lox.TokenType.NIL_, "",Nil,  -1), _
-		        "IOException")
-		      End Try
+		      Dim ti As TextInputStream= TextInputStream.Open(mFile.FileItem)
+		      Return ti.ReadAll(Encodings.UTF8)
 		    Case "write"
 		      Dim source As String= args(0)
 		      If source.Len= 0 Then Return mFile
 		      
-		      Try
-		        #pragma BreakOnExceptions Off
-		        Dim tt As TextOutputStream= TextOutputStream.Create(mFile.FileItem)
-		        tt.Write source
-		        tt.Close
-		        mFile.Fields.Value("exists")= mFile.FileItem.Exists
-		        mFile.Fields.Value("length")= mFile.FileItem.Length
-		        #pragma BreakOnExceptions Default
-		      Catch exc As IOException
-		        #pragma BreakOnExceptions Off
-		        Raise New RuntimeError(New Token(Lox.TokenType.NIL_, "",Nil,  -1), _
-		        "IOException")
-		      End Try
+		      Dim tt As TextOutputStream= TextOutputStream.Create(mFile.FileItem)
+		      tt.Write source
 		    End Select
+		  Catch exc As IOException
+		    #pragma BreakOnExceptions Off
+		    Raise New RuntimeError(New Token(Lox.TokenType.NIL_, "",Nil,  -1), _
+		    "IOException")
 		  Catch
 		    #pragma BreakOnExceptions Off
-		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), "mismatch in num/type of arguments.")
+		    Raise New RuntimeError(New Token(TokenType.NIL_, "", Nil, -1), _
+		    "mismatch in num/type of arguments.")
 		  End Try
 		End Function
 	#tag EndMethod

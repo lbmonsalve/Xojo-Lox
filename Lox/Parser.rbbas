@@ -40,10 +40,10 @@ Protected Class Parser
 		    
 		    If expr IsA Lox.Ast.Variable Then
 		      expr= New Lox.Ast.HashMapExpr(Lox.Ast.Variable(expr).Name, idx)
-		    ElseIf expr IsA Lox.Ast.Get Then
-		      Break // TODO:
-		    Else
-		      Break // TODO:
+		    Else // TODO:
+		      HadError= True
+		      #pragma BreakOnExceptions Off
+		      Raise Error(Peek, "only for variables.")
 		    End If
 		  End If
 		  
@@ -379,7 +379,7 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function GetAssignmentOper(expr As Lox.Ast.Expr, equals As Token) As Lox.Ast.Expr
-		  // TODO: refactory this
+		  // TODO: refactor this
 		  
 		  If equals.TypeToken= TokenType.EQUAL Then
 		    Dim value As Lox.Ast.Expr= assignment
@@ -702,8 +702,10 @@ Protected Class Parser
 		    
 		    If expr IsA Lox.Ast.Variable Then
 		      name= Lox.Ast.Variable(expr).Name
-		    Else
-		      Break // TODO:
+		    Else // TODO:
+		      HadError= True
+		      #pragma BreakOnExceptions Off
+		      Raise Error(Peek, "postfix only for variables.")
 		    End If
 		    
 		    expr= New Lox.Ast.Postfix(name, oper, expr)
