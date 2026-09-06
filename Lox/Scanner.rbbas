@@ -259,11 +259,6 @@ Protected Class Scanner
 		    AddToken TokenType.COMMA
 		  Case "."
 		    AddToken TokenType.DOT
-		  Case "#"
-		    If Peek= "{" Then
-		      Call Advance
-		      AddToken TokenType.HASHTAG_BRACE
-		    End If
 		    
 		    // 2-char operators
 		  Case "-"

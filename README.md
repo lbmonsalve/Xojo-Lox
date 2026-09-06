@@ -229,7 +229,7 @@ var d= DateTime();
 
 var a=[1,2,3]; // array
 
-var hm= #{"a"=>1,"b"=>2, "c"=>100}; // hashmap
+var dictionary= {"a": 1,"b": 2, "c": 100}; // hashmap
 
 var r= RegEx("\d+");
 print r.caseSensitive; // expect: false
@@ -335,9 +335,8 @@ block          → "{" declaration* "}";
 // expressions:
 expression     → assignment ;
 
-assignment     → ( call "." )? IDENTIFIER ( "[" elvis "]" )?
-                 ("=" | "+=" | "-=" | "*=" | "/=") assignment
-               | elvis ;
+assignment     → elvis ( "{" elvis "}" )?
+                 ("=" | "+=" | "-=" | "*=" | "/=") assignment ;
 
 elvis          → ternary (("?:" | "?.") ternary)* ;
 ternary        → expression "?" expression ":" expression 
@@ -358,12 +357,14 @@ suscript       → primary ( "[" elvis "]" )? ;
 primary        → "true" | "false" | "nil" | "this" | "fun" "(" parameters? ")" block
                | NUMBER | IDENTIFIER | "(" expression ")"
                | STRING ( "${" expression "}" STRING? )*
-               | "super" "." IDENTIFIER | "[" arguments? "]" ;
+               | "super" "." IDENTIFIER | "[" elvis "]" | "{" pairs "}" ;
 
 // utility rules:
 functionBody   → IDENTIFIER "(" parameters? ")" block ;
 parameters     → IDENTIFIER ( "," IDENTIFIER )* ;
 arguments      → expression ( "," expression )* ;
+pairs          → pair ( "," pair )* ;
+pair           → elvis ":" expression ;
 
 // lexical grammar:
 NUMBER         → DIGIT+ ( "." DIGIT+ )? | HEX | OCT | BIN ;

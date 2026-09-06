@@ -11,28 +11,7 @@ Protected Class Parser
 		Private Function assignment() As Lox.Ast.Expr
 		  Dim expr As Lox.Ast.Expr= elvis
 		  
-		  If Match(TokenType.LEFT_BRACKET) Then // array?
-		    Break
-		    // idx
-		    Dim idx As Lox.Ast.Expr= elvis
-		    // idx
-		    Call consume TokenType.RIGHT_BRACKET, "Expect ']' after elements."
-		    
-		    If expr IsA Lox.Ast.Variable Then
-		      expr= New Lox.Ast.ArrayExpr(Lox.Ast.Variable(expr).Name, idx)
-		    ElseIf expr IsA Lox.Ast.Get Then
-		      'expr= New Lox.Ast.ArrayExpr(Lox.Ast.Get(expr).Name, idx)
-		      Break // TODO:
-		      Dim getExpr As Lox.Ast.Get= Lox.Ast.Get(expr)
-		      Dim arrExpr As New Lox.Ast.ArrayExpr(getExpr.Name, idx)
-		      expr= New Lox.Ast.Set(getExpr.Obj, getExpr.Name, arrExpr)
-		    Else
-		      Break // TODO:
-		    End If
-		    
-		  End If
-		  
-		  If Match(TokenType.HASHTAG_BRACE) Then // hashmap?
+		  If Match(TokenType.LEFT_BRACE) Then // hashmap?
 		    // idx
 		    Dim idx As Lox.Ast.Expr= elvis
 		    // idx
@@ -766,19 +745,23 @@ Protected Class Parser
 		    Return New Lox.Ast.ArrayLiteral(elems)
 		  End If
 		  
-		  // Hash literal? (E.g: {"a" => 1, "b" => 2}).
-		  // https://github.com/gkjpettet/roo/blob/master/docs/The%20Roo%20Standard%20Library.md#regular-expressions
-		  If Match(TokenType.HASHTAG_BRACE) Then
+		  // Hash literal? (E.g: {"a": 1, "b": 2}).
+		  // https://github.com/gkjpettet/roo/blob/master/docs/The%20Roo%20Standard%20Library.md#hashes-1
+		  If Match(TokenType.LEFT_BRACE) Then
 		    Dim keyValues() As Pair
 		    
 		    If Not Check(TokenType.RIGHT_BRACE) Then
 		      Do
 		        Dim key As Lox.Ast.Expr= elvis
-		        Call Consume(TokenType.FAT_ARROW, "Expected `=>` operator after hash key.")
+		        Call Consume(TokenType.COLON, "Expected `:` operator after hash key.")
 		        Dim value As Lox.Ast.Expr= expression
 		        
 		        keyValues.Append New Pair(key, value)
 		      Loop Until Not (Match(TokenType.COMMA))
+		    Else
+		      HadError= True
+		      #pragma BreakOnExceptions Off
+		      Raise Error(Previous, "Expect expression.")
 		    End If
 		    Call consume TokenType.RIGHT_BRACE, "Expect '}' after elements."
 		    
@@ -839,21 +822,12 @@ Protected Class Parser
 		    
 		    If expr IsA Lox.Ast.Variable Then
 		      expr= New Lox.Ast.ArrayExpr(Lox.Ast.Variable(expr).Name, idx)
+		    Else // TODO:
+		      HadError= True
+		      #pragma BreakOnExceptions Off
+		      Raise Error(Peek, "only for variables.")
 		    End If
 		  End If
-		  
-		  'If Match(TokenType.HASHTAG_BRACE) Then
-		  '// idx
-		  'Dim idx As Lox.Ast.Expr= elvis
-		  '// idx
-		  'Call consume TokenType.RIGHT_BRACE, "Expect '}' after elements."
-		  '
-		  'If expr IsA Lox.Ast.Variable Then
-		  'expr= New Lox.Ast.HashMapExpr(Lox.Ast.Variable(expr).Name, idx)
-		  'Else
-		  'Break
-		  'End If
-		  'End If
 		  
 		  Return expr
 		End Function
