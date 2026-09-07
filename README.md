@@ -121,6 +121,33 @@ var o = 0o1056;
 var b = 0b1110;
 ```
 
+#### Escaping.
+
+```c
+var s1= "\0";  // The NUL byte: 0.
+var s2= "\""; print s2;  // expect: "
+var s3= "\\"; print s3;  // expect: \
+var s4= "\%"; print s4;  // expect: %
+var s5= "\a";  // Alarm beep. (Who uses this?)
+var s6= "\b";  // Backspace.
+var s7= "\e";  // ESC character.
+var s8= "\f";  // Formfeed.
+var s9= "\n";  // Newline.
+var s10= "\r"; // Carriage return.
+var s11= "\t"; // Tab.
+var s12= "\v"; // Vertical tab.
+
+
+// Unencoded byte     (2 hex digits) 
+var s13= "\x48"; print s13; // expect: H
+
+// Unicode code point (4 hex digits)
+var s14= "\u0041"; print s14; // expect: A
+
+// Unicode code point (8 hex digits)
+var s15= "\U0001F64A"; print s15;
+```
+
 #### Bitwise.
 
 ```c

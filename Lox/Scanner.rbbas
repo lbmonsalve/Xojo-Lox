@@ -434,6 +434,49 @@ Protected Class Scanner
 		      AddToken TokenType.STRING_INTERPOLATION, mSource.SubstringLox(mStart+ 1, mCurrent- 1)
 		      mInterpolationStr= mInterpolationStr+ 1
 		      Return
+		    ElseIf Peek= "\" Then // escaping chars
+		      Const kHexChars= "0123456789abcdefABCDEF"
+		      Const kInvalidHEXCharacter= "invalid HEX character ""$Peek$""."
+		      
+		      Call Advance
+		      Dim ch As String= Peek
+		      
+		      Select Case ch
+		      Case "0", """", "\", "%", "a", "b", "e", "f", "n", "r", "t", "v"
+		        Call Advance
+		      Case "x" // 2 hex digits
+		        For i As Integer= 1 To 2
+		          Call Advance
+		          If InStr(kHexChars, Peek)= 0 Then
+		            Error mLine, kInvalidHEXCharacter.Replace("$Peek$", Peek)
+		            HadError= True
+		            Return
+		          End If
+		        Next
+		      Case Else
+		        If Asc(ch)= 117 Then // 4 hex digits
+		          For i As Integer= 1 To 4
+		            Call Advance
+		            If InStr(kHexChars, Peek)= 0 Then
+		              Error mLine, kInvalidHEXCharacter.Replace("$Peek$", Peek)
+		              HadError= True
+		              Return
+		            End If
+		          Next
+		        ElseIf Asc(ch)= 85 Then // 8 hex digits
+		          For i As Integer= 1 To 8
+		            Call Advance
+		            If InStr(kHexChars, Peek)= 0 Then
+		              Error mLine, kInvalidHEXCharacter.Replace("$Peek$", Peek)
+		              HadError= True
+		              Return
+		            End If
+		          Next
+		        End If
+		        
+		      End Select
+		      Continue
+		      
 		    End If
 		    Call Advance
 		  Wend
