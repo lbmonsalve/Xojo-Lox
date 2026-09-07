@@ -1561,17 +1561,6 @@ End
 		End Sub
 	#tag EndEvent
 	#tag Event
-		Function CellBackgroundPaint(g As Graphics, row As Integer, column As Integer) As Boolean
-		  #Pragma Unused column
-		  
-		  If row Mod 2 = 0 And Not Me.Selected(row) Then
-		    g.ForeColor = &cF9FFFB00 //RGB(237, 243, 254) '&cD0D4FF
-		    g.FillRect(0, 0, g.Width, g.Height)
-		  End If
-		  
-		End Function
-	#tag EndEvent
-	#tag Event
 		Function ContextualMenuAction(hitItem as MenuItem) As Boolean
 		  Select Case hitItem.Text
 		  Case kCMSelectAllGroups
@@ -1695,16 +1684,9 @@ End
 		  #Pragma Unused x
 		  #Pragma Unused y
 		  
-		  #if TargetMacOS
-		    If Me.Selected(row) Then Return False
-		  #endif
-		  
 		  If Me.Cell(row, ColResult) = TestResult.Failed Then
 		    g.ForeColor = &cFF151500
-		    'g.Bold = True
-		  Else
-		    g.ForeColor = &c4F4F4F00
-		    'g.Bold = False
+		    g.Bold = True
 		  End If
 		End Function
 	#tag EndEvent

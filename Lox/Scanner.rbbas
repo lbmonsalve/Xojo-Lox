@@ -24,7 +24,7 @@ Protected Class Scanner
 
 	#tag Method, Flags = &h0
 		Sub Constructor(source As String)
-		  mSource= ReplaceLineEndings(source, EndOfLine.Windows)
+		  mSource= ReplaceLineEndings(source, EndOfLine.Windows) // why? console windows problems
 		End Sub
 	#tag EndMethod
 
