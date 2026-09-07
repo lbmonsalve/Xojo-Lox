@@ -21,6 +21,7 @@ Inherits Lox.Ast.Expr
 		    
 		    // search \xNN
 		    Dim rg As New RegEx
+		    rg.Options.CaseSensitive= True
 		    rg.SearchPattern= "\\x?([\da-fA-F]{2})"
 		    Dim match As RegExMatch= rg.Search(tmpValue)
 		    

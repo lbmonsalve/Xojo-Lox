@@ -145,7 +145,7 @@ var s13= "\x48"; print s13; // expect: H
 var s14= "\u0041"; print s14; // expect: A
 
 // Unicode code point (8 hex digits)
-var s15= "\U0001F64A"; print s15;
+var s15= "\U0001F64A\U0001F680"; print s15; // expect: 🙊🚀
 ```
 
 #### Bitwise.
