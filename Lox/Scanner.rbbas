@@ -336,8 +336,11 @@ Protected Class Scanner
 		    
 		    // strings
 		  Case """"
-		    StringsInterpolated
-		    // strings
+		    If Peek= """" And PeekNext= """" Then
+		      StringsRaw
+		    Else
+		      StringsInterpolated
+		    End If
 		    
 		    // ternary, elvis
 		  Case "?"
@@ -408,6 +411,8 @@ Protected Class Scanner
 
 	#tag Method, Flags = &h21
 		Private Sub Strings()
+		  // old, not used!
+		  
 		  While Peek<> """" And Not IsAtEnd
 		    If Peek= Chr(EOL) Then mLine= mLine+ 1
 		    Call Advance
@@ -489,6 +494,43 @@ Protected Class Scanner
 		  
 		  Call Advance
 		  AddToken TokenType.STRING_, mSource.SubstringLox(mStart+ 1, mCurrent- 1)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub StringsRaw()
+		  Const kDQ= """"
+		  
+		  // consume next two "
+		  Call Advance
+		  Call Advance
+		  
+		  While Not IsAtEnd
+		    Dim c As String= Advance
+		    Dim c1 As String= Peek
+		    Dim c2 As String= PeekNext
+		    
+		    If c= Chr(EOL) Then mLine= mLine+ 1
+		    If c= kDQ And c1= kDQ And c2= kDQ Then Exit
+		  Wend
+		  
+		  If IsAtEnd Then
+		    Error mLine, "Unterminated string."
+		    HadError= True
+		    Return
+		  End If
+		  
+		  // consume next two "
+		  Call Advance
+		  Call Advance
+		  
+		  // remove first EOL if exists
+		  Dim rawString As String= mSource.SubstringLox(mStart+ 3, mCurrent- 3)
+		  rawString= ReplaceLineEndings(rawString, EndOfLine.UNIX)
+		  If rawString.LeftB(1)= EndOfLine.UNIX Then rawString= rawString.MidB(2)
+		  rawString= ReplaceLineEndings(rawString, EndOfLine)
+		  
+		  AddToken TokenType.STRING_, rawString
 		End Sub
 	#tag EndMethod
 

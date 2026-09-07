@@ -413,8 +413,38 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub StringEscapingTest()
+		  DoRun kStringEscaping
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub StringInterpolationTest()
 		  DoRun kStringInterpolationSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub StringRawTest()
+		  Dim snnipet As String= kStringRaw
+		  
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Dim expect As String= ReplaceLineEndings(kStringRawExpected, EndOfLine)+ EndOfLine
+		  Dim actual As String= BufferPrint
+		  Assert.AreEqual expect, actual, "AreEqual expect, actual"
 		End Sub
 	#tag EndMethod
 
@@ -532,7 +562,16 @@ Inherits TestGroup
 	#tag Constant, Name = kStaticMethodsSnnipet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private
 	#tag EndConstant
 
+	#tag Constant, Name = kStringEscaping, Type = String, Dynamic = False, Default = \"var s2\x3D \"\\\"\"; print s2;  // expect: \"\rvar s3\x3D \"\\\\\"; print s3;  // expect: \\\rvar s4\x3D \"\\%\"; print s4;  // expect: %\r\rvar s13\x3D \"\\x48\"; print s13; // expect: H\rvar s14\x3D \"\\u0041\"; print s14; // expect: A\rvar s15\x3D \"\\U0001F64A\\U0001F680\"; print s15; // expect: \xF0\x9F\x99\x8A\xF0\x9F\x9A\x80\r", Scope = Private
+	#tag EndConstant
+
 	#tag Constant, Name = kStringInterpolationSnnipet, Type = String, Dynamic = False, Default = \"var name\x3D\"luis\";\rprint \"welcome ${name}!\";\r\r// expect: welcome luis!\r\rprint \"one plus two times tree: ${1+2*3}.\";\r\r// expect: one plus two times tree: 7.0.", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kStringRaw, Type = String, Dynamic = False, Default = \"var json\x3D \"\"\"\r{\r    \"hello\": \"lox\"\x2C\r    \"from\": \"json\"\r}\r\"\"\";\rprint json;\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kStringRawExpected, Type = String, Dynamic = False, Default = \"{\r    \"hello\": \"lox\"\x2C\r    \"from\": \"json\"\r}\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kTextSnnipet, Type = String, Dynamic = False, Default = \"print Text.asc(\"@\"); // expect: 64.0\r\rprint Text.chr(9); // expect: \t\r\rprint Text.decodeBase64(\"dGVzdA\x3D\x3D\"); // expect: test\r\rprint Text.decodeHex(\"61\"); // expect: a\r\rprint Text.encodeBase64(\"test\"); // expect: dGVzdA\x3D\x3D\r\rprint Text.encodeHex(\"test\"); // expect: 74657374\r\rprint Text.inStr(\"hello world\"\x2C \"world\"); // expect: 7.0\r\rprint Text.left(\"hello world\"\x2C 5); // expect: hello\r\rprint Text.len(\"hello world\"); // expect: 11.0\r\rprint Text.lower(\"HELLO WORLD\"); // expect: hello world\r\rprint Text.mid(\"hello world\"\x2C 7); // expect: world\rprint Text.mid(\"hello world\"\x2C 7\x2C 1); // expect: w\r\rprint Text.nthField(\"this*is*the*end\"\x2C \"*\"\x2C 3); // expect: the\r\rprint Text.replace(\"The quick fox\"\x2C \"quick\"\x2C \"slow\"); // expect: The slow fox\r\rprint Text.replaceAll(\"xyxyxy\"\x2C \"x\"\x2C \"z\"); // expect: zyzyzy\r\rprint Text.right(\"hello world\"\x2C 5); // expect: world\r\rprint Text.titleCase(\"tHe Quick fOX\"); // expect: The Quick Fox\r\rprint Text.trim(\" tHe Quick fOX \"); // expect: The Quick Fox\r\rprint Text.upper(\"tHe Quick fOX\"); // expect: THE QUICK FOX", Scope = Private

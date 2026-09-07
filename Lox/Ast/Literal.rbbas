@@ -10,12 +10,13 @@ Inherits Lox.Ast.Expr
 	#tag Method, Flags = &h1000
 		Sub Constructor(value As Variant)
 		  If value.Type= Variant.TypeString Then
-		    // escaping
-		    Dim tmpValue As String= value.StringValue.ReplaceAll("\0", Chr(0)). _
-		    ReplaceAll("\""", """").ReplaceAll("\\", "\").ReplaceAll("\%", "%"). _
-		    ReplaceAll("\a", Chr(7)).ReplaceAll("\b", Chr(8)).ReplaceAll("\e", Chr(27)). _
-		    ReplaceAll("\f", Chr(12)).ReplaceAll("\n", Chr(10)).ReplaceAll("\r", Chr(13)). _
-		    ReplaceAll("\t", Chr(9)).ReplaceAll("\v", Chr(11))
+		    Dim tmpValue As String= value.StringValue
+		    
+		    tmpValue= tmpValue.ReplaceAll("\0", Chr(0)).ReplaceAll("\""", """"). _
+		    ReplaceAll("\\", "\").ReplaceAll("\%", "%").ReplaceAll("\a", Chr(7)). _
+		    ReplaceAll("\b", Chr(8)).ReplaceAll("\e", Chr(27)).ReplaceAll("\f", Chr(12)). _
+		    ReplaceAll("\n", Chr(10)).ReplaceAll("\r", Chr(13)).ReplaceAll("\t", Chr(9)). _
+		    ReplaceAll("\v", Chr(11))
 		    
 		    Dim strValue As String= tmpValue
 		    

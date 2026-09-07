@@ -148,6 +148,18 @@ var s14= "\u0041"; print s14; // expect: A
 var s15= "\U0001F64A\U0001F680"; print s15; // expect: 🙊🚀
 ```
 
+#### Raw string literals.
+
+```c
+var json= """
+{
+    "hello": "lox",
+    "from": "json"
+}
+""";
+print json; // string without first EOL.
+```
+
 #### Bitwise.
 
 ```c
