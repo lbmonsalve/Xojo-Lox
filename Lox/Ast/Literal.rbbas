@@ -9,58 +9,6 @@ Inherits Lox.Ast.Expr
 
 	#tag Method, Flags = &h1000
 		Sub Constructor(value As Variant)
-		  If value.Type= Variant.TypeString Then
-		    Dim tmpValue As String= value.StringValue
-		    
-		    tmpValue= tmpValue.ReplaceAll("\0", Chr(0)).ReplaceAll("\""", """"). _
-		    ReplaceAll("\\", "\").ReplaceAll("\%", "%").ReplaceAll("\a", Chr(7)). _
-		    ReplaceAll("\b", Chr(8)).ReplaceAll("\e", Chr(27)).ReplaceAll("\f", Chr(12)). _
-		    ReplaceAll("\n", Chr(10)).ReplaceAll("\r", Chr(13)).ReplaceAll("\t", Chr(9)). _
-		    ReplaceAll("\v", Chr(11))
-		    
-		    Dim strValue As String= tmpValue
-		    
-		    // search \xNN
-		    Dim rg As New RegEx
-		    rg.Options.CaseSensitive= True
-		    rg.SearchPattern= "\\x?([\da-fA-F]{2})"
-		    Dim match As RegExMatch= rg.Search(tmpValue)
-		    
-		    While Not (match Is Nil)
-		      Dim subExpr As String= match.SubExpressionString(1)
-		      Dim repExpr As String= DecodeHex(subExpr)
-		      strValue= strValue.ReplaceAll(match.SubExpressionString(0), repExpr)
-		      
-		      match= rg.Search
-		    Wend
-		    
-		    // search \uNNNN
-		    rg.SearchPattern= "\\u?([\da-fA-F]{4})"
-		    match= rg.Search(tmpValue)
-		    
-		    While Not (match Is Nil)
-		      Dim subExpr As String= match.SubExpressionString(1)
-		      Dim repExpr As String= Encodings.UTF8.Chr(Val("&h"+ subExpr))
-		      strValue= strValue.ReplaceAll(match.SubExpressionString(0), repExpr)
-		      
-		      match= rg.Search
-		    Wend
-		    
-		    // search \UNNNNNN
-		    rg.SearchPattern= "\\U?([\da-fA-F]{8})"
-		    match= rg.Search(tmpValue)
-		    
-		    While Not (match Is Nil)
-		      Dim subExpr As String= match.SubExpressionString(1)
-		      Dim repExpr As String= Encodings.UTF8.Chr(Val("&h"+ subExpr))
-		      strValue= strValue.ReplaceAll(match.SubExpressionString(0), repExpr)
-		      
-		      match= rg.Search
-		    Wend
-		    
-		    value= strValue
-		  End If
-		  
 		  Self.Value= value
 		End Sub
 	#tag EndMethod

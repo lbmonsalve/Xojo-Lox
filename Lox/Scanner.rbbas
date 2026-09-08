@@ -493,7 +493,59 @@ Protected Class Scanner
 		  End If
 		  
 		  Call Advance
-		  AddToken TokenType.STRING_, mSource.SubstringLox(mStart+ 1, mCurrent- 1)
+		  
+		  // convert escaping and/or unicode formats
+		  Dim tmpValue As String= mSource.SubstringLox(mStart+ 1, mCurrent- 1)
+		  
+		  tmpValue= tmpValue.ReplaceAll("\0", Chr(0)).ReplaceAll("\""", """"). _
+		  ReplaceAll("\\", "\").ReplaceAll("\%", "%").ReplaceAll("\a", Chr(7)). _
+		  ReplaceAll("\b", Chr(8)).ReplaceAll("\e", Chr(27)).ReplaceAll("\f", Chr(12)). _
+		  ReplaceAll("\n", Chr(10)).ReplaceAll("\r", Chr(13)).ReplaceAll("\t", Chr(9)). _
+		  ReplaceAll("\v", Chr(11))
+		  
+		  Dim rgxValue As String= tmpValue
+		  
+		  // search \xNN
+		  Dim rg As New RegEx
+		  rg.Options.CaseSensitive= True
+		  rg.SearchPattern= "\\x?([\da-fA-F]{2})"
+		  Dim match As RegExMatch= rg.Search(tmpValue)
+		  
+		  While Not (match Is Nil)
+		    Dim subExpr As String= match.SubExpressionString(1)
+		    Dim repExpr As String= DecodeHex(subExpr)
+		    rgxValue= rgxValue.ReplaceAll(match.SubExpressionString(0), repExpr)
+		    
+		    match= rg.Search
+		  Wend
+		  
+		  // search \uNNNN
+		  rg.SearchPattern= "\\u?([\da-fA-F]{4})"
+		  match= rg.Search(tmpValue)
+		  
+		  While Not (match Is Nil)
+		    Dim subExpr As String= match.SubExpressionString(1)
+		    Dim repExpr As String= Encodings.UTF8.Chr(Val("&h"+ subExpr))
+		    rgxValue= rgxValue.ReplaceAll(match.SubExpressionString(0), repExpr)
+		    
+		    match= rg.Search
+		  Wend
+		  
+		  // search \UNNNNNN
+		  rg.SearchPattern= "\\U?([\da-fA-F]{8})"
+		  match= rg.Search(tmpValue)
+		  
+		  While Not (match Is Nil)
+		    Dim subExpr As String= match.SubExpressionString(1)
+		    Dim repExpr As String= Encodings.UTF8.Chr(Val("&h"+ subExpr))
+		    rgxValue= rgxValue.ReplaceAll(match.SubExpressionString(0), repExpr)
+		    
+		    match= rg.Search
+		  Wend
+		  
+		  tmpValue= rgxValue
+		  
+		  AddToken TokenType.STRING_, tmpValue
 		End Sub
 	#tag EndMethod
 
