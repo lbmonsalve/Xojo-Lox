@@ -34,6 +34,9 @@ Inherits Lox.Inter.LoxClass
 		    
 		    Return ret
 		    
+		  Case "osVersion"
+		    Return GetOSVersion
+		    
 		  Case "osEnvVar", "debugLog", "assert"
 		    Return New Lox.Inter.Std.SystemMethods(name, Self)
 		    

@@ -135,6 +135,222 @@ Protected Module Lox
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function GetOSVersion(AsNumber As Boolean = False) As String
+		  If AsNumber Then
+		    If mOSVersionNumber<> "" Then Return mOSVersionNumber
+		  Else
+		    If mOSVersion<> "" Then Return mOSVersion
+		  End
+		  
+		  Dim os As String
+		  Dim OS_CODE As Integer
+		  
+		  #If TargetMacOS
+		    #if RBVersion< 2012.21
+		      Dim noerror As Boolean
+		      Dim result As Integer
+		      Dim sver As String
+		      Dim sversion As String
+		      
+		      noerror=System.Gestalt("sysv",result)
+		      If noerror Then
+		        sver=Hex(result)
+		        sversion=sver.Left(2) + "." + sver.Mid(3,1) + "." + sver.Right(1)
+		        
+		        If AsNumber Then
+		          mOSVersionNumber= sver.Mid(3,1)
+		          Return mOSVersionNumber
+		        End
+		        
+		        OS_CODE=Val(sver.Mid(3,1))
+		        
+		        Select Case OS_CODE
+		        Case 0
+		          os="Cheetah"
+		        Case 1
+		          os="Puma"
+		        Case 2
+		          os="Jaguar"
+		        Case 3
+		          os="Panther"
+		        Case 4
+		          os="Tiger"
+		        Case 5
+		          os="Leopard"
+		        Case 6
+		          os="Snow Leopard"
+		        Case 7
+		          os="Lion"
+		        Case 8
+		          os="Mountain Lion"
+		        case 9
+		          os="Mavericks"
+		        case 10
+		          os="Yosemite"
+		        case 11
+		          os="El Capitan"
+		        case 12
+		          os="Sierra"
+		        Case 13
+		          os="High Sierra"
+		        Case Else
+		          os="Unknown"
+		        End Select
+		        mOSVersion= "MacOS "+ os +" "+ sversion
+		        Return mOSVersion
+		      Else
+		        Return "Unknown"
+		      End If
+		    #else
+		      Dim major, minor, bug As Integer
+		      
+		      If System.Gestalt("sys1", major) Then
+		        If System.Gestalt("sys2", minor) Then
+		          If System.Gestalt("sys3", bug) Then
+		            'MsgBox "Max OS X v" + Str(major) + "." + Str(minor) + "." + Str(bug)
+		          End If
+		        End If
+		      End If
+		      
+		      If AsNumber Then
+		        mOSVersionNumber= Str(minor)
+		        Return mOSVersionNumber
+		      End
+		      
+		      OS_CODE= minor
+		      
+		      Select Case OS_CODE
+		      Case 0
+		        os="Cheetah"
+		      Case 1
+		        os="Puma"
+		      Case 2
+		        os="Jaguar"
+		      Case 3
+		        os="Panther"
+		      Case 4
+		        os="Tiger"
+		      Case 5
+		        os="Leopard"
+		      Case 6
+		        os="Snow Leopard"
+		      Case 7
+		        os="Lion"
+		      Case 8
+		        os="Mountain Lion"
+		      case 9
+		        os="Mavericks"
+		      case 10
+		        os="Yosemite"
+		      case 11
+		        os="El Capitan"
+		      case 12
+		        os="Sierra"
+		      Case 13
+		        os="High Sierra"
+		      Case Else
+		        os="Unknown"
+		      End Select
+		      
+		      mOSVersion= "MacOS "+ os +" "+ Str(major)+ "."+ Str(minor)+ "."+ Str(bug)
+		      
+		      Return mOSVersion
+		    #endif
+		  #ElseIf TargetWin32
+		    os = "Windows"
+		    
+		    //try to be more specific of windows version
+		    Soft Declare Sub GetVersionExA Lib "Kernel32" ( info As Ptr )
+		    Soft Declare Sub GetVersionExW Lib "Kernel32" ( info As Ptr )
+		    
+		    Dim info As MemoryBlock
+		    
+		    If System.IsFunctionAvailable( "GetVersionExW", "Kernel32" ) Then
+		      info =  New MemoryBlock( 20 + (2 * 128) )
+		      info.Long( 0 ) = info.Size
+		      GetVersionExW( info )
+		    Else
+		      info =  New MemoryBlock( 148 )
+		      info.Long( 0 ) = info.Size
+		      GetVersionExA( info )
+		    End If
+		    
+		    If AsNumber Then
+		      mOSVersionNumber= Str(info.Long(4)*100+info.long(8))
+		      Return mOSVersionNumber
+		    End
+		    
+		    Dim str As String
+		    
+		    OS_CODE= info.Long(4)*100+info.long(8)
+		    
+		    Select Case OS_CODE
+		    Case 400
+		      os = "Windows 95/NT 4.0"
+		    Case 410
+		      os = "Windows 98"
+		    Case 490
+		      os = "Windows Me"
+		    Case 300 To 399
+		      os = "Windows NT 3.51"
+		      OS_CODE=30
+		    Case 500
+		      os = "Windows 2000"
+		    Case 501
+		      os = "Windows XP"
+		    Case 502
+		      os = "Windows Server 2003"
+		    Case 600
+		      os = "Windows Vista"
+		    Case 601
+		      os = "Windows 7"
+		    Case 602
+		      Dim s As New Shell
+		      s.Execute("ver")
+		      Dim res As String = s.Result
+		      If Val(Mid(res, 30, 2)) = 10 Then
+		        str= Format(Val(Mid(res, 33, 10))* 100000, "00000")
+		        If str= "00000" Then
+		          os = ""
+		          str= res.Trim // win11
+		        Else
+		          os = "Windows 10"
+		          str= " Build "+ Str
+		        End If
+		      Else
+		        os = "Windows 8/8.1"
+		      End If
+		    Case 1000 // 64 bit Windows 10
+		      os = "Windows 10/11"
+		      
+		    End Select
+		    
+		    If str = "" Then str = " Build " + str(info.Long(12))
+		    
+		    If str.InStr("[")= 0 Then
+		      If System.IsFunctionAvailable( "GetVersionExW", "Kernel32" ) Then
+		        str = str + " " + Trim( info.WString( 20 ) )
+		      Else
+		        str = str + " " + Trim( info.CString( 20 ) )
+		      End If
+		    End If
+		    
+		    mOSVersion= os+ str
+		    Return mOSVersion
+		  #EndIf
+		  
+		  Dim s As New Shell
+		  s.Execute("uname -a")
+		  mOSVersion= s.Result
+		  
+		  s.Execute("uname -r")
+		  mOSVersionNumber= s.Result
+		  
+		  If AsNumber Then Return mOSVersionNumber Else Return mOSVersion
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function IIf(stmt As Boolean, ifTrue As TokenType, ifFalse As TokenType) As TokenType
 		  If stmt Then Return ifTrue Else Return ifFalse
 		End Function
@@ -529,6 +745,14 @@ Protected Module Lox
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Attributes( Hidden ) Private mOSVersion As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Attributes( Hidden ) Private mOSVersionNumber As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mPrintFormatNumber As String = "-###########0.0#####"
 	#tag EndProperty
 
@@ -663,6 +887,12 @@ Protected Module Lox
 			Visible=true
 			Group="ID"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="PrintFormatNumber"
+			Group="Behavior"
+			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
