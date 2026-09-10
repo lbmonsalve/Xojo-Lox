@@ -256,7 +256,7 @@ Inherits TestGroup
 	#tag Method, Flags = &h0
 		Sub InterpreterTest()
 		  Dim prevFrmt As String= Lox.PrintFormatNumber
-		  Lox.PrintFormatNumber= "-###########0" // lox compat
+		  Lox.PrintFormatNumber= "" // lox compat
 		  
 		  Dim folders() As String= FindFolders
 		  
