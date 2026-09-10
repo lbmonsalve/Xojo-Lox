@@ -148,6 +148,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return False
 		  ElseIf callee IsA Lox.Inter.Std.TextMethods Then
 		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.RandomLox Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.Std.RandomLoxMethods Then
+		    Return False
 		    
 		  End If
 		  
@@ -167,6 +171,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mGlobals.Define "DateTime", New Lox.Inter.Std.DateTime
 		  mGlobals.Define "RegEx", New Lox.Inter.Std.RegExLox
 		  mGlobals.Define "File", New Lox.Inter.Std.File
+		  mGlobals.Define "Random", New Lox.Inter.Std.RandomLox
 		  
 		  mEnvironment= mGlobals
 		  

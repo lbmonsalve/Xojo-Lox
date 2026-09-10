@@ -519,6 +519,18 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
+		  // rnd
+		  'Static r As Random
+		  'r= New Random
+		  'r.RandomizeSeed
+		  '
+		  'TextArea1.AppendText Str(r.Gaussian)+ EndOfLine
+		  'TextArea1.AppendText Str(r.Number)+ EndOfLine
+		  'TextArea1.AppendText Str(r.InRange(2, 7))+ EndOfLine
+		  'TextArea1.AppendText Str(r.LessThan(100))+ EndOfLine
+		  'Return
+		  
+		  
 		  // regex replace
 		  
 		  'Dim str1 As String= "\x41 \x43"

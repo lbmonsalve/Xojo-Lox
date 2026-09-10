@@ -316,11 +316,33 @@ var name="luis";
 print "welcome ${name}!";
 ```
 
+#### Random.
+
+```c
+var r= Random();
+
+print r.next();       // long integer
+print r.float();      // decimal
+print r.float(0, 5);  // decimal between
+
+print r.int(1,100);   // integer
+
+print "array:";
+
+var a=[1,2,3,4,5,6];
+
+print r.sample(a);    // pick one
+
+r.shuffle(a);         // rearrange
+a.each(fun (e) { print e; });
+```
+
 #### import lox file.
 
 ```c
 import "a"; // import a.lox file from searchPath
 ```
+
 
 ## [grammar](https://craftinginterpreters.com/appendix-i.html)
 

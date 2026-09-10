@@ -373,6 +373,29 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub RandomTest()
+		  Dim snnipet As String= kRandom
+		  
+		  BufferPrint= ""
+		  Lox.Interpreter.Reset
+		  
+		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim tokens() As Lox.Token= scanner.Scan
+		  
+		  Dim parser As New Lox.Parser(tokens)
+		  Dim statements() As Lox.Ast.Stmt= parser.Parse
+		  
+		  Dim resolver As New Lox.Inter.Resolver(Lox.Interpreter)
+		  resolver.Resolve(statements)
+		  
+		  Lox.Interpreter.Interpret(statements)
+		  
+		  Assert.Message BufferPrint
+		  Assert.Pass
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub RegExTest()
 		  DoRun kRegExSnnipet
 		End Sub
@@ -554,6 +577,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0\r\rh\x3D0x1a2b3c4d5e6f;\rprint h; // expect: 28772997619311.0", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kRandom, Type = String, Dynamic = False, Default = \"var r\x3DRandom();\r\rprint r.next();\rprint r.number();\rprint r.float();\rprint r.float(0\x2C 5);\rprint r.int(1\x2C100);\r\rprint \"array:\";\r\rvar a\x3D[1\x2C2\x2C3\x2C4\x2C5\x2C6];\r\rprint r.sample(a);\r\rr.shuffle(a);\ra.each(fun (e) { print e; });\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kRegExSnnipet, Type = String, Dynamic = False, Default = \"var r\x3D RegEx(\"\\d+\");\rprint r.caseSensitive; // expect: false\rprint r.greedy; // expect: true\rr.match(\"10\").each(fun (e) { print e;}); // expect: 10\rprint r.match(\"rr\"); // expect: null\r\rr.match(\"rr\")\?.each(fun (e) { print e; }); // nothing", Scope = Private
