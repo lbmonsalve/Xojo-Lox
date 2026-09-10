@@ -275,14 +275,31 @@ Protected Module Lox
 		      GetVersionExA( info )
 		    End If
 		    
+		    Dim str As String
+		    OS_CODE= info.Long(4)*100+info.long(8)
+		    
 		    If AsNumber Then
-		      mOSVersionNumber= Str(info.Long(4)*100+info.long(8))
+		      If OS_CODE= 602 Then
+		        Dim s As New Shell
+		        s.Execute("ver")
+		        Dim res As String = s.Result
+		        
+		        Dim rg As New RegEx
+		        rg.SearchPattern= "\d+\.*"
+		        Dim match As RegExMatch= rg.Search(res)
+		        
+		        While Not (match Is Nil)
+		          str= str+ match.SubExpressionString(0)
+		          
+		          match= rg.Search
+		        Wend
+		        mOSVersionNumber= str
+		      Else
+		        mOSVersionNumber= Str(OS_CODE)
+		      End If
+		      
 		      Return mOSVersionNumber
 		    End
-		    
-		    Dim str As String
-		    
-		    OS_CODE= info.Long(4)*100+info.long(8)
 		    
 		    Select Case OS_CODE
 		    Case 400
@@ -308,30 +325,33 @@ Protected Module Lox
 		      Dim s As New Shell
 		      s.Execute("ver")
 		      Dim res As String = s.Result
+		      
 		      If Val(Mid(res, 30, 2)) = 10 Then
-		        str= Format(Val(Mid(res, 33, 10))* 100000, "00000")
-		        If str= "00000" Then
-		          os = ""
-		          str= res.Trim // win11
-		        Else
-		          os = "Windows 10"
-		          str= " Build "+ Str
-		        End If
+		        os = "Windows 10/11"
 		      Else
 		        os = "Windows 8/8.1"
 		      End If
-		    Case 1000 // 64 bit Windows 10
-		      os = "Windows 10/11"
+		      
+		      Dim rg As New RegEx
+		      rg.SearchPattern= "\d+\.*"
+		      Dim match As RegExMatch= rg.Search(res)
+		      
+		      While Not (match Is Nil)
+		        str= str+ match.SubExpressionString(0)
+		        
+		        match= rg.Search
+		      Wend
+		      str=  " "+ str
 		      
 		    End Select
 		    
-		    If str = "" Then str = " Build " + str(info.Long(12))
-		    
-		    If str.InStr("[")= 0 Then
+		    If str= "" Then
+		      str= " Build " + str(info.Long(12))
+		      
 		      If System.IsFunctionAvailable( "GetVersionExW", "Kernel32" ) Then
-		        str = str + " " + Trim( info.WString( 20 ) )
+		        str= str+ " "+ Trim( info.WString( 20 ) )
 		      Else
-		        str = str + " " + Trim( info.CString( 20 ) )
+		        str= str+ " "+ Trim( info.CString( 20 ) )
 		      End If
 		    End If
 		    

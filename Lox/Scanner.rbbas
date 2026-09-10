@@ -190,8 +190,8 @@ Protected Class Scanner
 		  
 		  Dim value As Double
 		  #if TargetConsole And TargetWin32
-		    Dim nVersion As Integer= GetOSVersion(True).Val
-		    If nVersion= 601 Or nVersion= 602 Then // spanish nums!
+		    Dim sVersion As String= GetOSVersion(True)
+		    If sVersion= "601" Then // spanish nums!
 		      value= mSource.SubstringLox(mStart, mCurrent).Replace(".", ",").Val
 		    Else
 		      value= mSource.SubstringLox(mStart, mCurrent).Val
