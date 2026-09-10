@@ -458,7 +458,7 @@ Protected Class Scanner
 		            Return
 		          End If
 		        Next
-		      Case Else
+		      Case Else // bug? u = U
 		        If Asc(ch)= 117 Then // 4 hex digits
 		          For i As Integer= 1 To 4
 		            Call Advance

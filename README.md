@@ -273,7 +273,7 @@ var dictionary= {"a": 1,"b": 2, "c": 100}; // hashmap
 var r= RegEx("\d+");
 print r.caseSensitive; // expect: false
 print r.greedy; // expect: true
-print r.match("10"); // expect: 10
+r.match("10").each(fun (e) { print e; }); // expect: 10
 print r.match("rr"); // expect: null
 ```
 

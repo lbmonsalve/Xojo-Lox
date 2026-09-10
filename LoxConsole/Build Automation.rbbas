@@ -20,7 +20,9 @@
 					Format(Val(PropertyValue("App.NonReleaseVersion")), "0#") + _
 					" ("+ value+ ")"
 					
+					If version <> PropertyValue("App.ShortVersion") Then
 					PropertyValue("App.ShortVersion") = version
+					End If
 					
 				End
 				Begin BuildProjectStep Build

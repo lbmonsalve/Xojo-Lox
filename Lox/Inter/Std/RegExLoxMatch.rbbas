@@ -14,7 +14,15 @@ Implements ICallable
 		    Dim match As RegExMatch= mRegEx.Search(args(0))
 		    If match Is Nil Then Return Nil
 		    
-		    Return match.SubExpressionString(0)
+		    Dim result() As Variant
+		    
+		    While Not (match Is Nil)
+		      result.Append match.SubExpressionString(0)
+		      
+		      match= mRegEx.Search
+		    Wend
+		    
+		    Return New Lox.Inter.LoxArray(result)
 		  Catch
 		    #pragma BreakOnExceptions Off
 		    Raise New RuntimeError(tok, "mismatch in num/type of arguments.")

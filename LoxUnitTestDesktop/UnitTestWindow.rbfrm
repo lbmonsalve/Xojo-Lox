@@ -519,6 +519,26 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
+		  // regex replace
+		  
+		  'Dim str1 As String= "\x41 \x43"
+		  'Dim str2 As String= str1
+		  '
+		  'Dim rg As New RegEx
+		  'rg.Options.CaseSensitive= True
+		  'rg.SearchPattern= "\\x?([\da-fA-F]{2})"
+		  'Dim match As RegExMatch= rg.Search(str1)
+		  '
+		  'While Not (match Is Nil)
+		  'Dim subExpr As String= match.SubExpressionString(0)
+		  'Dim repExpr As String= DecodeHex(match.Replace("\1"))
+		  'str2= str2.ReplaceAll(match.SubExpressionString(0), repExpr)
+		  '
+		  'match= rg.Search
+		  'Wend
+		  'Break
+		  
+		  
 		  // test:
 		  
 		  'Dim varts() As Variant
