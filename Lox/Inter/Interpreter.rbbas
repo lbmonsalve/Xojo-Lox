@@ -178,6 +178,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mLocals= New Lox.Misc.CSDictionary
 		  
 		  mImportFiles= New Dictionary
+		  
+		  HadRuntimeError= False
 		End Sub
 	#tag EndMethod
 

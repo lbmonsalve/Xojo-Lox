@@ -391,12 +391,16 @@ Protected Module Lox
 		Function ToStringLox(Extends obj As Variant) As String
 		  Select Case obj.Type
 		  Case 0
-		    Return "null"
+		    Return "nil"
 		  Case 2, 3, 4, 5, 6
 		    #if TargetConsole
-		      Return Str(obj.DoubleValue) // TODO: "-###########0.0#####"
+		      #if RBVersion < 2014
+		        Return Str(obj.DoubleValue) // realstudio bug
+		      #else
+		        Return Str(obj.DoubleValue, PrintFormatNumber)
+		      #endif
 		    #else
-		      Return Str(obj.DoubleValue, "-###########0.0#####")
+		      Return Str(obj.DoubleValue, PrintFormatNumber)
 		    #endif
 		  Case 7 // date
 		    Return obj.DateValue.SQLDateTime
@@ -525,12 +529,30 @@ Protected Module Lox
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private mPrintFormatNumber As String = "-###########0.0#####"
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private mPrintOut As Writeable
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private mSearchPaths() As FolderItem
 	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  return mPrintFormatNumber
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mPrintFormatNumber = value
+			End Set
+		#tag EndSetter
+		PrintFormatNumber As String
+	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter

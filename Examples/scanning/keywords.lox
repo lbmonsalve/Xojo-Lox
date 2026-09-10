@@ -1,18 +1,18 @@
 and class else false for fun if nil or return super this true var while
 
-// expect: AND and null
-// expect: CLASS class null
-// expect: ELSE else null
-// expect: FALSE false null
-// expect: FOR for null
-// expect: FUN fun null
-// expect: IF if null
-// expect: NIL nil null
-// expect: OR or null
-// expect: RETURN return null
-// expect: SUPER super null
-// expect: THIS this null
-// expect: TRUE true null
-// expect: VAR var null
-// expect: WHILE while null
-// expect: EOF  null
+// expect: AND and nil
+// expect: CLASS class nil
+// expect: ELSE else nil
+// expect: FALSE false nil
+// expect: FOR for nil
+// expect: FUN fun nil
+// expect: IF if nil
+// expect: NIL nil nil
+// expect: OR or nil
+// expect: RETURN return nil
+// expect: SUPER super nil
+// expect: THIS this nil
+// expect: TRUE true nil
+// expect: VAR var nil
+// expect: WHILE while nil
+// expect: EOF  nil

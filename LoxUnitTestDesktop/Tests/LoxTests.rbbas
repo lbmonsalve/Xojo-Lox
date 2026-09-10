@@ -255,6 +255,9 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub InterpreterTest()
+		  Dim prevFrmt As String= Lox.PrintFormatNumber
+		  Lox.PrintFormatNumber= "-###########0" // lox compat
+		  
 		  Dim folders() As String= FindFolders
 		  
 		  For Each folder As String In folders
@@ -335,6 +338,8 @@ Inherits TestGroup
 		      End If
 		    Next
 		  Next
+		  
+		  Lox.PrintFormatNumber= prevFrmt
 		End Sub
 	#tag EndMethod
 
@@ -543,7 +548,7 @@ Inherits TestGroup
 	#tag Constant, Name = kDatetimeSnnipet, Type = String, Dynamic = False, Default = \"var d\x3D DateTime();\r\rd\x3D DateTime(2000\x2C 1\x2C 1);\rprint d.year;\rprint d.month;\rprint d.day;\rprint d.SQLDatetime;\r\r// expect: 2000.0\r// expect: 1.0\r// expect: 1.0\r// expect: 2000-01-01 00:00:00", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kElvisSnnipet, Type = String, Dynamic = False, Default = \"var elvis \x3D true \?: false;\rprint elvis; // expect: true\rvar elvis2 \x3D false \?: true;\rprint elvis2; // expect: true\relvis\x3D false\?:false\?:true;\rprint elvis; // expect: true\r\rprint false\?.true; // expect: true\rprint nil\?.true; // expect: null\rprint true\?.nil\?.false\?.true; // expect: null\r\rprint (true\?.nil\?.false\?.true)\?:\"default\"; // expect: default\r", Scope = Private
+	#tag Constant, Name = kElvisSnnipet, Type = String, Dynamic = False, Default = \"var elvis \x3D true \?: false;\rprint elvis; // expect: true\rvar elvis2 \x3D false \?: true;\rprint elvis2; // expect: true\relvis\x3D false\?:false\?:true;\rprint elvis; // expect: true\r\rprint false\?.true; // expect: true\rprint nil\?.true; // expect: nil\rprint true\?.nil\?.false\?.true; // expect: nil\r\rprint (true\?.nil\?.false\?.true)\?:\"default\"; // expect: default\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kExtendIdSnnipet, Type = String, Dynamic = False, Default = \"var a\xC3\xB1o\x3D2024; print a\xC3\xB1o; // expect: 2024.0\rvar \xCE\xA3\x3D \"sigma\"; print \xCE\xA3; // expect: sigma\rvar $emoji$\x3D \"smileyface\";\rprint $emoji$; // expect: smileyface", Scope = Private
@@ -552,10 +557,10 @@ Inherits TestGroup
 	#tag Constant, Name = kFileSnnipet, Type = String, Dynamic = False, Default = \"var f1\x3D File(\"test1.txt\");\rf1.write(\"hello\");\rprint f1.length;\r\rvar txt\x3D f1.read();\r\rvar f2\x3D File(\"test2.txt\");\rf2.write(txt+ \" world\");\rprint f2.length;\r\r// expect: 5.0\r// expect: 11.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kFunctionsSnnipet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6.0\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: null\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1.0\rcounter(); // expect: 2.0", Scope = Private
+	#tag Constant, Name = kFunctionsSnnipet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6.0\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: nil\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1.0\rcounter(); // expect: 2.0", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kHashMapSnnipet, Type = String, Dynamic = False, Default = \"var hm\x3D {\"a\":1\x2C\"b\":2\x2C \"c\":100};\rprint hm{\"b\"}; // expect: 2.0\r\rhm{\"a\"}\x3D 3;\rprint hm{\"a\"}; // expect: 3.0\r\rvar a\x3D hm.delete(\"a\");\r\rprint a; // expect: 3.0\rprint hm.length; // expect: 2.0\r\rprint hm.value(\"b\"); // expect: 2.0\rprint hm.value(\"c\"); // expect: 100.0\rprint hm.value(\"d\"); // expect: null\r\rhm.put(1\x2C 200);\r\rvar one\x3D hm.value(1);\rprint one; // expect: 200.0\r\rhm.each(fun (k\x2Cv) { print k; print v; });\r\r// expect: c\r// expect: 100.0\r// expect: b\r// expect: 2.0\r// expect: 1.0\r// expect: 200.0", Scope = Private
+	#tag Constant, Name = kHashMapSnnipet, Type = String, Dynamic = False, Default = \"var hm\x3D {\"a\":1\x2C\"b\":2\x2C \"c\":100};\rprint hm{\"b\"}; // expect: 2.0\r\rhm{\"a\"}\x3D 3;\rprint hm{\"a\"}; // expect: 3.0\r\rvar a\x3D hm.delete(\"a\");\r\rprint a; // expect: 3.0\rprint hm.length; // expect: 2.0\r\rprint hm.value(\"b\"); // expect: 2.0\rprint hm.value(\"c\"); // expect: 100.0\rprint hm.value(\"d\"); // expect: nil\r\rhm.put(1\x2C 200);\r\rvar one\x3D hm.value(1);\rprint one; // expect: 200.0\r\rhm.each(fun (k\x2Cv) { print k; print v; });\r\r// expect: c\r// expect: 100.0\r// expect: b\r// expect: 2.0\r// expect: 1.0\r// expect: 200.0", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kIfOrElseSnnipet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private
@@ -582,7 +587,7 @@ Inherits TestGroup
 	#tag Constant, Name = kRandom, Type = String, Dynamic = False, Default = \"var r\x3DRandom();\r\rprint r.next();\rprint r.number();\rprint r.float();\rprint r.float(0\x2C 5);\rprint r.int(1\x2C100);\r\rprint \"array:\";\r\rvar a\x3D[1\x2C2\x2C3\x2C4\x2C5\x2C6];\r\rprint r.sample(a);\r\rr.shuffle(a);\ra.each(fun (e) { print e; });\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kRegExSnnipet, Type = String, Dynamic = False, Default = \"var r\x3D RegEx(\"\\d+\");\rprint r.caseSensitive; // expect: false\rprint r.greedy; // expect: true\rr.match(\"10\").each(fun (e) { print e;}); // expect: 10\rprint r.match(\"rr\"); // expect: null\r\rr.match(\"rr\")\?.each(fun (e) { print e; }); // nothing", Scope = Private
+	#tag Constant, Name = kRegExSnnipet, Type = String, Dynamic = False, Default = \"var r\x3D RegEx(\"\\d+\");\rprint r.caseSensitive; // expect: false\rprint r.greedy; // expect: true\rr.match(\"10\").each(fun (e) { print e;}); // expect: 10\rprint r.match(\"rr\"); // expect: nil\r\rr.match(\"rr\")\?.each(fun (e) { print e; }); // nothing", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kStaticMethodsSnnipet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private
