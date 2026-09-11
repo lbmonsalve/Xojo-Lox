@@ -179,26 +179,7 @@ Protected Class Scanner
 		    End Select
 		  End If
 		  
-		  // RealStudio consola localization numbers!
-		  'Dim val1 As Double= 1.2
-		  'Dim str1 As String= "1.2"
-		  'Dim str2 As String= Str(val1)
-		  'Dim str3 As String= Format(val1, "-###########0.0#######")
-		  'Dim val2 As Double= CDbl(str1)
-		  'Dim val3 As Double= Val(str1)
-		  'Break
-		  
-		  Dim value As Double
-		  #if TargetConsole And TargetWin32
-		    Dim sVersion As String= GetOSVersion(True)
-		    If sVersion= "601" Then // spanish nums!
-		      value= mSource.SubstringLox(mStart, mCurrent).Replace(".", ",").Val
-		    Else
-		      value= mSource.SubstringLox(mStart, mCurrent).Val
-		    End If
-		  #else
-		    value= mSource.SubstringLox(mStart, mCurrent).Val
-		  #endif
+		  Dim value As Double= mSource.SubstringLox(mStart, mCurrent).Val
 		  
 		  AddToken TokenType.NUMBER, value
 		End Sub

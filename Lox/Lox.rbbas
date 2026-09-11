@@ -662,16 +662,8 @@ Protected Module Lox
 		  Select Case obj.Type
 		  Case 0
 		    Return "nil"
-		  Case 2, 3, 4, 5, 6
-		    #if TargetConsole
-		      #if RBVersion < 2014
-		        Return Str(obj.DoubleValue) // realstudio bug
-		      #else
-		        Return Str(obj.DoubleValue, PrintFormatNumber)
-		      #endif
-		    #else
-		      Return Str(obj.DoubleValue, PrintFormatNumber)
-		    #endif
+		  Case 2, 3, 4, 5, 6 // number
+		    Return Str(obj.DoubleValue, PrintFormatNumber)
 		  Case 7 // date
 		    Return obj.DateValue.SQLDateTime
 		  Case 8, 16
