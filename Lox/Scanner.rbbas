@@ -22,6 +22,47 @@ Protected Class Scanner
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub BlockComment()
+		  Dim nesting As Integer= 1, line As Integer= mLine, addLine As Boolean= True
+		  
+		  While nesting> 0 // consume nesting
+		    If IsAtEnd Then
+		      Error line, "Unterminated block comment."
+		      HadError= True
+		      Return
+		    End If
+		    
+		    Dim c As String= Peek
+		    
+		    If c= "/" And PeekNext= "*" Then
+		      Call Advance
+		      Call Advance
+		      nesting= nesting+ 1
+		      addLine= True
+		      Continue
+		    End If
+		    
+		    If c= "*" And PeekNext= "/" Then
+		      Call Advance
+		      Call Advance
+		      nesting= nesting- 1
+		      Continue
+		    End If
+		    
+		    If c= Chr(EOL) Then
+		      mLine= mLine+ 1
+		      If addLine Then
+		        line= line+ 1
+		        addLine= False
+		      End If
+		    End If
+		    
+		    Call Advance
+		  Wend
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub Constructor(source As String)
 		  mSource= ReplaceLineEndings(source, EndOfLine.Windows) // why? console windows problems
@@ -149,14 +190,14 @@ Protected Class Scanner
 
 	#tag Method, Flags = &h21
 		Private Sub Number()
-		  While IsDigit(Peek)
+		  While IsDigit(Peek) Or Peek= "_"
 		    Call Advance
 		  Wend
 		  
 		  // Look for a fractional part.
 		  If Peek= "." And IsDigit(PeekNext) Then
 		    Call Advance // Consume the "."
-		    While IsDigit(Peek)
+		    While IsDigit(Peek) Or Peek= "_"
 		      Call Advance
 		    Wend
 		  End If
@@ -168,20 +209,20 @@ Protected Class Scanner
 		      // Advance twice to consume the `e` and sign character.
 		      Call Advance
 		      Call Advance
-		      While IsDigit(Peek)
+		      While IsDigit(Peek) Or Peek= "_"
 		        Call Advance
 		      Wend
 		    Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
 		      Call Advance // Advance to consume the `e`.
-		      While IsDigit(Peek)
+		      While IsDigit(Peek) Or Peek= "_"
 		        Call Advance
 		      Wend
 		    End Select
 		  End If
 		  
-		  Dim value As Double= mSource.SubstringLox(mStart, mCurrent).Val
+		  Dim value As String= mSource.SubstringLox(mStart, mCurrent).ReplaceAll("_", "")
 		  
-		  AddToken TokenType.NUMBER, value
+		  AddToken TokenType.NUMBER, value.Val
 		End Sub
 	#tag EndMethod
 
@@ -306,10 +347,12 @@ Protected Class Scanner
 		    
 		    // slash or comment
 		  Case "/"
-		    If Match("/") Then
+		    If Match("/") Then // line comments
 		      While Peek<> Chr(EOL) And Not IsAtEnd
 		        Call Advance
 		      Wend
+		    ElseIf Match("*") Then // block comment
+		      BlockComment
 		    Else
 		      AddToken IIf(Match("="), TokenType.SLASH_EQUAL, TokenType.SLASH)
 		    End If
@@ -359,27 +402,27 @@ Protected Class Scanner
 		      Select Case base
 		      Case "x"
 		        Call Advance
-		        While IsHexadecimal(Peek)
+		        While IsHexadecimal(Peek) Or Peek= "_"
 		          Call Advance
 		        Wend
-		        Dim value As Double= mSource.SubstringLox(mStart+ 2, mCurrent).ValHexLox
-		        AddToken TokenType.NUMBER, value
+		        Dim value As String= mSource.SubstringLox(mStart+ 2, mCurrent).ReplaceAll("_", "")
+		        AddToken TokenType.NUMBER, value.ValHexLox
 		        Return
 		      Case "o"
 		        Call Advance
-		        While IsOctal(Peek)
+		        While IsOctal(Peek) Or Peek= "_"
 		          Call Advance
 		        Wend
-		        Dim value As Double= Val("&o"+ mSource.SubstringLox(mStart+ 2, mCurrent))
-		        AddToken TokenType.NUMBER, value
+		        Dim value As String= mSource.SubstringLox(mStart+ 2, mCurrent).ReplaceAll("_", "")
+		        AddToken TokenType.NUMBER, Val("&o"+ value)
 		        Return
 		      Case "b"
 		        Call Advance
-		        While IsBinnary(Peek)
+		        While IsBinnary(Peek) Or Peek= "_"
 		          Call Advance
 		        Wend
-		        Dim value As Double= Val("&b"+ mSource.SubstringLox(mStart+ 2, mCurrent))
-		        AddToken TokenType.NUMBER, value
+		        Dim value As String= mSource.SubstringLox(mStart+ 2, mCurrent).ReplaceAll("_", "")
+		        AddToken TokenType.NUMBER, Val("&b"+ value)
 		        Return
 		      End Select
 		    End If

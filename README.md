@@ -97,6 +97,7 @@ var after = clock();
 print after - before;
 
 print System.osName;
+print System.osVersion;
 print System.osEnvVar("HOMEPATH"); // windows
 print System.assert(true, "pass");
 print System.debugLog("test");
@@ -113,10 +114,16 @@ var 😃= "smileyface";
 print 😃; // expect: smileyface
 ```
 
+#### Numbers literals.
+
+```c
+var n = 9_999_999_999.91_19; // can use underscores _ for readability
+```
+
 #### HEX, OCT, BIN literals.
 
 ```c
-var h = 0x2324; 
+var h = 0xbebe_cafe; 
 var o = 0o1056; 
 var b = 0b1110;
 ```
@@ -201,7 +208,6 @@ print i;
 a>b ? 1 : 2
 ```
 
-
 #### Elvis operator.
 
 ```c
@@ -211,7 +217,6 @@ print true?.nil?.false?.true; // expect: null
 
 print true?.false?.nil?.true?:"default"; // expect: default
 ```
-
 
 #### Break, continue keywords.
 
@@ -238,7 +243,6 @@ if (false) {print "if";}
   or (true) {print "or";} // expect: or
   else {print "else";} 
 ```
-
 
 #### Modules.
 
@@ -428,7 +432,7 @@ pairs          → pair ( "," pair )* ;
 pair           → elvis ":" expression ;
 
 // lexical grammar:
-NUMBER         → DIGIT+ ( "." DIGIT+ )? | HEX | OCT | BIN ;
+NUMBER         → DIGIT+ ( "." DIGIT+ )? | HEX | OCT | BIN | "_" ;
 STRING         → "\"" <any char except "\"">* "\"" ;
 IDENTIFIER     → ALPHA ( ALPHA | DIGIT )* ;
 ALPHA          → "a" ... "z" 
@@ -449,5 +453,8 @@ DIGIT          → "0" ... "9" ;
 HEX            → "0x" [a-fA-F0-9]* ;
 OCT            → "0o" [0-7]* ;
 BIN            → "0b" [01]* ;
+
+LINE_COMMENT   → '//' ~[\r\n]* ;
+BLOCK_COMMENT  → '/*' .*? '*/' ;
 
 ```

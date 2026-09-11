@@ -28,6 +28,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub CommentTest()
+		  DoRun kCommentSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub CompoundAssignmentOperatorsTest()
 		  DoRun kCompoundSnnipet
 		End Sub
@@ -537,6 +543,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kBreakSnnipet, Type = String, Dynamic = False, Default = \"var bb\x3D0;\rwhile (true) {\r  if (bb\x3D10) break;\r  bb++;\r}\rprint bb; // expect: 10.0", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kCommentSnnipet, Type = String, Dynamic = False, Default = \"// line comments:\rvar n\x3D 9_999_999.91_91; // can use _ in numbers\rprint n; // expect: 9999999.9191\r\r// block comments:\r  \r/*\rvar nn\x3D 0xbebe_Cafe; // using _ in hex prefix literals\rprint nn;\r  \rvar a\x3D[1.1\x2C2.2\x2C3.3\x2C4.4];\ra.each(fun /* comment! */ (e) { print e; }); // nested comments!!\r*/\r\rn\x3D 0xbebe_Cafe; print n; // expect: 3200174846.0\rn\x3D 0o10_56; print n; // expect: 558.0\rn\x3D 0b11_10_00_10; print n; // expect: 226.0\r\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kCompoundSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D5;\ra+\x3D5;\rprint a; // expect: 10.0\ra-\x3D3;\rprint a; // expect: 7.0\ra*\x3D5;\rprint a; // expect: 35.0\ra/\x3D2;\rprint a; // expect: 17.5", Scope = Private
