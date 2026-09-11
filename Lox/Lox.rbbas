@@ -212,49 +212,83 @@ Protected Module Lox
 		        End If
 		      End If
 		      
-		      If AsNumber Then
-		        mOSVersionNumber= Str(minor)
-		        Return mOSVersionNumber
-		      End
-		      
-		      OS_CODE= minor
-		      
-		      Select Case OS_CODE
-		      Case 0
-		        os="Cheetah"
-		      Case 1
-		        os="Puma"
-		      Case 2
-		        os="Jaguar"
-		      Case 3
-		        os="Panther"
-		      Case 4
-		        os="Tiger"
-		      Case 5
-		        os="Leopard"
-		      Case 6
-		        os="Snow Leopard"
-		      Case 7
-		        os="Lion"
-		      Case 8
-		        os="Mountain Lion"
-		      case 9
-		        os="Mavericks"
-		      case 10
-		        os="Yosemite"
-		      case 11
-		        os="El Capitan"
-		      case 12
-		        os="Sierra"
-		      Case 13
-		        os="High Sierra"
-		      Case Else
-		        os="Unknown"
-		      End Select
-		      
-		      mOSVersion= "MacOS "+ os +" "+ Str(major)+ "."+ Str(minor)+ "."+ Str(bug)
-		      
-		      Return mOSVersion
+		      If major= 10 Then
+		        If AsNumber Then
+		          mOSVersionNumber= Str(minor)
+		          Return mOSVersionNumber
+		        End
+		        
+		        OS_CODE= minor
+		        
+		        Select Case OS_CODE
+		        Case 0
+		          os="Cheetah"
+		        Case 1
+		          os="Puma"
+		        Case 2
+		          os="Jaguar"
+		        Case 3
+		          os="Panther"
+		        Case 4
+		          os="Tiger"
+		        Case 5
+		          os="Leopard"
+		        Case 6
+		          os="Snow Leopard"
+		        Case 7
+		          os="Lion"
+		        Case 8
+		          os="Mountain Lion"
+		        case 9
+		          os="Mavericks"
+		        case 10
+		          os="Yosemite"
+		        case 11
+		          os="El Capitan"
+		        case 12
+		          os="Sierra"
+		        Case 13
+		          os="High Sierra"
+		        Case 14
+		          os="Mojave"
+		        Case 15
+		          os="Catalina"
+		        Case Else
+		          os="Unknown"
+		        End Select
+		        
+		        mOSVersion= "MacOS "+ os +" "+ Str(major)+ "."+ Str(minor)+ "."+ Str(bug)
+		        
+		        Return mOSVersion
+		      Else // new versions
+		        If AsNumber Then
+		          mOSVersionNumber= Str(major)
+		          Return mOSVersionNumber
+		        End
+		        
+		        OS_CODE= major
+		        
+		        Select Case OS_CODE
+		        Case 11
+		          os="Big sur"
+		        Case 12
+		          os="Monterey"
+		        Case 13
+		          os="Ventura"
+		        Case 14
+		          os="Sonoma"
+		        Case 15
+		          os="Sequoia"
+		        Case 26
+		          os="Tahoe"
+		        Case Else
+		          os="Unknown"
+		        End Select
+		        
+		        mOSVersion= "MacOS "+ os +" "+ Str(major)+ "."+ Str(minor)+ "."+ Str(bug)
+		        
+		        Return mOSVersion
+		      End If
 		    #endif
 		  #ElseIf TargetWin32
 		    os = "Windows"
