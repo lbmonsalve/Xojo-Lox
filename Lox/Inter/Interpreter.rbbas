@@ -164,7 +164,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mGlobals= New Environment
 		  mGlobals.Define "clock", New LoxClock
 		  mGlobals.Define "Array", New LoxArray
-		  mGlobals.Define "HashMap", New LoxHashMap
+		  mGlobals.Define "Map", New LoxHashMap
 		  mGlobals.Define "System", New Lox.Inter.Std.System
 		  mGlobals.Define "Math", New Lox.Inter.Std.Math
 		  mGlobals.Define "Text", New Lox.Inter.Std.Text

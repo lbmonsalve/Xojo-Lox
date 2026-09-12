@@ -650,6 +650,8 @@ Protected Module Lox
 		    Return "STRING_INTERPOLATION"
 		  Case TokenType.IMPORT
 		    Return "IMPORT"
+		  Case TokenType.DOTDOT
+		    Return "DOTDOT"
 		    
 		  Case Else
 		    Return "STRINGIFY->"
@@ -843,7 +845,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.260910", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.260911", Scope = Public
 	#tag EndConstant
 
 
@@ -909,7 +911,8 @@ Protected Module Lox
 		  FAT_ARROW
 		  HASHTAG_BRACE
 		  STRING_INTERPOLATION
-		IMPORT
+		  IMPORT
+		DOTDOT
 	#tag EndEnum
 
 

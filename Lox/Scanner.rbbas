@@ -287,7 +287,7 @@ Protected Class Scanner
 		  Case ","
 		    AddToken TokenType.COMMA
 		  Case "."
-		    AddToken TokenType.DOT
+		    AddToken IIf(Match("."), TokenType.DOTDOT, TokenType.DOT)
 		    
 		    // 2-char operators
 		  Case "-"
