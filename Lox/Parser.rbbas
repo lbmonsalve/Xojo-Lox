@@ -293,6 +293,21 @@ Protected Class Parser
 		  If Match(TokenType.SEMICOLON) Then
 		  ElseIf Match(TokenType.VAR_) Then
 		    initializer= varDecl
+		  ElseIf Match(TokenType.IDENTIFIER) Then // for ( in )
+		    Break
+		    'initializer=
+		    '
+		    'Call consume TokenType.IN_, "Expect 'in' after '"+ Peek.Lexeme+ "'."
+		    'Dim condition As Lox.Ast.Expr= range
+		    'Call consume TokenType.RIGHT_PAREN, "Expect ')' after for clauses."
+		    '
+		    'Dim body As Lox.Ast.Stmt= statement
+		    '
+		    'Dim stmts() As Lox.Ast.Stmt
+		    'stmts.Append initializer
+		    'stmts.Append New Lox.Ast.WhileStmt(condition, body)
+		    '
+		    'Return New Lox.Ast.Block(stmts)
 		  Else
 		    initializer= exprStmt
 		  End If
@@ -784,6 +799,12 @@ Protected Class Parser
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Function range() As Lox.Ast.Expr
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Function returnStmt() As Lox.Ast.Stmt
 		  Dim keyword As Token= Previous
 		  Dim value As Lox.Ast.Expr
@@ -797,11 +818,11 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function statement() As Lox.Ast.Stmt
-		  If Match(TokenType.FOR_) Then Return forStatement
-		  If Match(TokenType.IF_) Then Return ifStmt
 		  If Match(TokenType.PRINT_) Then Return printStmt
-		  If Match(TokenType.RETURN_) Then Return returnStmt
+		  If Match(TokenType.IF_) Then Return ifStmt
 		  If Match(TokenType.WHILE_) Then Return whileStmt
+		  If Match(TokenType.FOR_) Then Return forStatement
+		  If Match(TokenType.RETURN_) Then Return returnStmt
 		  If Match(TokenType.BREAK_) Then Return breakStmt
 		  If Match(TokenType.CONTINUE_) Then Return continueStmt
 		  If Match(TokenType.LEFT_BRACE) Then Return New Lox.Ast.Block(block)

@@ -650,8 +650,14 @@ Protected Module Lox
 		    Return "STRING_INTERPOLATION"
 		  Case TokenType.IMPORT
 		    Return "IMPORT"
+		  Case TokenType.IN_
+		    Return "IN"
 		  Case TokenType.DOTDOT
 		    Return "DOTDOT"
+		  Case TokenType.DOTDOTDOT
+		    Return "DOTDOTDOT"
+		  Case TokenType.DOT_LESS
+		    Return "DOT_LESS"
 		    
 		  Case Else
 		    Return "STRINGIFY->"
@@ -912,7 +918,10 @@ Protected Module Lox
 		  HASHTAG_BRACE
 		  STRING_INTERPOLATION
 		  IMPORT
-		DOTDOT
+		  IN_
+		  DOTDOT
+		  DOTDOTDOT
+		DOT_LESS
 	#tag EndEnum
 
 

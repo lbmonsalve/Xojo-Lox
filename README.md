@@ -374,19 +374,20 @@ varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
 
 // statements:
 statement      → exprStmt
-               | forStmt
-               | ifStmt
                | printStmt
-               | returnStmt
+               | ifStmt
                | whileStmt
+               | forStmt
+               | returnStmt
                | breakStmt
                | continueStmt
                | block ;
 
 exprStmt       → expression ";" ;
 forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
-                 expression? ";"
-                 expression? ")" statement ;
+                   expression? ";"
+                   expression? ")" statement
+                 | "for" "(" IDENTIFIER "in" range ")" statement ;
 ifStmt         → "if" "(" expression ")" statement
                ( "or" "(" expression ")" statement )*
                ( "else" statement )? ;
@@ -430,6 +431,7 @@ parameters     → IDENTIFIER ( "," IDENTIFIER )* ;
 arguments      → expression ( "," expression )* ;
 pairs          → pair ( "," pair )* ;
 pair           → elvis ":" expression ;
+range          → NUMBER ".." NUMBER | NUMBER ".<" NUMBER | elvis ;
 
 // lexical grammar:
 NUMBER         → DIGIT+ ( "." DIGIT+ )? | HEX | OCT | BIN | "_" ;

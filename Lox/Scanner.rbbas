@@ -287,7 +287,13 @@ Protected Class Scanner
 		  Case ","
 		    AddToken TokenType.COMMA
 		  Case "."
-		    AddToken IIf(Match("."), TokenType.DOTDOT, TokenType.DOT)
+		    If Match(".") Then
+		      AddToken IIf(Match("."), TokenType.DOTDOTDOT, TokenType.DOTDOT)
+		    ElseIf Match("<") Then
+		      AddToken TokenType.DOT_LESS
+		    Else
+		      AddToken TokenType.DOT
+		    End If
 		    
 		    // 2-char operators
 		  Case "-"
@@ -662,6 +668,7 @@ Protected Class Scanner
 			  mKeywords.Value("continue")= TokenType.CONTINUE_
 			  mKeywords.Value("module")= TokenType.MODULE_
 			  mKeywords.Value("import")= TokenType.IMPORT
+			  mKeywords.Value("in")= TokenType.IN_
 			  
 			  Return mKeywords
 			End Get

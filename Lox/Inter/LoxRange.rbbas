@@ -1,11 +1,11 @@
 #tag Class
-Protected Class LoxHashMap
+Protected Class LoxRange
 Inherits Lox.Inter.LoxClass
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Select Case args.Ubound
 		  Case -1
-		    Return New Lox.Inter.LoxHashMap
+		    Return New Lox.Inter.LoxRange
 		  End Select
 		End Function
 	#tag EndMethod
@@ -18,47 +18,47 @@ Inherits Lox.Inter.LoxClass
 		  // Constructor(metaclass As LoxClass, name As String, superClass As LoxClass, methods As Lox.Misc.CSDictionary) -- From LoxClass
 		  // Constructor(klass As LoxClass) -- From LoxInstance
 		  Super.Constructor Self
-		  
-		  HashMap= New Lox.Misc.CSDictionary
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1000
-		Sub Constructor(hashMap As Lox.Misc.CSDictionary)
-		  // Calling the overridden superclass constructor.
-		  // Note that this may need modifications if there are multiple constructor choices.
-		  // Possible constructor calls:
-		  // Constructor(metaclass As LoxClass, name As String, superClass As LoxClass, methods As Lox.Misc.CSDictionary) -- From LoxClass
-		  // Constructor(klass As LoxClass) -- From LoxInstance
-		  Constructor
-		  
-		  Self.HashMap= hashMap
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function FindMethod(name As String) As Variant
 		  Select Case name
-		  Case "length"
-		    Return HashMap.Count
-		  Case "clear"
-		    HashMap.Clear
-		    Return Self
-		  Case "delete", "each", "value", "put"
-		    Return New Lox.Inter.LoxHashMapMethods(name, Self)
+		  Case "from"
+		    Return From
+		  Case "to"
+		    Return To_
+		  Case "by"
+		    Return By
+		  Case "includeTo"
+		    Return IncludeTo_
+		  Case "makeIterator", "next"
+		    Return New Lox.Inter.LoxRangeMethods(name, Self)
 		  End Select
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  Return "<class Dict>"
+		  Return "<class Range>"
 		End Function
 	#tag EndMethod
 
 
 	#tag Property, Flags = &h0
-		HashMap As Lox.Misc.CSDictionary
+		By As Double
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		From As Double
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		IncludeTo_ As Double
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		To_ As Double
 	#tag EndProperty
 
 

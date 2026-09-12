@@ -519,6 +519,9 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
+		  // for (i in 1..10) { print i; }
+		  
+		  
 		  // rnd
 		  'Static r As Random
 		  'r= New Random
