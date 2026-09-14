@@ -516,7 +516,7 @@ End
 
 	#tag Note, Name = Snnipets
 		
-		// for (i in 1..10) { print i; }
+		// for (i in 1..10) print i;
 		{
 		  var range= Range(1, 10);
 		  var itera= range.makeIterator();
@@ -525,72 +525,73 @@ End
 		    print i;
 		  }
 		} 
-		// var a=[1,3,5];
-		// for (i in a) { print i; }
+		
+		var a=[1,3,5];
 		{
-		  var range= [1,3,5];
+		  var range= a;
 		  var itera= range.makeIterator();
 		  var i;
 		  while (i= itera.next()) {
 		    print i;
 		  }
 		} 
+		// for (i in a) print i;
+		
 		  
 		  // rnd
-		  'Static r As Random
-		  'r= New Random
-		  'r.RandomizeSeed
-		  '
-		  'TextArea1.AppendText Str(r.Gaussian)+ EndOfLine
-		  'TextArea1.AppendText Str(r.Number)+ EndOfLine
-		  'TextArea1.AppendText Str(r.InRange(2, 7))+ EndOfLine
-		  'TextArea1.AppendText Str(r.LessThan(100))+ EndOfLine
-		  'Return
+		  Static r As Random
+		  r= New Random
+		  r.RandomizeSeed
+		  
+		  TextArea1.AppendText Str(r.Gaussian)+ EndOfLine
+		  TextArea1.AppendText Str(r.Number)+ EndOfLine
+		  TextArea1.AppendText Str(r.InRange(2, 7))+ EndOfLine
+		  TextArea1.AppendText Str(r.LessThan(100))+ EndOfLine
+		  Return
 		  
 		  
 		  // regex replace
+		  Dim str1 As String= "\x41 \x43"
+		  Dim str2 As String= str1
 		  
-		  'Dim str1 As String= "\x41 \x43"
-		  'Dim str2 As String= str1
-		  '
-		  'Dim rg As New RegEx
-		  'rg.Options.CaseSensitive= True
-		  'rg.SearchPattern= "\\x?([\da-fA-F]{2})"
-		  'Dim match As RegExMatch= rg.Search(str1)
-		  '
-		  'While Not (match Is Nil)
-		  'Dim subExpr As String= match.SubExpressionString(0)
-		  'Dim repExpr As String= DecodeHex(match.Replace("\1"))
-		  'str2= str2.ReplaceAll(match.SubExpressionString(0), repExpr)
-		  '
-		  'match= rg.Search
-		  'Wend
-		  'Break
+		  Dim rg As New RegEx
+		  rg.Options.CaseSensitive= True
+		  rg.SearchPattern= "\\x?([\da-fA-F]{2})"
+		  Dim match As RegExMatch= rg.Search(str1)
+		  
+		  While Not (match Is Nil)
+		    Dim subExpr As String= match.SubExpressionString(0)
+		    Dim repExpr As String= DecodeHex(match.Replace("\1"))
+		    str2= str2.ReplaceAll(match.SubExpressionString(0), repExpr)
+		    
+		    match= rg.Search
+		  Wend
+		  Break
 		  
 		  
 		  // test:
+		  Dim varts() As Variant
+		  Dim vart1 As Variant= "a"
+		  Dim vart2 As Variant= "b"
+		  Dim vart3 As Variant= "c"
+		  Dim vart4 As Variant= "d"
 		  
-		  'Dim varts() As Variant
-		  'Dim vart1 As Variant= "a"
-		  'Dim vart2 As Variant= "b"
-		  'Dim vart3 As Variant= "c"
-		  'Dim vart4 As Variant= "d"
-		  '
-		  'varts.Append vart1
-		  'varts.Append vart2
-		  'varts.Append vart3
-		  'varts.Append vart4
-		  '
-		  'Dim hm As New Lox.Misc.CSDictionary
-		  'hm.Value(vart1)= 1
-		  'hm.Value(vart2)= 2
-		  'hm.Value(vart3)= 3
-		  '
-		  'Dim found As Variant= hm.Lookup(vart1, -1)
-		  'vart1= 4
-		  'found= hm.Lookup(vart1, -2)
-		  '
-		  'Break
+		  varts.Append vart1
+		  varts.Append vart2
+		  varts.Append vart3
+		  varts.Append vart4
+		  
+		  Dim hm As New Lox.Misc.CSDictionary
+		  hm.Value(vart1)= 1
+		  hm.Value(vart2)= 2
+		  hm.Value(vart3)= 3
+		  
+		  Dim found As Variant= hm.Lookup(vart1, -1)
+		  vart1= 4
+		  found= hm.Lookup(vart1, -2)
+		  Break
+		  
+		  
 	#tag EndNote
 
 

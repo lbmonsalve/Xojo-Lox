@@ -8,7 +8,7 @@ A dynamic typing, automatic memory management, 'first class' functions and objec
 [The Lox Language](https://craftinginterpreters.com/the-lox-language.html)
 
 Example:
-```c
+```swift
 // Your first Lox program!
 print "Hello, world!";
 
@@ -109,7 +109,7 @@ print System.debugLog("test");
 
 #### Identifiers extended. emoji's friendly.
 
-```c
+```swift
 var año=2024; print año; // expect: 2024.0
 var Σ= "sigma"; print Σ; // expect: sigma
 var 😃= "smileyface";
@@ -118,13 +118,13 @@ print 😃; // expect: smileyface
 
 #### Numbers literals.
 
-```c
+```swift
 var n = 9_999_999_999.91_19; // can use underscores _ for readability
 ```
 
 #### HEX, OCT, BIN literals.
 
-```c
+```swift
 var h = 0xbebe_cafe; 
 var o = 0o1056; 
 var b = 0b1110;
@@ -132,7 +132,7 @@ var b = 0b1110;
 
 #### Escaping.
 
-```c
+```swift
 var s1= "\0";  // The NUL byte: 0.
 var s2= "\""; print s2;  // expect: "
 var s3= "\\"; print s3;  // expect: \
@@ -159,7 +159,7 @@ var s15= "\U0001F64A\U0001F680"; print s15; // expect: 🙊🚀
 
 #### Raw string literals.
 
-```c
+```swift
 var json= """
 {
     "hello": "lox",
@@ -171,7 +171,7 @@ print json; // string without first EOL.
 
 #### Bitwise.
 
-```c
+```swift
 print 7 & 5;
 print 7 | 5;
 print 7 << 2;
@@ -180,7 +180,7 @@ print 40 >> 2;
 
 #### Compound assingnment.
 
-```c
+```swift
 var a=5;
 a+=5;
 print a; // expect: 10.0
@@ -195,7 +195,7 @@ print a; // expect: 17.5
 
 #### Postfix.
 
-```c
+```swift
 var i=1; i++;
 print i;
 
@@ -206,13 +206,13 @@ print i;
 
 #### Ternary.
 
-```c
+```swift
 a>b ? 1 : 2
 ```
 
 #### Elvis operator.
 
-```c
+```swift
 print false?.true; // expect: true
 print nil?.true; // expect: null
 print true?.nil?.false?.true; // expect: null
@@ -222,10 +222,10 @@ print true?.false?.nil?.true?:"default"; // expect: default
 
 #### Break, continue keywords.
 
-```c
+```swift
 var bb=0;
 while (true) {
-  if (bb=10) break;
+  if (bb==10) break;
   bb++;
 }
 print bb; // expect: 10.0
@@ -248,7 +248,7 @@ if (false) {print "if";}
 
 #### Modules.
 
-```c
+```swift
 module M {
   class C {
     parse(cc) {print cc;}
@@ -285,7 +285,7 @@ print r.match("rr"); // expect: null
 
 #### File.
 
-```c
+```swift
 var f1= File("test1.txt");
 f1.write("hello");
 print f1.length;
@@ -317,14 +317,14 @@ print appdata.count;
 
 #### String interpolation.
 
-```c
+```swift
 var name="luis";
 print "welcome ${name}!";
 ```
 
 #### Random.
 
-```c
+```swift
 var r= Random();
 
 print r.next();       // long integer
@@ -345,7 +345,7 @@ a.each(fun (e) { print e; });
 
 #### import lox file.
 
-```c
+```swift
 import "a"; // import a.lox file from searchPath
 ```
 
