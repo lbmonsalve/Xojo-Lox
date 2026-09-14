@@ -126,7 +126,7 @@ Protected Class Parser
 		  Dim classMethods() As Lox.Ast.FunctionStmt
 		  
 		  While Not Check(TokenType.RIGHT_BRACE) And Not IsAtEnd
-		    Dim isClassMethod As Boolean= Match(TokenType.CLASS_)
+		    Dim isClassMethod As Boolean= Match(TokenType.CLASS_, TokenType.STATIC_)
 		    If isClassMethod Then
 		      classMethods.Append funDecl("method")
 		    Else

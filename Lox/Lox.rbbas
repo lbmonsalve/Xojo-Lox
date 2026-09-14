@@ -658,6 +658,8 @@ Protected Module Lox
 		    Return "DOTDOTDOT"
 		  Case TokenType.DOT_LESS
 		    Return "DOT_LESS"
+		  Case TokenType.STATIC_
+		    Return "STATIC"
 		    
 		  Case Else
 		    Return "STRINGIFY->"
@@ -921,7 +923,8 @@ Protected Module Lox
 		  IN_
 		  DOTDOT
 		  DOTDOTDOT
-		DOT_LESS
+		  DOT_LESS
+		STATIC_
 	#tag EndEnum
 
 

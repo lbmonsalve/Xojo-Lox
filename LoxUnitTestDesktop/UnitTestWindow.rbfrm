@@ -590,8 +590,6 @@ End
 		  vart1= 4
 		  found= hm.Lookup(vart1, -2)
 		  Break
-		  
-		  
 	#tag EndNote
 
 

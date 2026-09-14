@@ -445,6 +445,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub SequenceProtocolTest()
+		  DoRun kSequenceProtocol
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub StaticMethodTest()
 		  // https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter12_classes.md
 		  
@@ -572,7 +578,7 @@ Inherits TestGroup
 	#tag Constant, Name = kFileSnnipet, Type = String, Dynamic = False, Default = \"var f1\x3D File(\"test1.txt\");\rf1.write(\"hello\");\rprint f1.length;\r\rvar txt\x3D f1.read();\r\rvar f2\x3D File(\"test2.txt\");\rf2.write(txt+ \" world\");\rprint f2.length;\r\r// expect: 5.0\r// expect: 11.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kForInSnnipet, Type = String, Dynamic = False, Default = \"for (i in 1..3) print i;\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\rvar a \x3D [3\x2C5\x2C7];\rfor (i in a) print i;\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r\rfor (i in Range(1\x2C 10\x2C 2)) print i;\r// expect: 1.0\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r// expect: 9.0", Scope = Private
+	#tag Constant, Name = kForInSnnipet, Type = String, Dynamic = False, Default = \"for (i in 1..3) print i;\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\rvar a \x3D [3\x2C5\x2C7];\rfor (i in a) print i;\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r\rfor (i in Range(1\x2C 10\x2C 2)) print i;\r// expect: 1.0\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r// expect: 9.0\r\rfor (i in 1.<3) print i;\r// expect: 1.0\r// expect: 2.0\r\rfor (i in 7.<3) print i;\r// expect: 7.0\r// expect: 6.0\r// expect: 5.0\r// expect: 4.0\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kFunctionsSnnipet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6.0\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: nil\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1.0\rcounter(); // expect: 2.0", Scope = Private
@@ -606,6 +612,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kRegExSnnipet, Type = String, Dynamic = False, Default = \"var r\x3D RegEx(\"\\d+\");\rprint r.caseSensitive; // expect: false\rprint r.greedy; // expect: true\rr.match(\"10\").each(fun (e) { print e;}); // expect: 10\rprint r.match(\"rr\"); // expect: nil\r\rr.match(\"rr\")\?.each(fun (e) { print e; }); // nothing", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kSequenceProtocol, Type = String, Dynamic = False, Default = \"// sequence protocol:\r// makeIterator() returns iterator with next()\r\rclass Foo {\r  init(count) {\r    this.count\x3D count;\r  }\r\r  // generate its own iterator\r  makeIterator() { return this; }\r\r  // called for-in loop\r  next() {\r    if (this.count\x3D\x3D 0) {\r      return nil;\r    } else {\r      var curr\x3D this.count;\r      this.count-\x3D 1;\r      return curr;\r    }\r  }\r}\r\rvar f\x3D Foo(3);\rfor (i in f) print i;\r\r// expect: 3.0\r// expect: 2.0\r// expect: 1.0\r\r\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kStaticMethodsSnnipet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private

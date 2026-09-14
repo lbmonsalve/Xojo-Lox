@@ -669,6 +669,7 @@ Protected Class Scanner
 			  mKeywords.Value("module")= TokenType.MODULE_
 			  mKeywords.Value("import")= TokenType.IMPORT
 			  mKeywords.Value("in")= TokenType.IN_
+			  mKeywords.Value("static")= TokenType.STATIC_
 			  
 			  Return mKeywords
 			End Get
