@@ -13,9 +13,26 @@ Implements ICallable
 		    #pragma BreakOnExceptions Off
 		    Select Case MethodName
 		    Case "makeIterator"
+		      Dim iter As New Lox.Inter.LoxRange(Owner)
+		      iter.Current= iter.From
 		      
+		      Return iter
 		    Case "next"
+		      If Owner.From<= Owner.To_ Then
+		        If Owner.Current<= Owner.To_ Then
+		          Dim curr As Double= Owner.Current
+		          Owner.Current= Owner.Current+ Owner.By
+		          Return curr
+		        End If
+		      Else // reverse
+		        If Owner.Current>= Owner.To_ Then
+		          Dim curr As Double= Owner.Current
+		          Owner.Current= Owner.Current- Owner.By
+		          Return curr
+		        End If
+		      End If
 		      
+		      Return Nil
 		    End Select
 		  Catch
 		    #pragma BreakOnExceptions Off

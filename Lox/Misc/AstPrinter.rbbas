@@ -351,6 +351,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitRangeLiteral(expr As Lox.Ast.RangeLiteral) As Variant
+		  Return Parenthesize("range "+ expr.Operator.ToString, expr.From, expr.To_)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitReturnStmt(stmt As Lox.Ast.ReturnStmt) As Variant
 		  If stmt.Value Is Nil Then Return "(return)"
 		  

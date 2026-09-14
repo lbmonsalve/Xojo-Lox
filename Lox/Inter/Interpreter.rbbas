@@ -128,6 +128,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return False
 		  ElseIf callee IsA Lox.Inter.LoxArrayMethods Then
 		    Return False
+		  ElseIf callee IsA Lox.Inter.LoxRange Then
+		    Return False
+		  ElseIf callee IsA Lox.Inter.LoxRangeMethods Then
+		    Return False
 		  ElseIf callee IsA Lox.Inter.LoxHashMap Then
 		    Return False
 		  ElseIf callee IsA Lox.Inter.LoxHashMapMethods Then
@@ -165,6 +169,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mGlobals.Define "clock", New LoxClock
 		  mGlobals.Define "Array", New LoxArray
 		  mGlobals.Define "Dict", New LoxHashMap
+		  mGlobals.Define "Range", New LoxRange
+		  // std
 		  mGlobals.Define "System", New Lox.Inter.Std.System
 		  mGlobals.Define "Math", New Lox.Inter.Std.Math
 		  mGlobals.Define "Text", New Lox.Inter.Std.Text
@@ -918,6 +924,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Else
 		    PrintOut.Write msg+ EndOfLine
 		  End If
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VisitRangeLiteral(expr As Lox.Ast.RangeLiteral) As Variant
+		  
 		End Function
 	#tag EndMethod
 

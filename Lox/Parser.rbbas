@@ -294,20 +294,56 @@ Protected Class Parser
 		  ElseIf Match(TokenType.VAR_) Then
 		    initializer= varDecl
 		  ElseIf Match(TokenType.IDENTIFIER) Then // for ( in )
-		    Break
-		    'initializer=
-		    '
-		    'Call consume TokenType.IN_, "Expect 'in' after '"+ Peek.Lexeme+ "'."
-		    'Dim condition As Lox.Ast.Expr= range
-		    'Call consume TokenType.RIGHT_PAREN, "Expect ')' after for clauses."
-		    '
-		    'Dim body As Lox.Ast.Stmt= statement
-		    '
-		    'Dim stmts() As Lox.Ast.Stmt
-		    'stmts.Append initializer
-		    'stmts.Append New Lox.Ast.WhileStmt(condition, body)
-		    '
-		    'Return New Lox.Ast.Block(stmts)
+		    Dim name As Token= Previous
+		    
+		    Call consume TokenType.IN_, "Expect 'in' after '"+ name.Lexeme+ "'."
+		    Dim condition As Lox.Ast.Expr= range
+		    Call consume TokenType.RIGHT_PAREN, "Expect ')' after for clauses."
+		    
+		    Dim body As Lox.Ast.Stmt= statement
+		    
+		    // var range__
+		    Dim varRange As Lox.Ast.VarStmt
+		    Dim varRangeName As New Token(TokenType.IDENTIFIER, "range__", Nil, name.Line)
+		    If True Then // fake scope
+		      Dim varVari As New Lox.Ast.Variable(New Token(TokenType.IDENTIFIER, "Range", Nil, name.Line))
+		      Dim varAr() As Lox.Ast.Expr
+		      If condition IsA Lox.Ast.RangeLiteral Then
+		        Dim rangeLiteral As Lox.Ast.RangeLiteral= Lox.Ast.RangeLiteral(condition)
+		        varAr.Append rangeLiteral.From
+		        varAr.Append rangeLiteral.To_
+		      Else
+		        Break
+		      End If
+		      
+		      varRange= New Lox.Ast.VarStmt(varRangeName, New Lox.Ast.CallExpr(varVari, Nil, varAr))
+		    End If
+		    
+		    // var itera__
+		    Dim varItera As Lox.Ast.VarStmt
+		    Dim varIteraName As New Token(TokenType.IDENTIFIER, "itera__", Nil, name.Line)
+		    If True Then // fake scope
+		      Dim varObj As New Lox.Ast.Variable(varRangeName)
+		      Dim varVari As New Lox.Ast.Get(New Token(TokenType.IDENTIFIER, "makeIterator", Nil, name.Line), varObj)
+		      Dim varAr() As Lox.Ast.Expr
+		      varItera= New Lox.Ast.VarStmt(varIteraName, New Lox.Ast.CallExpr(varVari, Nil, varAr))
+		    End If
+		    
+		    // rewrite condition
+		    If True Then
+		      Dim condiGet As New Lox.Ast.Get(New Token(TokenType.IDENTIFIER, "next", Nil, name.Line), _
+		      New Lox.Ast.Variable(varIteraName))
+		      Dim varAr() As Lox.Ast.Expr
+		      condition= New Lox.Ast.Assign(name, New Lox.Ast.CallExpr(condiGet, Nil, varAr))
+		    End If
+		    
+		    Dim stmts() As Lox.Ast.Stmt
+		    stmts.Append varRange
+		    stmts.Append varItera
+		    stmts.Append New Lox.Ast.VarStmt(name, Nil)
+		    stmts.Append New Lox.Ast.WhileStmt(condition, body)
+		    
+		    Return New Lox.Ast.Block(stmts)
 		  Else
 		    initializer= exprStmt
 		  End If
@@ -800,7 +836,24 @@ Protected Class Parser
 
 	#tag Method, Flags = &h21
 		Private Function range() As Lox.Ast.Expr
+		  If Peek.TypeToken= TokenType.NUMBER Then
+		    Dim from As New Lox.Ast.Literal(Advance.Literal)
+		    
+		    If Match(TokenType.DOTDOT) Then
+		    ElseIf Match(TokenType.DOT_LESS) Then
+		    Else
+		      HadError= True
+		      #pragma BreakOnExceptions Off
+		      Raise Error(Peek, "Expect range operator.")
+		    End If
+		    
+		    Dim op As Token= Previous
+		    Dim to_ As New Lox.Ast.Literal(Advance.Literal)
+		    
+		    Return New Lox.Ast.RangeLiteral(from, op, to_, New Lox.Ast.Literal(1))
+		  End If
 		  
+		  Return elvis
 		End Function
 	#tag EndMethod
 

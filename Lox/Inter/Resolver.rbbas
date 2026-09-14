@@ -384,6 +384,12 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitRangeLiteral(expr As Lox.Ast.RangeLiteral) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitReturnStmt(stmt As Lox.Ast.ReturnStmt) As Variant
 		  If mCurrentFunction= FunctionType.NONE Then
 		    Error stmt.Keyword, "Can't return from top-level code."

@@ -109,6 +109,12 @@ Protected Interface IExprVisitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function VisitRangeLiteral(expr As Lox.Ast.RangeLiteral) As Variant
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function VisitSet(expr As Lox.Ast.Set) As Variant
 		  
 		End Function

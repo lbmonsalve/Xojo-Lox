@@ -514,13 +514,17 @@ End
 	#tag EndMethod
 
 
-#tag EndWindowCode
-
-#tag Events PushButton1
-	#tag Event
-		Sub Action()
-		  // for (i in 1..10) { print i; }
-		  
+	#tag Note, Name = Snnipets
+		
+		// for (i in 1..10) { print i; }
+		{
+		  var range= Range(1, 10);
+		  var itera= range.makeIterator();
+		  var i;
+		  while (i= itera.next()) {
+		    print i;
+		  }
+		} 
 		  
 		  // rnd
 		  'Static r As Random
@@ -577,7 +581,14 @@ End
 		  'found= hm.Lookup(vart1, -2)
 		  '
 		  'Break
-		  
+	#tag EndNote
+
+
+#tag EndWindowCode
+
+#tag Events PushButton1
+	#tag Event
+		Sub Action()
 		  Dim txtType As New FileType
 		  txtType.Name = "text/plain"
 		  txtType.MacType = "TXT "
