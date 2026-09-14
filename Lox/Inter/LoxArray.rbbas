@@ -55,6 +55,8 @@ Inherits Lox.Inter.LoxClass
 		    Return Elements.Ubound+ 1
 		  Case "pop", "push", "each", "indexOf", "map", "deleteAt"
 		    Return New Lox.Inter.LoxArrayMethods(name, Self)
+		  Case "makeIterator", "next"
+		    Return New Lox.Inter.LoxArrayMethods(name, Self)
 		  End Select
 		End Function
 	#tag EndMethod
@@ -67,11 +69,20 @@ Inherits Lox.Inter.LoxClass
 
 
 	#tag Property, Flags = &h0
+		Current As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		Elements() As Variant
 	#tag EndProperty
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="Current"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true

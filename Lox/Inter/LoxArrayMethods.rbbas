@@ -41,6 +41,17 @@ Implements ICallable
 		      Dim elem As Variant= Owner.Elements(args(0))
 		      Owner.Elements.Remove args(0)
 		      Return elem
+		    Case "makeIterator"
+		      Dim iter As New Lox.Inter.LoxArray
+		      iter.Elements= Owner.Elements
+		      
+		      Return iter
+		    Case "next"
+		      Dim curr As Integer= Owner.Current
+		      If curr> Owner.Elements.Ubound Then Return Nil
+		      Owner.Current= Owner.Current+ 1
+		      
+		      Return Owner.Elements(curr)
 		    End Select
 		  Catch
 		    #pragma BreakOnExceptions Off

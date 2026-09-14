@@ -525,6 +525,16 @@ End
 		    print i;
 		  }
 		} 
+		// var a=[1,3,5];
+		// for (i in a) { print i; }
+		{
+		  var range= [1,3,5];
+		  var itera= range.makeIterator();
+		  var i;
+		  while (i= itera.next()) {
+		    print i;
+		  }
+		} 
 		  
 		  // rnd
 		  'Static r As Random

@@ -305,18 +305,25 @@ Protected Class Parser
 		    // var range__
 		    Dim varRange As Lox.Ast.VarStmt
 		    Dim varRangeName As New Token(TokenType.IDENTIFIER, "range__", Nil, name.Line)
-		    If True Then // fake scope
+		    If condition IsA Lox.Ast.RangeLiteral Then
 		      Dim varVari As New Lox.Ast.Variable(New Token(TokenType.IDENTIFIER, "Range", Nil, name.Line))
 		      Dim varAr() As Lox.Ast.Expr
-		      If condition IsA Lox.Ast.RangeLiteral Then
-		        Dim rangeLiteral As Lox.Ast.RangeLiteral= Lox.Ast.RangeLiteral(condition)
-		        varAr.Append rangeLiteral.From
+		      Dim rangeLiteral As Lox.Ast.RangeLiteral= Lox.Ast.RangeLiteral(condition)
+		      Dim from As Lox.Ast.Literal= Lox.Ast.Literal(rangeLiteral.From)
+		      Dim to_ As Lox.Ast.Literal= Lox.Ast.Literal(rangeLiteral.To_)
+		      
+		      varAr.Append rangeLiteral.From
+		      If rangeLiteral.Operator.TypeToken= TokenType.DOTDOT Then
 		        varAr.Append rangeLiteral.To_
+		      ElseIf to_.Value.DoubleValue> from.Value.DoubleValue Then
+		        varAr.Append New Lox.Ast.Literal(to_.Value.DoubleValue- 1)
 		      Else
-		        Break
+		        varAr.Append New Lox.Ast.Literal(to_.Value.DoubleValue+ 1)
 		      End If
 		      
 		      varRange= New Lox.Ast.VarStmt(varRangeName, New Lox.Ast.CallExpr(varVari, Nil, varAr))
+		    Else
+		      varRange= New Lox.Ast.VarStmt(varRangeName, condition)
 		    End If
 		    
 		    // var itera__

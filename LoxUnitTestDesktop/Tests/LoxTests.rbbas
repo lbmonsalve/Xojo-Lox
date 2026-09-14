@@ -181,6 +181,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ForInTest()
+		  DoRun kForInSnnipet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub FunctionsTest()
 		  DoRun kFunctionsSnnipet
 		End Sub
@@ -564,6 +570,9 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kFileSnnipet, Type = String, Dynamic = False, Default = \"var f1\x3D File(\"test1.txt\");\rf1.write(\"hello\");\rprint f1.length;\r\rvar txt\x3D f1.read();\r\rvar f2\x3D File(\"test2.txt\");\rf2.write(txt+ \" world\");\rprint f2.length;\r\r// expect: 5.0\r// expect: 11.0\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kForInSnnipet, Type = String, Dynamic = False, Default = \"for (i in 1..3) print i;\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\rvar a \x3D [3\x2C5\x2C7];\rfor (i in a) print i;\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r\rfor (i in Range(1\x2C 10\x2C 2)) print i;\r// expect: 1.0\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r// expect: 9.0", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kFunctionsSnnipet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6.0\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: nil\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1.0\rcounter(); // expect: 2.0", Scope = Private

@@ -32,6 +32,8 @@ for (var a = 1; a < 10; a++ ) {
   print a;
 }
 
+for (1 in 1..10) print i;
+
 // functions
 fun printSum(a, b) {
   print a + b;
