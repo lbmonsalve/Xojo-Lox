@@ -109,7 +109,7 @@ Inherits ConsoleApplication
 		  Dim source As String
 		  
 		  Do
-		    If Not multiLine Then StdOut.Write "> "
+		    If Not multiLine Then StdOut.Write "lox> "
 		    
 		    #if TargetWin32
 		      Dim line As String= Input.DefineEncoding(Encodings.DOSLatin1)._
