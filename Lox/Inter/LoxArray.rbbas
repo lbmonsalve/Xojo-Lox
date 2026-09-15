@@ -53,7 +53,7 @@ Inherits Lox.Inter.LoxClass
 		    Return Elements.Ubound= -1
 		  Case "length"
 		    Return Elements.Ubound+ 1
-		  Case "pop", "push", "each", "indexOf", "map", "deleteAt"
+		  Case "pop", "push", "each", "indexOf", "map", "reduce", "deleteAt"
 		    Return New Lox.Inter.LoxArrayMethods(name, Self)
 		  Case "makeIterator", "next"
 		    Return New Lox.Inter.LoxArrayMethods(name, Self)

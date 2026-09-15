@@ -23,7 +23,7 @@ Begin Window UnitTestWindow Implements Writeable
    Resizeable      =   True
    Title           =   "LoxUnitTest"
    Visible         =   True
-   Width           =   800
+   Width           =   900
    Begin TabPanel TabPanel1
       AutoDeactivate  =   True
       Bold            =   ""
@@ -53,7 +53,7 @@ Begin Window UnitTestWindow Implements Writeable
       Underline       =   ""
       Value           =   1
       Visible         =   True
-      Width           =   800
+      Width           =   900
       Begin UnitTestPanel UnitTestPanel1
          AcceptFocus     =   ""
          AcceptTabs      =   True
@@ -79,7 +79,7 @@ Begin Window UnitTestWindow Implements Writeable
          Top             =   38
          UseFocusRing    =   ""
          Visible         =   True
-         Width           =   770
+         Width           =   870
       End
       Begin PushButton PushButton1
          AutoDeactivate  =   True
@@ -118,7 +118,7 @@ Begin Window UnitTestWindow Implements Writeable
          AutoDeactivate  =   True
          AutomaticallyCheckSpelling=   False
          BackColor       =   &hFFFFFF
-         Bold            =   ""
+         Bold            =   False
          Border          =   True
          DataField       =   ""
          DataSource      =   ""
@@ -156,7 +156,7 @@ Begin Window UnitTestWindow Implements Writeable
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
-         Width           =   360
+         Width           =   476
       End
       Begin TextArea TextArea2
          AcceptTabs      =   ""
@@ -176,7 +176,7 @@ Begin Window UnitTestWindow Implements Writeable
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   420
+         Left            =   520
          LimitText       =   0
          LockBottom      =   True
          LockedInPosition=   False
@@ -217,7 +217,7 @@ Begin Window UnitTestWindow Implements Writeable
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   420
+         Left            =   520
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   False
@@ -276,7 +276,7 @@ Begin Window UnitTestWindow Implements Writeable
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
-         Width           =   268
+         Width           =   368
       End
       Begin PushButton PushButton3
          AutoDeactivate  =   True
@@ -291,7 +291,7 @@ Begin Window UnitTestWindow Implements Writeable
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   564
+         Left            =   664
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   False
@@ -322,7 +322,7 @@ Begin Window UnitTestWindow Implements Writeable
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   636
+         Left            =   736
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   False
@@ -353,7 +353,7 @@ Begin Window UnitTestWindow Implements Writeable
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   708
+         Left            =   808
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   False
@@ -369,7 +369,7 @@ Begin Window UnitTestWindow Implements Writeable
          Top             =   50
          Underline       =   ""
          Visible         =   True
-         Width           =   60
+         Width           =   72
       End
       Begin PushButton PushButton6
          AutoDeactivate  =   True
@@ -384,7 +384,7 @@ Begin Window UnitTestWindow Implements Writeable
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
-         Left            =   492
+         Left            =   592
          LockBottom      =   ""
          LockedInPosition=   False
          LockLeft        =   False
@@ -516,6 +516,14 @@ End
 
 	#tag Note, Name = Snnipets
 		
+		var a=[1,2,3];
+		var s=a.reduce(fun(acum,curr){
+		  return acum+= curr;
+		});
+		print s;
+		//a.each(fun(e){print e;});
+		
+		
 		// for (i in 1..10) print i;
 		{
 		  var range= Range(1, 10);
@@ -608,6 +616,17 @@ End
 		  Dim t As TextInputStream= TextInputStream.Open(f)
 		  TextArea1.Text= t.ReadAll
 		  TextField1.Text= f.DisplayName
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events TextArea1
+	#tag Event
+		Sub Open()
+		  #if TargetWin32
+		    Me.TextFont= "Consolas"
+		  #elseif TargetMacOS
+		    Me.TextFont= "Menlo"
+		  #endif
 		End Sub
 	#tag EndEvent
 #tag EndEvents

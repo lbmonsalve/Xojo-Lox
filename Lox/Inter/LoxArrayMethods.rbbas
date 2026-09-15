@@ -21,8 +21,6 @@ Implements ICallable
 		        elems.Append arg
 		      Next
 		      Return arr
-		    Case "each"
-		      Return DoEach(inter, args, tok)
 		    Case "indexOf"
 		      'Return Owner.Elements.IndexOf(args(0))
 		      Dim elems() As Variant= Owner.Elements
@@ -35,8 +33,12 @@ Implements ICallable
 		        End If
 		      Next
 		      Return idxFound
+		    Case "each"
+		      Return DoEach(inter, args, tok)
 		    Case "map"
 		      Return DoMap(inter, args, tok)
+		    Case "reduce"
+		      Return DoReduce(inter, args, tok)
 		    Case "deleteAt"
 		      Dim elem As Variant= Owner.Elements(args(0))
 		      Owner.Elements.Remove args(0)
@@ -136,6 +138,26 @@ Implements ICallable
 		  Next
 		  
 		  Return New Lox.Inter.LoxArray(result)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function DoReduce(inter As Interpreter, args() As Variant, tok As Token) As Variant
+		  // Check that `func` is invokable.
+		  If Not args(0).IsCallableLox Then
+		    Raise New RuntimeError(tok, "Expected an callable operand")
+		  End If
+		  
+		  Dim func As Lox.Inter.ICallable= args(0)
+		  Dim funcArgs(1) As Variant, result As Variant= 0
+		  
+		  For i As Integer= 0 To Owner.Elements.Ubound
+		    funcArgs(0)= result
+		    funcArgs(1)= Owner.Elements(i)
+		    result= func.Call_(inter, funcArgs, tok)
+		  Next
+		  
+		  Return result
 		End Function
 	#tag EndMethod
 
