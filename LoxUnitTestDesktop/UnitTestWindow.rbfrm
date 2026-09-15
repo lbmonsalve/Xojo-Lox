@@ -514,7 +514,18 @@ End
 	#tag EndMethod
 
 
-	#tag Note, Name = Snnipets
+	#tag Note, Name = Snippets
+		
+		var a= Array(10);
+		var i= 0;
+		for (; i< 10; i++) {
+		  a[i]= i*2;
+		  print "a[${i}]= ${a[i]}";
+		}
+		
+		//for (i in 0..9) a[i]= 1;
+		//a.each(fun (e) {print e;});
+		
 		
 		var a=[1,2,3];
 		var s=a.reduce(fun(acum,curr){

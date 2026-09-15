@@ -43,8 +43,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Sub resolve(expr As Lox.Ast.Expr)
+	#tag Method, Flags = &h0
+		Sub Resolve(expr As Lox.Ast.Expr)
 		  Call expr.Accept Self
 		  
 		Exception exc As RuntimeError
@@ -61,8 +61,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Sub resolve(stmt As Lox.Ast.Stmt)
+	#tag Method, Flags = &h0
+		Sub Resolve(stmt As Lox.Ast.Stmt)
 		  Call stmt.Accept Self
 		  
 		Exception exc As RuntimeError
@@ -103,6 +103,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function VisitArrayAssign(expr As Lox.Ast.ArrayAssign) As Variant
 		  resolve expr.Value
+		  resolve expr.Index
 		  resolveLocal expr, expr.Name
 		End Function
 	#tag EndMethod
@@ -283,6 +284,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 	#tag Method, Flags = &h0
 		Function VisitHashMapAssign(expr As Lox.Ast.HashMapAssign) As Variant
 		  resolve expr.Value
+		  resolve expr.Key
 		  resolveLocal expr, expr.Name
 		End Function
 	#tag EndMethod

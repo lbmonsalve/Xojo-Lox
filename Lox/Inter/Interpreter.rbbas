@@ -241,7 +241,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Dim assignee As LoxArray
 		  
 		  // Get the array we are assigning to.
-		  Dim distance As Integer= mLocals.Lookup(expr, -1)
+		  Dim distance As Integer= mLocals.Lookup(expr.Name, -1)
 		  If distance= -1 Then // Global variable.
 		    assigneeVariant= Globals.Get(expr.Name)
 		  Else // Locally scoped variable.
