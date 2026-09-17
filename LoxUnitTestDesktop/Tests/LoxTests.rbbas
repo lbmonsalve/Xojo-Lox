@@ -10,53 +10,59 @@ Inherits TestGroup
 
 
 	#tag Method, Flags = &h0
+		Sub ArrayEachTest()
+		  DoRun kArrayEachSnippet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub ArraysTest()
-		  DoRun kArraysSnnipet
+		  DoRun kArraysSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub BitwiseTest()
-		  DoRun kBitwiseSnnipet
+		  DoRun kBitwiseSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub BreakTest()
-		  DoRun kBreakSnnipet
+		  DoRun kBreakSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub CommentTest()
-		  DoRun kCommentSnnipet
+		  DoRun kCommentSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub CompoundAssignmentOperatorsTest()
-		  DoRun kCompoundSnnipet
+		  DoRun kCompoundSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ContinueTest()
-		  DoRun kContinueSnnipet
+		  DoRun kContinueSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub DateTimeTest()
-		  DoRun kDatetimeSnnipet
+		  DoRun kDatetimeSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub DoRun(snnipet As String)
+		Private Sub DoRun(Snippet As String)
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
-		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim scanner As New Lox.Scanner(Snippet)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
@@ -67,7 +73,7 @@ Inherits TestGroup
 		  
 		  Lox.Interpreter.Interpret(statements)
 		  
-		  Dim expect() As String= GetExpect(snnipet)
+		  Dim expect() As String= GetExpect(Snippet)
 		  Dim actual() As String= Split(BufferPrint, EndOfLine)
 		  If actual.Ubound> -1 Then
 		    actual.Remove actual.Ubound
@@ -81,19 +87,19 @@ Inherits TestGroup
 		Sub ElvisTest()
 		  // https://github.com/sravand123/TinkerScript.git
 		  
-		  DoRun kElvisSnnipet
+		  DoRun kElvisSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ExtendIdNamesTest()
 		  // emoji friendly!
-		  Dim snnipet As String= kExtendIdSnnipet.ReplaceAll("$emoji$", Encodings.UTF8.Chr(&h1f600))
+		  Dim Snippet As String= kExtendIdSnippet.ReplaceAll("$emoji$", Encodings.UTF8.Chr(&h1f600))
 		  
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
-		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim scanner As New Lox.Scanner(Snippet)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
@@ -104,7 +110,7 @@ Inherits TestGroup
 		  
 		  Lox.Interpreter.Interpret(statements)
 		  
-		  Dim expect() As String= GetExpect(snnipet)
+		  Dim expect() As String= GetExpect(Snippet)
 		  Dim actual() As String= Split(BufferPrint, EndOfLine)
 		  If actual.Ubound> -1 Then
 		    actual.Remove actual.Ubound
@@ -116,7 +122,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub FileTest()
-		  DoRun kFileSnnipet
+		  DoRun kFileSnippet
 		End Sub
 	#tag EndMethod
 
@@ -182,13 +188,13 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub ForInTest()
-		  DoRun kForInSnnipet
+		  DoRun kForInSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub FunctionsTest()
-		  DoRun kFunctionsSnnipet
+		  DoRun kFunctionsSnippet
 		End Sub
 	#tag EndMethod
 
@@ -249,19 +255,19 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub HashMapsTest()
-		  DoRun kHashMapSnnipet
+		  DoRun kHashMapSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub IfOrElseTest()
-		  DoRun kIfOrElseSnnipet
+		  DoRun kIfOrElseSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ImportTest()
-		  DoRun kImportSnnipet
+		  DoRun kImportSnippet
 		End Sub
 	#tag EndMethod
 
@@ -359,13 +365,13 @@ Inherits TestGroup
 		Sub LamdaTest()
 		  // https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter10_functions.md
 		  
-		  DoRun kLamdaSnnipet
+		  DoRun kLamdaSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub MathTest()
-		  DoRun kMathSnnipets
+		  DoRun kMathSnippets
 		End Sub
 	#tag EndMethod
 
@@ -373,30 +379,30 @@ Inherits TestGroup
 		Sub ModuleTest()
 		  // https://github.com/gkjpettet/roo
 		  
-		  DoRun kModuleSnnipet
+		  DoRun kModuleSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub PostfixExprTest()
-		  DoRun kPostfixSnnipet
+		  DoRun kPostfixSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub PrefixedNumbersTest()
-		  DoRun kPrefixedNumberSnnipet
+		  DoRun kPrefixedNumberSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub RandomTest()
-		  Dim snnipet As String= kRandom
+		  Dim Snippet As String= kRandom
 		  
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
-		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim scanner As New Lox.Scanner(Snippet)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
@@ -414,7 +420,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub RegExTest()
-		  DoRun kRegExSnnipet
+		  DoRun kRegExSnippet
 		End Sub
 	#tag EndMethod
 
@@ -454,7 +460,7 @@ Inherits TestGroup
 		Sub StaticMethodTest()
 		  // https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter12_classes.md
 		  
-		  DoRun kStaticMethodsSnnipet
+		  DoRun kStaticMethodsSnippet
 		End Sub
 	#tag EndMethod
 
@@ -466,18 +472,18 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub StringInterpolationTest()
-		  DoRun kStringInterpolationSnnipet
+		  DoRun kStringInterpolationSnippet
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub StringRawTest()
-		  Dim snnipet As String= kStringRaw
+		  Dim Snippet As String= kStringRaw
 		  
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
-		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim scanner As New Lox.Scanner(Snippet)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
@@ -496,12 +502,12 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub TernaryTest()
-		  Dim snnipet As String= "var a=1; var b=2; var c=a>b?1:2; print c;"
+		  Dim Snippet As String= "var a=1; var b=2; var c=a>b?1:2; print c;"
 		  
 		  BufferPrint= ""
 		  Lox.Interpreter.Reset
 		  
-		  Dim scanner As New Lox.Scanner(snnipet)
+		  Dim scanner As New Lox.Scanner(Snippet)
 		  Dim tokens() As Lox.Token= scanner.Scan
 		  
 		  Dim parser As New Lox.Parser(tokens)
@@ -517,9 +523,9 @@ Inherits TestGroup
 		  
 		  BufferPrint= ""
 		  
-		  snnipet= "var c=a<b?1:2; print c;"
+		  Snippet= "var c=a<b?1:2; print c;"
 		  
-		  scanner= New Lox.Scanner(snnipet)
+		  scanner= New Lox.Scanner(Snippet)
 		  parser= New Lox.Parser(scanner.Scan)
 		  statements= parser.Parse
 		  'resolver= New Lox.Inter.Resolver(Lox.Interpreter)
@@ -534,7 +540,7 @@ Inherits TestGroup
 
 	#tag Method, Flags = &h0
 		Sub TextTest()
-		  DoRun kTextSnnipet
+		  DoRun kTextSnippet
 		End Sub
 	#tag EndMethod
 
@@ -548,82 +554,85 @@ Inherits TestGroup
 	#tag EndProperty
 
 
-	#tag Constant, Name = kArraysSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D[1\x2C2\x2C3];\rprint a.length; // expect: 3.0\rprint a.empty; // expect: false\rprint a[1]; // expect: 2.0\ra[0]\x3D4;\rprint a[0]; // expect: 4.0\r\rvar b\x3D[];\rprint b.length; // expect: 0.0\r\rvar foo\x3D [\"a\"\x2C \"b\"\x2C \"c\"];\rprint foo[2]; // // expect: c\r\rvar foo \x3D [1\x2C 1 + 1];\rprint foo; // expect: <class Array>\rprint foo[1]; // expect: 2.0\r\rfun add(a\x2Cb) { return a+ b; }\rprint foo[add(0\x2C 1)]; // expect: 2.0\r\r// pop\rvar c\x3D[4\x2C5\x2C6];\rvar elem\x3D c.pop();\rprint elem; // expect: 6.0\rprint c.length; // expect: 2.0\r\r// push\rvar b\x3D a.push(4\x2C5);\rprint a.length; // expect: 3.0\rprint b.length; // expect: 5.0\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"\x2C 1];\ra.each(fun (e) {\r  print \"<\"+ e+ \">\";\r});\r\r// expect: <a>\r// expect: <b>\r// expect: <c>\r// expect: <d>\r// expect: <1.0>\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\rvar find\x3D a.indexOf(\"c\");\rprint find; // expect: 2.0\r\r\rfun echo(e) { print e;}\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\ra.each(echo);\r\rvar b\x3D a.map(fun (e) { return e+ \"!\";});\rprint b.length;\rb.each(echo);\r\r// expect: a\r// expect: b\r// expect: c\r// expect: d\r\r// expect: 4.0\r// expect: a!\r// expect: b!\r// expect: c!\r// expect: d!\r\rvar a\x3D[11\x2C22\x2C33];\rvar s\x3Da.reduce(fun(acum\x2Ccurr){\r  return acum+\x3D curr;\r});\rprint s;\r\r// expect: 66.0\r", Scope = Private
+	#tag Constant, Name = kArrayEachSnippet, Type = String, Dynamic = False, Default = \"var a\x3D Array(10);\r\rfor (var i\x3D 0; i<\x3D 10; i++) a[i]\x3D (i+1)*2;\r\ra.each(fun (e) {print e;});\r\r// expect: 2.0\r// expect: 4.0\r// expect: 6.0\r// expect: 8.0\r// expect: 10.0\r// expect: 12.0\r// expect: 14.0\r// expect: 16.0\r// expect: 18.0\r// expect: 20.0\r// expect: 22.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kBitwiseSnnipet, Type = String, Dynamic = False, Default = \"print 7 & 5;\rprint 7 | 5;\rprint 7 << 2;\rprint 40 >> 2;\r\r // expect: 5.0\r // expect: 7.0\r // expect: 28.0\r // expect: 10.0\r", Scope = Private
+	#tag Constant, Name = kArraysSnippet, Type = String, Dynamic = False, Default = \"var a\x3D[1\x2C2\x2C3];\rprint a.length; // expect: 3.0\rprint a.empty; // expect: false\rprint a[1]; // expect: 2.0\ra[0]\x3D4;\rprint a[0]; // expect: 4.0\r\rvar b\x3D[];\rprint b.length; // expect: 0.0\r\rvar foo\x3D [\"a\"\x2C \"b\"\x2C \"c\"];\rprint foo[2]; // // expect: c\r\rvar foo \x3D [1\x2C 1 + 1];\rprint foo; // expect: <class Array>\rprint foo[1]; // expect: 2.0\r\rfun add(a\x2Cb) { return a+ b; }\rprint foo[add(0\x2C 1)]; // expect: 2.0\r\r// pop\rvar c\x3D[4\x2C5\x2C6];\rvar elem\x3D c.pop();\rprint elem; // expect: 6.0\rprint c.length; // expect: 2.0\r\r// push\rvar b\x3D a.push(4\x2C5);\rprint a.length; // expect: 3.0\rprint b.length; // expect: 5.0\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"\x2C 1];\ra.each(fun (e) {\r  print \"<\"+ e+ \">\";\r});\r\r// expect: <a>\r// expect: <b>\r// expect: <c>\r// expect: <d>\r// expect: <1.0>\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\rvar find\x3D a.indexOf(\"c\");\rprint find; // expect: 2.0\r\r\rfun echo(e) { print e;}\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\ra.each(echo);\r\rvar b\x3D a.map(fun (e) { return e+ \"!\";});\rprint b.length;\rb.each(echo);\r\r// expect: a\r// expect: b\r// expect: c\r// expect: d\r\r// expect: 4.0\r// expect: a!\r// expect: b!\r// expect: c!\r// expect: d!\r\rvar a\x3D[11\x2C22\x2C33];\rvar s\x3Da.reduce(fun(acum\x2Ccurr){\r  return acum+\x3D curr;\r});\rprint s;\r\r// expect: 66.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kBreakSnnipet, Type = String, Dynamic = False, Default = \"var bb\x3D0;\rwhile (true) {\r  if (bb\x3D10) break;\r  bb++;\r}\rprint bb; // expect: 10.0", Scope = Private
+	#tag Constant, Name = kBitwiseSnippet, Type = String, Dynamic = False, Default = \"print 7 & 5;\rprint 7 | 5;\rprint 7 << 2;\rprint 40 >> 2;\r\r // expect: 5.0\r // expect: 7.0\r // expect: 28.0\r // expect: 10.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kCommentSnnipet, Type = String, Dynamic = False, Default = \"// line comments:\rvar n\x3D 9_999_999.91_91; // can use _ in numbers\rprint n; // expect: 9999999.9191\r\r// block comments:\r  \r/*\rvar nn\x3D 0xbebe_Cafe; // using _ in hex prefix literals\rprint nn;\r  \rvar a\x3D[1.1\x2C2.2\x2C3.3\x2C4.4];\ra.each(fun /* comment! */ (e) { print e; }); // nested comments!!\r*/\r\rn\x3D 0xbebe_Cafe; print n; // expect: 3200174846.0\rn\x3D 0o10_56; print n; // expect: 558.0\rn\x3D 0b11_10_00_10; print n; // expect: 226.0\r\r", Scope = Private
+	#tag Constant, Name = kBreakSnippet, Type = String, Dynamic = False, Default = \"var bb\x3D0;\rwhile (true) {\r  if (bb\x3D10) break;\r  bb++;\r}\rprint bb; // expect: 10.0", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kCompoundSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D5;\ra+\x3D5;\rprint a; // expect: 10.0\ra-\x3D3;\rprint a; // expect: 7.0\ra*\x3D5;\rprint a; // expect: 35.0\ra/\x3D2;\rprint a; // expect: 17.5", Scope = Private
+	#tag Constant, Name = kCommentSnippet, Type = String, Dynamic = False, Default = \"// line comments:\rvar n\x3D 9_999_999.91_91; // can use _ in numbers\rprint n; // expect: 9999999.9191\r\r// block comments:\r  \r/*\rvar nn\x3D 0xbebe_Cafe; // using _ in hex prefix literals\rprint nn;\r  \rvar a\x3D[1.1\x2C2.2\x2C3.3\x2C4.4];\ra.each(fun /* comment! */ (e) { print e; }); // nested comments!!\r*/\r\rn\x3D 0xbebe_Cafe; print n; // expect: 3200174846.0\rn\x3D 0o10_56; print n; // expect: 558.0\rn\x3D 0b11_10_00_10; print n; // expect: 226.0\r\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kContinueSnnipet, Type = String, Dynamic = False, Default = \"var a \x3D 0;\rwhile (a < 10) {\r  a \x3D a + 1;\r  if (a\x3D\x3D 6) continue;\r  print a;\r}\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r// expect: 4.0\r// expect: 5.0\r// expect: 7.0\r// expect: 8.0\r// expect: 9.0\r// expect: 10.0\r", Scope = Private
+	#tag Constant, Name = kCompoundSnippet, Type = String, Dynamic = False, Default = \"var a\x3D5;\ra+\x3D5;\rprint a; // expect: 10.0\ra-\x3D3;\rprint a; // expect: 7.0\ra*\x3D5;\rprint a; // expect: 35.0\ra/\x3D2;\rprint a; // expect: 17.5", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kDatetimeSnnipet, Type = String, Dynamic = False, Default = \"var d\x3D DateTime();\r\rd\x3D DateTime(2000\x2C 1\x2C 1);\rprint d.year;\rprint d.month;\rprint d.day;\rprint d.SQLDatetime;\r\r// expect: 2000.0\r// expect: 1.0\r// expect: 1.0\r// expect: 2000-01-01 00:00:00", Scope = Private
+	#tag Constant, Name = kContinueSnippet, Type = String, Dynamic = False, Default = \"var a \x3D 0;\rwhile (a < 10) {\r  a \x3D a + 1;\r  if (a\x3D\x3D 6) continue;\r  print a;\r}\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r// expect: 4.0\r// expect: 5.0\r// expect: 7.0\r// expect: 8.0\r// expect: 9.0\r// expect: 10.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kElvisSnnipet, Type = String, Dynamic = False, Default = \"var elvis \x3D true \?: false;\rprint elvis; // expect: true\rvar elvis2 \x3D false \?: true;\rprint elvis2; // expect: true\relvis\x3D false\?:false\?:true;\rprint elvis; // expect: true\r\rprint false\?.true; // expect: true\rprint nil\?.true; // expect: nil\rprint true\?.nil\?.false\?.true; // expect: nil\r\rprint (true\?.nil\?.false\?.true)\?:\"default\"; // expect: default\r", Scope = Private
+	#tag Constant, Name = kDatetimeSnippet, Type = String, Dynamic = False, Default = \"var d\x3D DateTime();\r\rd\x3D DateTime(2000\x2C 1\x2C 1);\rprint d.year;\rprint d.month;\rprint d.day;\rprint d.SQLDatetime;\r\r// expect: 2000.0\r// expect: 1.0\r// expect: 1.0\r// expect: 2000-01-01 00:00:00", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kExtendIdSnnipet, Type = String, Dynamic = False, Default = \"var a\xC3\xB1o\x3D2024; print a\xC3\xB1o; // expect: 2024.0\rvar \xCE\xA3\x3D \"sigma\"; print \xCE\xA3; // expect: sigma\rvar $emoji$\x3D \"smileyface\";\rprint $emoji$; // expect: smileyface", Scope = Private
+	#tag Constant, Name = kElvisSnippet, Type = String, Dynamic = False, Default = \"var elvis \x3D true \?: false;\rprint elvis; // expect: true\rvar elvis2 \x3D false \?: true;\rprint elvis2; // expect: true\relvis\x3D false\?:false\?:true;\rprint elvis; // expect: true\r\rprint false\?.true; // expect: true\rprint nil\?.true; // expect: nil\rprint true\?.nil\?.false\?.true; // expect: nil\r\rprint (true\?.nil\?.false\?.true)\?:\"default\"; // expect: default\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kFileSnnipet, Type = String, Dynamic = False, Default = \"var f1\x3D File(\"test1.txt\");\rf1.write(\"hello\");\rprint f1.length;\r\rvar txt\x3D f1.read();\r\rvar f2\x3D File(\"test2.txt\");\rf2.write(txt+ \" world\");\rprint f2.length;\r\r// expect: 5.0\r// expect: 11.0\r", Scope = Private
+	#tag Constant, Name = kExtendIdSnippet, Type = String, Dynamic = False, Default = \"var a\xC3\xB1o\x3D2024; print a\xC3\xB1o; // expect: 2024.0\rvar \xCE\xA3\x3D \"sigma\"; print \xCE\xA3; // expect: sigma\rvar $emoji$\x3D \"smileyface\";\rprint $emoji$; // expect: smileyface", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kForInSnnipet, Type = String, Dynamic = False, Default = \"for (i in 1..3) print i;\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\rvar a \x3D [3\x2C5\x2C7];\rfor (i in a) print i;\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r\rfor (i in Range(1\x2C 10\x2C 2)) print i;\r// expect: 1.0\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r// expect: 9.0\r\rfor (i in 1.<3) print i;\r// expect: 1.0\r// expect: 2.0\r\rfor (i in 7.<3) print i;\r// expect: 7.0\r// expect: 6.0\r// expect: 5.0\r// expect: 4.0\r", Scope = Private
+	#tag Constant, Name = kFileSnippet, Type = String, Dynamic = False, Default = \"var f1\x3D File(\"test1.txt\");\rf1.write(\"hello\");\rprint f1.length;\r\rvar txt\x3D f1.read();\r\rvar f2\x3D File(\"test2.txt\");\rf2.write(txt+ \" world\");\rprint f2.length;\r\r// expect: 5.0\r// expect: 11.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kFunctionsSnnipet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6.0\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: nil\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1.0\rcounter(); // expect: 2.0", Scope = Private
+	#tag Constant, Name = kForInSnippet, Type = String, Dynamic = False, Default = \"for (i in 1..3) print i;\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\rvar a \x3D [3\x2C5\x2C7];\rfor (i in a) print i;\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r\rfor (i in Range(1\x2C 10\x2C 2)) print i;\r// expect: 1.0\r// expect: 3.0\r// expect: 5.0\r// expect: 7.0\r// expect: 9.0\r\rfor (i in 1.<3) print i;\r// expect: 1.0\r// expect: 2.0\r\rfor (i in 7.<3) print i;\r// expect: 7.0\r// expect: 6.0\r// expect: 5.0\r// expect: 4.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kHashMapSnnipet, Type = String, Dynamic = False, Default = \"var hm\x3D {\"a\":1\x2C\"b\":2\x2C \"c\":100};\rprint hm{\"b\"}; // expect: 2.0\r\rhm{\"a\"}\x3D 3;\rprint hm{\"a\"}; // expect: 3.0\r\rvar a\x3D hm.delete(\"a\");\r\rprint a; // expect: 3.0\rprint hm.length; // expect: 2.0\r\rprint hm.value(\"b\"); // expect: 2.0\rprint hm.value(\"c\"); // expect: 100.0\rprint hm.value(\"d\"); // expect: nil\r\rhm.put(1\x2C 200);\r\rvar one\x3D hm.value(1);\rprint one; // expect: 200.0\r\rhm.each(fun (k\x2Cv) { print k; print v; });\r\r// expect: c\r// expect: 100.0\r// expect: b\r// expect: 2.0\r// expect: 1.0\r// expect: 200.0", Scope = Private
+	#tag Constant, Name = kFunctionsSnippet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6.0\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: nil\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1.0\rcounter(); // expect: 2.0", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kIfOrElseSnnipet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private
+	#tag Constant, Name = kHashMapSnippet, Type = String, Dynamic = False, Default = \"var hm\x3D {\"a\":1\x2C\"b\":2\x2C \"c\":100};\rprint hm{\"b\"}; // expect: 2.0\r\rhm{\"a\"}\x3D 3;\rprint hm{\"a\"}; // expect: 3.0\r\rvar a\x3D hm.delete(\"a\");\r\rprint a; // expect: 3.0\rprint hm.length; // expect: 2.0\r\rprint hm.value(\"b\"); // expect: 2.0\rprint hm.value(\"c\"); // expect: 100.0\rprint hm.value(\"d\"); // expect: nil\r\rhm.put(1\x2C 200);\r\rvar one\x3D hm.value(1);\rprint one; // expect: 200.0\r\rhm.each(fun (k\x2Cv) { print k; print v; });\r\r// expect: c\r// expect: 100.0\r// expect: b\r// expect: 2.0\r// expect: 1.0\r// expect: 200.0", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kImportSnnipet, Type = String, Dynamic = False, Default = \"import \"a\";\r\r// expect: a.lox\r// expect: b.lox\r", Scope = Private
+	#tag Constant, Name = kIfOrElseSnippet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kLamdaSnnipet, Type = String, Dynamic = False, Default = \"// https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter10_functions.md\r\rfun whichFn(fn) {\r  fn(\"world\");\r}\r\rwhichFn(fun (a) {\r print \"hello \"+ a; // expect: hello world\r});\r\rfun named(a) { print a; }\rwhichFn(named);\r\r// expect: world\r\rfun whichFn(fn) {\r  for (var i \x3D 1; i <\x3D 3; i \x3D i + 1) {\r    fn(i);\r  }\r}\r\rwhichFn(fun (a) { print a; });\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r", Scope = Private
+	#tag Constant, Name = kImportSnippet, Type = String, Dynamic = False, Default = \"import \"a\";\r\r// expect: a.lox\r// expect: b.lox\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kMathSnnipets, Type = String, Dynamic = False, Default = \"print Math.abs(23.9); // expect: 23.9\r\rprint Math.abs(-23.9); // expect: 23.9\r\rprint Math.acos(0.5); // expect: 60.0\r\rprint Math.asin(0.5); // expect: 30.0\r\rprint Math.atan(1); // expect: 45.0\r\rprint Math.atan2(1\x2C0); // expect: 90.0\r\rprint Math.bin(15); // expect: 1111\rprint Math.bin(75); // expect: 1001011\rprint Math.bin(0xf); // expect: 1111\r\rprint Math.cdbl(\"12345\"); // expect: 12345.0\r//print Math.cdbl(\"12345.6789\"); // depends op system\r\rprint Math.ceil(1.234*100)/100; // expect: 1.24\r\rprint Math.cos(45); // expect: 0.707107\r\rprint Math.exp(10); // expect: 22026.465795\r\rprint Math.floor(1.234); // expect: 1.0\r\rprint Math.hex(5); // expect: 5\rprint Math.hex(75); // expect: 4B\rprint Math.hex(256); // expect: 100\r\rprint Math.log(10); // expect: 2.302585\r\rprint Math.max(3.01\x2C 4.05); // expect: 4.05\rprint Math.min(3.01\x2C 4.05); // expect: 3.01\r\rprint Math.oct(5); // expect: 5\rprint Math.oct(75); // expect: 113\rprint Math.oct(256); // expect: 400\r\rprint Math.pow(4\x2C7); // expect: 16384.0\r\rprint Math.round(1.499); // expect: 1.0\rprint Math.round(1.5); // expect: 2.0\r\rprint Math.sin(30); // expect: 0.5\r\rprint Math.sqrt(16); // expect: 4.0\r\rprint Math.tan(45); // expect: 1.0\r\rprint Math.val(\"12345\"); // expect: 12345.0\rprint Math.val(\"12345car45\"); // expect: 12345.0\rprint Math.val(\"123.45\"); // expect: 123.45\rprint Math.val(\"123 45\"); // expect: 123.0\rprint Math.val(\"car\"); // expect: 0.0\r\rprint Math.str(0); // expect: 0\rprint Math.str(12345); // expect: 12345\rprint Math.str(12345.67); // expect: 12345.67\rprint Math.str(12345.67\x2C \"###\x2C###.##\"); // expect: 12\x2C345.67\rprint Math.str(-12345.67\x2C \"###\x2C###.##\"); // expect: 12\x2C345.67\rprint Math.str(-12345.67\x2C \"-###\x2C###.##\"); // expect: -12\x2C345.67", Scope = Private
+	#tag Constant, Name = kLamdaSnippet, Type = String, Dynamic = False, Default = \"// https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter10_functions.md\r\rfun whichFn(fn) {\r  fn(\"world\");\r}\r\rwhichFn(fun (a) {\r print \"hello \"+ a; // expect: hello world\r});\r\rfun named(a) { print a; }\rwhichFn(named);\r\r// expect: world\r\rfun whichFn(fn) {\r  for (var i \x3D 1; i <\x3D 3; i \x3D i + 1) {\r    fn(i);\r  }\r}\r\rwhichFn(fun (a) { print a; });\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kModuleSnnipet, Type = String, Dynamic = False, Default = \"module M {\r  class C {\r    parse(cc) {print cc;}\r  }\r  fun F() {print \"hello\";}\r  fun hello() {return \"hello!\";}\r}\rM.hello2\x3D \"hello2\";\r\rM.F();\rvar a\x3D M.C();\ra.parse(\"b\");\r\rvar hello\x3D M.hello();\rprint hello;\rprint M.hello2;\r\r// expect: hello\r// expect: b\r// expect: hello!\r// expect: hello2\r\r", Scope = Private
+	#tag Constant, Name = kMathSnippets, Type = String, Dynamic = False, Default = \"print Math.abs(23.9); // expect: 23.9\r\rprint Math.abs(-23.9); // expect: 23.9\r\rprint Math.acos(0.5); // expect: 60.0\r\rprint Math.asin(0.5); // expect: 30.0\r\rprint Math.atan(1); // expect: 45.0\r\rprint Math.atan2(1\x2C0); // expect: 90.0\r\rprint Math.bin(15); // expect: 1111\rprint Math.bin(75); // expect: 1001011\rprint Math.bin(0xf); // expect: 1111\r\rprint Math.cdbl(\"12345\"); // expect: 12345.0\r//print Math.cdbl(\"12345.6789\"); // depends op system\r\rprint Math.ceil(1.234*100)/100; // expect: 1.24\r\rprint Math.cos(45); // expect: 0.707107\r\rprint Math.exp(10); // expect: 22026.465795\r\rprint Math.floor(1.234); // expect: 1.0\r\rprint Math.hex(5); // expect: 5\rprint Math.hex(75); // expect: 4B\rprint Math.hex(256); // expect: 100\r\rprint Math.log(10); // expect: 2.302585\r\rprint Math.max(3.01\x2C 4.05); // expect: 4.05\rprint Math.min(3.01\x2C 4.05); // expect: 3.01\r\rprint Math.oct(5); // expect: 5\rprint Math.oct(75); // expect: 113\rprint Math.oct(256); // expect: 400\r\rprint Math.pow(4\x2C7); // expect: 16384.0\r\rprint Math.round(1.499); // expect: 1.0\rprint Math.round(1.5); // expect: 2.0\r\rprint Math.sin(30); // expect: 0.5\r\rprint Math.sqrt(16); // expect: 4.0\r\rprint Math.tan(45); // expect: 1.0\r\rprint Math.val(\"12345\"); // expect: 12345.0\rprint Math.val(\"12345car45\"); // expect: 12345.0\rprint Math.val(\"123.45\"); // expect: 123.45\rprint Math.val(\"123 45\"); // expect: 123.0\rprint Math.val(\"car\"); // expect: 0.0\r\rprint Math.str(0); // expect: 0\rprint Math.str(12345); // expect: 12345\rprint Math.str(12345.67); // expect: 12345.67\rprint Math.str(12345.67\x2C \"###\x2C###.##\"); // expect: 12\x2C345.67\rprint Math.str(-12345.67\x2C \"###\x2C###.##\"); // expect: 12\x2C345.67\rprint Math.str(-12345.67\x2C \"-###\x2C###.##\"); // expect: -12\x2C345.67", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kPostfixSnnipet, Type = String, Dynamic = False, Default = \"var a\x3D5;\rvar b\x3D a++;\rprint a; // expect: 6.0\rprint b; // expect: 5.0\r{\r  var a\x3D10;\r  var b\x3D a++;\r  print a; // expect: 11.0\r  print b; // expect: 10.0\r}\r\rvar c\x3D b--;\rprint c; // expect: 5.0\rprint b; // expect: 4.0\r", Scope = Private
+	#tag Constant, Name = kModuleSnippet, Type = String, Dynamic = False, Default = \"module M {\r  class C {\r    parse(cc) {print cc;}\r  }\r  fun F() {print \"hello\";}\r  fun hello() {return \"hello!\";}\r}\rM.hello2\x3D \"hello2\";\r\rM.F();\rvar a\x3D M.C();\ra.parse(\"b\");\r\rvar hello\x3D M.hello();\rprint hello;\rprint M.hello2;\r\r// expect: hello\r// expect: b\r// expect: hello!\r// expect: hello2\r\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kPrefixedNumberSnnipet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0\r\rh\x3D0x1a2b3c4d5e6f;\rprint h; // expect: 28772997619311.0", Scope = Private
+	#tag Constant, Name = kPostfixSnippet, Type = String, Dynamic = False, Default = \"var a\x3D5;\rvar b\x3D a++;\rprint a; // expect: 6.0\rprint b; // expect: 5.0\r{\r  var a\x3D10;\r  var b\x3D a++;\r  print a; // expect: 11.0\r  print b; // expect: 10.0\r}\r\rvar c\x3D b--;\rprint c; // expect: 5.0\rprint b; // expect: 4.0\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kPrefixedNumberSnippet, Type = String, Dynamic = False, Default = \"var h\x3D0x2324; \rvar o\x3D0o1056; \rvar b\x3D0b1110;\rprint h; // expect: 8996.0\rprint o; // expect: 558.0\rprint b; // expect: 14.0\r\rh\x3D0x1a2b3c4d5e6f;\rprint h; // expect: 28772997619311.0", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kRandom, Type = String, Dynamic = False, Default = \"var r\x3DRandom();\r\rprint r.next();\rprint r.number();\rprint r.float();\rprint r.float(0\x2C 5);\rprint r.int(1\x2C100);\r\rprint \"array:\";\r\rvar a\x3D[1\x2C2\x2C3\x2C4\x2C5\x2C6];\r\rprint r.sample(a);\r\rr.shuffle(a);\ra.each(fun (e) { print e; });\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kRegExSnnipet, Type = String, Dynamic = False, Default = \"var r\x3D RegEx(\"\\d+\");\rprint r.caseSensitive; // expect: false\rprint r.greedy; // expect: true\rr.match(\"10\").each(fun (e) { print e;}); // expect: 10\rprint r.match(\"rr\"); // expect: nil\r\rr.match(\"rr\")\?.each(fun (e) { print e; }); // nothing", Scope = Private
+	#tag Constant, Name = kRegExSnippet, Type = String, Dynamic = False, Default = \"var r\x3D RegEx(\"\\d+\");\rprint r.caseSensitive; // expect: false\rprint r.greedy; // expect: true\rr.match(\"10\").each(fun (e) { print e;}); // expect: 10\rprint r.match(\"rr\"); // expect: nil\r\rr.match(\"rr\")\?.each(fun (e) { print e; }); // nothing", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kSequenceProtocol, Type = String, Dynamic = False, Default = \"// sequence protocol:\r// makeIterator() returns iterator with next()\r\rclass Foo {\r  init(count) {\r    this.count\x3D count;\r  }\r\r  // generate its own iterator\r  makeIterator() { return this; }\r\r  // called for-in loop\r  next() {\r    if (this.count\x3D\x3D 0) {\r      return nil;\r    } else {\r      var curr\x3D this.count;\r      this.count-\x3D 1;\r      return curr;\r    }\r  }\r}\r\rvar f\x3D Foo(3);\rfor (i in f) print i;\r\r// expect: 3.0\r// expect: 2.0\r// expect: 1.0\r\r\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kStaticMethodsSnnipet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private
+	#tag Constant, Name = kStaticMethodsSnippet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9.0", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kStringEscaping, Type = String, Dynamic = False, Default = \"var s2\x3D \"\\\"\"; print s2;  // expect: \"\rvar s3\x3D \"\\\\\"; print s3;  // expect: \\\rvar s4\x3D \"\\%\"; print s4;  // expect: %\r\rvar s13\x3D \"\\x48\"; print s13; // expect: H\rvar s14\x3D \"\\u0041\"; print s14; // expect: A\rvar s15\x3D \"\\U0001F64A\\U0001F680\"; print s15; // expect: \xF0\x9F\x99\x8A\xF0\x9F\x9A\x80\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kStringInterpolationSnnipet, Type = String, Dynamic = False, Default = \"var name\x3D\"luis\";\rprint \"welcome ${name}!\";\r\r// expect: welcome luis!\r\rprint \"one plus two times tree: ${1+2*3}.\";\r\r// expect: one plus two times tree: 7.0.", Scope = Private
+	#tag Constant, Name = kStringInterpolationSnippet, Type = String, Dynamic = False, Default = \"var name\x3D\"luis\";\rprint \"welcome ${name}!\";\r\r// expect: welcome luis!\r\rprint \"one plus two times tree: ${1+2*3}.\";\r\r// expect: one plus two times tree: 7.0.", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kStringRaw, Type = String, Dynamic = False, Default = \"var json\x3D \"\"\"\r{\r    \"hello\": \"lox\"\x2C\r    \"from\": \"json\"\r}\r\"\"\";\rprint json;\r", Scope = Private
@@ -632,7 +641,7 @@ Inherits TestGroup
 	#tag Constant, Name = kStringRawExpected, Type = String, Dynamic = False, Default = \"{\r    \"hello\": \"lox\"\x2C\r    \"from\": \"json\"\r}\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kTextSnnipet, Type = String, Dynamic = False, Default = \"print Text.asc(\"@\"); // expect: 64.0\r\rprint Text.chr(9); // expect: \t\r\rprint Text.decodeBase64(\"dGVzdA\x3D\x3D\"); // expect: test\r\rprint Text.decodeHex(\"61\"); // expect: a\r\rprint Text.encodeBase64(\"test\"); // expect: dGVzdA\x3D\x3D\r\rprint Text.encodeHex(\"test\"); // expect: 74657374\r\rprint Text.inStr(\"hello world\"\x2C \"world\"); // expect: 7.0\r\rprint Text.left(\"hello world\"\x2C 5); // expect: hello\r\rprint Text.len(\"hello world\"); // expect: 11.0\r\rprint Text.lower(\"HELLO WORLD\"); // expect: hello world\r\rprint Text.mid(\"hello world\"\x2C 7); // expect: world\rprint Text.mid(\"hello world\"\x2C 7\x2C 1); // expect: w\r\rprint Text.nthField(\"this*is*the*end\"\x2C \"*\"\x2C 3); // expect: the\r\rprint Text.replace(\"The quick fox\"\x2C \"quick\"\x2C \"slow\"); // expect: The slow fox\r\rprint Text.replaceAll(\"xyxyxy\"\x2C \"x\"\x2C \"z\"); // expect: zyzyzy\r\rprint Text.right(\"hello world\"\x2C 5); // expect: world\r\rprint Text.titleCase(\"tHe Quick fOX\"); // expect: The Quick Fox\r\rprint Text.trim(\" tHe Quick fOX \"); // expect: The Quick Fox\r\rprint Text.upper(\"tHe Quick fOX\"); // expect: THE QUICK FOX", Scope = Private
+	#tag Constant, Name = kTextSnippet, Type = String, Dynamic = False, Default = \"print Text.asc(\"@\"); // expect: 64.0\r\rprint Text.chr(9); // expect: \t\r\rprint Text.decodeBase64(\"dGVzdA\x3D\x3D\"); // expect: test\r\rprint Text.decodeHex(\"61\"); // expect: a\r\rprint Text.encodeBase64(\"test\"); // expect: dGVzdA\x3D\x3D\r\rprint Text.encodeHex(\"test\"); // expect: 74657374\r\rprint Text.inStr(\"hello world\"\x2C \"world\"); // expect: 7.0\r\rprint Text.left(\"hello world\"\x2C 5); // expect: hello\r\rprint Text.len(\"hello world\"); // expect: 11.0\r\rprint Text.lower(\"HELLO WORLD\"); // expect: hello world\r\rprint Text.mid(\"hello world\"\x2C 7); // expect: world\rprint Text.mid(\"hello world\"\x2C 7\x2C 1); // expect: w\r\rprint Text.nthField(\"this*is*the*end\"\x2C \"*\"\x2C 3); // expect: the\r\rprint Text.replace(\"The quick fox\"\x2C \"quick\"\x2C \"slow\"); // expect: The slow fox\r\rprint Text.replaceAll(\"xyxyxy\"\x2C \"x\"\x2C \"z\"); // expect: zyzyzy\r\rprint Text.right(\"hello world\"\x2C 5); // expect: world\r\rprint Text.titleCase(\"tHe Quick fOX\"); // expect: The Quick Fox\r\rprint Text.trim(\" tHe Quick fOX \"); // expect: The Quick Fox\r\rprint Text.upper(\"tHe Quick fOX\"); // expect: THE QUICK FOX", Scope = Private
 	#tag EndConstant
 
 

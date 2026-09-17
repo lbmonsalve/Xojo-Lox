@@ -200,7 +200,26 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function VisitFunctionExpr(expr As Lox.Ast.FunctionExpr) As Variant
-		  Break
+		  Dim sb() As String
+		  
+		  // print Parameters
+		  sb.Append "(fun ("
+		  
+		  For Each param As Lox.Token In expr.Parameters
+		    If param<> expr.Parameters(0) Then sb.Append(" ")
+		    sb.Append param.Lexeme
+		  Next
+		  
+		  sb.Append ") "
+		  
+		  // print Body
+		  For Each body As Lox.Ast.Stmt In expr.Body
+		    sb.Append body.Accept(Self)
+		  Next
+		  
+		  sb.Append ")"
+		  
+		  Return Join(sb, "")
 		End Function
 	#tag EndMethod
 

@@ -32,8 +32,6 @@ for (var a = 1; a < 10; a++ ) {
   print a;
 }
 
-for (1 in 1..10) print i;
-
 // functions
 fun printSum(a, b) {
   print a + b;
@@ -97,15 +95,11 @@ var before = clock();
 print fib(10);
 var after = clock();
 print after - before;
-
-print System.osName;
-print System.osVersion;
-print System.osEnvVar("HOMEPATH"); // windows
-print System.assert(true, "pass");
-print System.debugLog("test");
-
 ```
+
+
 ### syntactic sugar
+
 
 #### Identifiers extended. emoji's friendly.
 
@@ -192,7 +186,6 @@ a/=2;
 print a; // expect: 17.5
 ```
 
-
 #### Postfix.
 
 ```swift
@@ -202,7 +195,6 @@ print i;
 i--;
 print i;
 ```
-
 
 #### Ternary.
 
@@ -214,8 +206,8 @@ a>b ? 1 : 2
 
 ```swift
 print false?.true; // expect: true
-print nil?.true; // expect: null
-print true?.nil?.false?.true; // expect: null
+print nil?.true; // expect: nil
+print true?.nil?.false?.true; // expect: nil
 
 print true?.false?.nil?.true?:"default"; // expect: default
 ```
@@ -246,6 +238,14 @@ if (false) {print "if";}
   else {print "else";} 
 ```
 
+#### for-in.
+
+```swift
+for (i in 1..10) print i; // expect: 1 to 10
+
+for (i in Range(0.1, 2.0, 0.2)) print i; // expect: 0.1 to 1.9
+```
+
 #### Modules.
 
 ```swift
@@ -267,14 +267,14 @@ print hello;
 print M.hello2;
 ```
 
-#### Datetime, arrays, hashmaps, regex.
+#### Datetime, arrays, Dictionary, regex.
 
 ```c
 var d= DateTime();
 
-var a=[1,2,3]; // array
+var a= [1,2,3]; // array
 
-var dictionary= {"a": 1,"b": 2, "c": 100}; // hashmap
+var dict= {"a": 1,"b": 2, "c": 100}; // dictionary
 
 var r= RegEx("\d+");
 print r.caseSensitive; // expect: false
@@ -319,7 +319,7 @@ print appdata.count;
 
 ```swift
 var name="luis";
-print "welcome ${name}!";
+print "welcome ${name}!"; // expect: "welcome luis"
 ```
 
 #### Random.
@@ -347,6 +347,16 @@ a.each(fun (e) { print e; });
 
 ```swift
 import "a"; // import a.lox file from searchPath
+```
+
+#### System module.
+
+```swift
+print System.osName;
+print System.osVersion;
+print System.osEnvVar("HOMEPATH"); // windows
+print System.assert(true, "pass");
+print System.debugLog("test");
 ```
 
 
