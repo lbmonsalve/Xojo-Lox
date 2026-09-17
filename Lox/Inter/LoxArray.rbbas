@@ -31,7 +31,7 @@ Inherits Lox.Inter.LoxClass
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor Self
 		  
-		  If size>= 0 Then ReDim Elements(size)
+		  If size>= 0 Then ReDim Elements(size- 1)
 		End Sub
 	#tag EndMethod
 

@@ -293,8 +293,8 @@ Protected Class Parser
 		  If Match(TokenType.SEMICOLON) Then
 		  ElseIf Match(TokenType.VAR_) Then
 		    initializer= varDecl
-		  ElseIf Match(TokenType.IDENTIFIER) Then // for ( in )
-		    Dim name As Token= Previous
+		  ElseIf Check(TokenType.IDENTIFIER) And CheckNext(TokenType.IN_) Then // for ( in )
+		    Dim name As Token= Advance
 		    
 		    Call consume TokenType.IN_, "Expect 'in' after '"+ name.Lexeme+ "'."
 		    Dim condition As Lox.Ast.Expr= range
