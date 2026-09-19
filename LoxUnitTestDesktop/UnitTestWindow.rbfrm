@@ -81,37 +81,6 @@ Begin Window UnitTestWindow Implements Writeable
          Visible         =   True
          Width           =   870
       End
-      Begin PushButton PushButton1
-         AutoDeactivate  =   True
-         Bold            =   ""
-         ButtonStyle     =   0
-         Cancel          =   ""
-         Caption         =   "Load"
-         Default         =   ""
-         Enabled         =   True
-         Height          =   30
-         HelpTag         =   ""
-         Index           =   -2147483648
-         InitialParent   =   "TabPanel1"
-         Italic          =   ""
-         Left            =   20
-         LockBottom      =   ""
-         LockedInPosition=   False
-         LockLeft        =   True
-         LockRight       =   ""
-         LockTop         =   True
-         Scope           =   0
-         TabIndex        =   0
-         TabPanelIndex   =   2
-         TabStop         =   True
-         TextFont        =   "System"
-         TextSize        =   16
-         TextUnit        =   0
-         Top             =   50
-         Underline       =   ""
-         Visible         =   True
-         Width           =   80
-      End
       Begin TextArea TextArea1
          AcceptTabs      =   True
          Alignment       =   0
@@ -204,16 +173,26 @@ Begin Window UnitTestWindow Implements Writeable
          Visible         =   True
          Width           =   360
       End
-      Begin PushButton PushButton2
+      Begin BevelButton PushButton2
+         AcceptFocus     =   ""
          AutoDeactivate  =   True
+         BackColor       =   ""
+         Bevel           =   4
          Bold            =   ""
-         ButtonStyle     =   0
-         Cancel          =   ""
+         ButtonType      =   ""
          Caption         =   "Run"
-         Default         =   ""
+         CaptionAlign    =   3
+         CaptionDelta    =   ""
+         CaptionPlacement=   0
          Enabled         =   True
+         HasBackColor    =   ""
+         HasMenu         =   0
          Height          =   30
          HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   ""
+         IconDY          =   ""
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
@@ -223,15 +202,18 @@ Begin Window UnitTestWindow Implements Writeable
          LockLeft        =   False
          LockRight       =   True
          LockTop         =   True
+         MenuValue       =   ""
          Scope           =   0
          TabIndex        =   4
          TabPanelIndex   =   2
          TabStop         =   True
+         TextColor       =   ""
          TextFont        =   "System"
          TextSize        =   16
          TextUnit        =   0
          Top             =   50
          Underline       =   ""
+         Value           =   ""
          Visible         =   True
          Width           =   60
       End
@@ -241,8 +223,8 @@ Begin Window UnitTestWindow Implements Writeable
          AutoDeactivate  =   False
          AutomaticallyCheckSpelling=   False
          BackColor       =   &hFFFFFF
-         Bold            =   ""
-         Border          =   False
+         Bold            =   True
+         Border          =   True
          CueText         =   ""
          DataField       =   ""
          DataSource      =   ""
@@ -276,18 +258,28 @@ Begin Window UnitTestWindow Implements Writeable
          Underline       =   ""
          UseFocusRing    =   True
          Visible         =   True
-         Width           =   368
+         Width           =   384
       End
-      Begin PushButton PushButton3
+      Begin BevelButton PushButton3
+         AcceptFocus     =   ""
          AutoDeactivate  =   True
+         BackColor       =   ""
+         Bevel           =   4
          Bold            =   ""
-         ButtonStyle     =   0
-         Cancel          =   ""
+         ButtonType      =   ""
          Caption         =   "Reset"
-         Default         =   ""
+         CaptionAlign    =   3
+         CaptionDelta    =   ""
+         CaptionPlacement=   0
          Enabled         =   True
+         HasBackColor    =   ""
+         HasMenu         =   0
          Height          =   30
          HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   ""
+         IconDY          =   ""
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
@@ -297,28 +289,41 @@ Begin Window UnitTestWindow Implements Writeable
          LockLeft        =   False
          LockRight       =   True
          LockTop         =   True
+         MenuValue       =   ""
          Scope           =   0
          TabIndex        =   6
          TabPanelIndex   =   2
          TabStop         =   True
+         TextColor       =   ""
          TextFont        =   "System"
          TextSize        =   16
          TextUnit        =   0
          Top             =   50
          Underline       =   ""
+         Value           =   ""
          Visible         =   True
          Width           =   60
       End
-      Begin PushButton PushButton4
+      Begin BevelButton PushButton4
+         AcceptFocus     =   ""
          AutoDeactivate  =   True
+         BackColor       =   ""
+         Bevel           =   4
          Bold            =   ""
-         ButtonStyle     =   0
-         Cancel          =   ""
+         ButtonType      =   ""
          Caption         =   "Scan"
-         Default         =   ""
+         CaptionAlign    =   3
+         CaptionDelta    =   ""
+         CaptionPlacement=   0
          Enabled         =   True
+         HasBackColor    =   ""
+         HasMenu         =   0
          Height          =   30
          HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   ""
+         IconDY          =   ""
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
@@ -328,28 +333,41 @@ Begin Window UnitTestWindow Implements Writeable
          LockLeft        =   False
          LockRight       =   True
          LockTop         =   True
+         MenuValue       =   ""
          Scope           =   0
          TabIndex        =   7
          TabPanelIndex   =   2
          TabStop         =   True
+         TextColor       =   ""
          TextFont        =   "System"
          TextSize        =   16
          TextUnit        =   0
          Top             =   50
          Underline       =   ""
+         Value           =   ""
          Visible         =   True
          Width           =   60
       End
-      Begin PushButton PushButton5
+      Begin BevelButton PushButton5
+         AcceptFocus     =   ""
          AutoDeactivate  =   True
+         BackColor       =   ""
+         Bevel           =   4
          Bold            =   ""
-         ButtonStyle     =   0
-         Cancel          =   ""
+         ButtonType      =   ""
          Caption         =   "Tokens"
-         Default         =   ""
+         CaptionAlign    =   3
+         CaptionDelta    =   ""
+         CaptionPlacement=   0
          Enabled         =   True
+         HasBackColor    =   ""
+         HasMenu         =   0
          Height          =   30
          HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   ""
+         IconDY          =   ""
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
@@ -359,28 +377,41 @@ Begin Window UnitTestWindow Implements Writeable
          LockLeft        =   False
          LockRight       =   True
          LockTop         =   True
+         MenuValue       =   ""
          Scope           =   0
          TabIndex        =   8
          TabPanelIndex   =   2
          TabStop         =   True
+         TextColor       =   ""
          TextFont        =   "System"
          TextSize        =   16
          TextUnit        =   0
          Top             =   50
          Underline       =   ""
+         Value           =   ""
          Visible         =   True
          Width           =   72
       End
-      Begin PushButton PushButton6
+      Begin BevelButton PushButton6
+         AcceptFocus     =   ""
          AutoDeactivate  =   True
+         BackColor       =   ""
+         Bevel           =   4
          Bold            =   ""
-         ButtonStyle     =   0
-         Cancel          =   ""
+         ButtonType      =   ""
          Caption         =   "Expr"
-         Default         =   ""
+         CaptionAlign    =   3
+         CaptionDelta    =   ""
+         CaptionPlacement=   0
          Enabled         =   True
+         HasBackColor    =   ""
+         HasMenu         =   0
          Height          =   30
          HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   ""
+         IconDY          =   ""
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
@@ -390,28 +421,41 @@ Begin Window UnitTestWindow Implements Writeable
          LockLeft        =   False
          LockRight       =   True
          LockTop         =   True
+         MenuValue       =   ""
          Scope           =   0
          TabIndex        =   5
          TabPanelIndex   =   2
          TabStop         =   True
+         TextColor       =   ""
          TextFont        =   "System"
          TextSize        =   16
          TextUnit        =   0
          Top             =   50
          Underline       =   ""
+         Value           =   ""
          Visible         =   True
          Width           =   60
       End
-      Begin PushButton PushButton7
+      Begin BevelButton PushButton7
+         AcceptFocus     =   ""
          AutoDeactivate  =   True
+         BackColor       =   ""
+         Bevel           =   4
          Bold            =   ""
-         ButtonStyle     =   0
-         Cancel          =   ""
-         Caption         =   "From clipboard"
-         Default         =   ""
+         ButtonType      =   ""
+         Caption         =   "From clipboard..."
+         CaptionAlign    =   2
+         CaptionDelta    =   2
+         CaptionPlacement=   0
          Enabled         =   True
+         HasBackColor    =   ""
+         HasMenu         =   0
          Height          =   30
          HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   ""
+         IconDY          =   ""
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   ""
@@ -421,18 +465,65 @@ Begin Window UnitTestWindow Implements Writeable
          LockLeft        =   True
          LockRight       =   ""
          LockTop         =   True
+         MenuValue       =   ""
          Scope           =   0
          TabIndex        =   2
          TabPanelIndex   =   2
          TabStop         =   True
+         TextColor       =   ""
          TextFont        =   "System"
          TextSize        =   16
          TextUnit        =   0
          Top             =   92
          Underline       =   ""
+         Value           =   ""
          Visible         =   True
          Width           =   130
       End
+   End
+   Begin BevelButton PushButton8
+      AcceptFocus     =   ""
+      AutoDeactivate  =   True
+      BackColor       =   ""
+      Bevel           =   4
+      Bold            =   ""
+      ButtonType      =   ""
+      Caption         =   "Load..."
+      CaptionAlign    =   2
+      CaptionDelta    =   2
+      CaptionPlacement=   0
+      Enabled         =   True
+      HasBackColor    =   ""
+      HasMenu         =   0
+      Height          =   30
+      HelpTag         =   ""
+      Icon            =   ""
+      IconAlign       =   0
+      IconDX          =   ""
+      IconDY          =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   20
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      MenuValue       =   ""
+      Scope           =   0
+      TabIndex        =   0
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextColor       =   ""
+      TextFont        =   "System"
+      TextSize        =   16
+      TextUnit        =   0
+      Top             =   50
+      Underline       =   ""
+      Value           =   ""
+      Visible         =   True
+      Width           =   80
    End
 End
 #tag EndWindow
@@ -614,22 +705,6 @@ End
 
 #tag EndWindowCode
 
-#tag Events PushButton1
-	#tag Event
-		Sub Action()
-		  Dim txtType As New FileType
-		  txtType.Name = "text/plain"
-		  txtType.MacType = "TXT "
-		  txtType.Extensions = "lox;txt"
-		  
-		  Dim f As FolderItem= GetOpenFolderItem(txtType)
-		  If f Is Nil Then Return
-		  Dim t As TextInputStream= TextInputStream.Open(f)
-		  TextArea1.Text= t.ReadAll
-		  TextField1.Text= f.DisplayName
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events TextArea1
 	#tag Event
 		Sub Open()
@@ -754,6 +829,22 @@ End
 		  Dim cb As New Clipboard
 		  TextArea1.Text= cb.Text
 		  cb.Close
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton8
+	#tag Event
+		Sub Action()
+		  Dim txtType As New FileType
+		  txtType.Name = "text/plain"
+		  txtType.MacType = "TXT "
+		  txtType.Extensions = "lox;txt"
+		  
+		  Dim f As FolderItem= GetOpenFolderItem(txtType)
+		  If f Is Nil Then Return
+		  Dim t As TextInputStream= TextInputStream.Open(f)
+		  TextArea1.Text= t.ReadAll
+		  TextField1.Text= f.DisplayName
 		End Sub
 	#tag EndEvent
 #tag EndEvents
