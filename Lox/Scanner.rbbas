@@ -364,12 +364,12 @@ Protected Class Scanner
 		    End If
 		    // slash or comment
 		    
-		    // whitespaces, tab, newlines, etc
+		    // whitespaces, tabs, form feed, newlines
 		  Case Chr(EOL)
 		    mLine= mLine+ 1
 		    
-		  Case " ", Chr(9), Chr(13), Chr(10)
-		    // whitespaces, tab, newlines, etc
+		  Case " ", Chr(9), Chr(10), Chr(11), Chr(12), Chr(13)
+		    // whitespaces, tabs, form feed, newlines
 		    
 		    // strings
 		  Case """"
