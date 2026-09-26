@@ -68,6 +68,7 @@ Begin Window UnitTestWindow Implements Writeable
          EraseBackground =   True
          HasBackgroundColor=   False
          Height          =   550
+         Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Left            =   15
          LockBottom      =   True
@@ -454,6 +455,7 @@ Begin Window UnitTestWindow Implements Writeable
          EraseBackground =   True
          HasBackgroundColor=   False
          Height          =   437
+         Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Left            =   20
          LockBottom      =   True
@@ -827,7 +829,11 @@ End
 #tag Events ScintillaContainer1
 	#tag Event
 		Sub Ready()
-		  Me.ScintillaControlMBS1.Text= kLoxSample
+		  Dim sc As ScintillaControlMBS= Me.ScintillaControlMBS1
+		  
+		  sc.Text= kLoxSample
+		  Call sc.MarkerAdd(1, 1)
+		  Call sc.MarkerAdd(4, 0)
 		End Sub
 	#tag EndEvent
 #tag EndEvents

@@ -64,7 +64,7 @@ End
 		  'Next
 		  
 		  // all miss the // comments, so we may eventually need to make an extra one.
-		  Const SCE_LOX_DEFAULT      = 0
+		  Const SCE_LOX_WHITE_SPACE  = 0
 		  Const SCE_LOX_COMMENT      = 1 // /* */
 		  Const SCE_LOX_COMMENT_LINE = 2 // // 
 		  Const SCE_LOX_NUMBER       = 4 
@@ -82,7 +82,6 @@ End
 		  'Const SCE_LOX_COLOR_ALPHA  = 14 // starts &c  default color is the system default text color based on light mode dark mode
 		  
 		  Dim factor As Double = 1
-		  
 		  Dim reservedWords As String = "print clock var true false nil fun class init static this super for in if or and else return while continue break module import"
 		  Dim dataTypes As String = "Array Dict Range"
 		  
@@ -110,38 +109,80 @@ End
 		    factor = 1
 		    style.size = 16
 		  #endif
-		  style.ForeColor = &c5C5C5C00
+		  style.ForeColor = &c5C5C5C
+		  
+		  #If False
+		    Dim backColor As Color= &cEBEBEB
+		    Dim commentColor As Color= &cAC151A
+		    Dim commentLineColor As Color= &c7D1012
+		    Dim stringColor As Color= &c9D33D5
+		    Dim numberColor As Color= &c24B52F
+		    Dim operatorColor As Color= &c590000
+		    Dim keywordColor As Color= &c0A5FFE
+		    Dim identifierColor As Color= &c003700
+		    Dim keyword2Color As Color= &cC46200
+		    Dim caretColor As Color= &c7E7E7E00
+		    Dim selBackColor As Color= &cCEE7FF
+		  #Else // dark 
+		    Dim backColor As Color= &c19191900
+		    Dim commentColor As Color= &cF29FA200
+		    Dim commentLineColor As Color= &cFAD1D200
+		    Dim stringColor As Color= &c00C10000
+		    Dim numberColor As Color= &c80BFFF00
+		    Dim operatorColor As Color= &cFF2F2F00
+		    Dim keywordColor As Color= &cC1C1E100
+		    Dim identifierColor As Color= &cC287E700
+		    Dim keyword2Color As Color= &cFF8B1700
+		    Dim caretColor As Color= &cF4F4F400
+		    Dim selBackColor As Color= &c52525200
+		  #endif
+		  
+		  style.BackColor= backColor
 		  
 		  'c.StyleClearAll
 		  '
-		  'c.Style(SCE_LOX_DEFAULT).ForeColor = &c000000
+		  c.Style(SCE_LOX_WHITE_SPACE).BackColor = backColor
 		  '
-		  c.Style(SCE_LOX_COMMENT).ForeColor = &cAC151A
-		  c.Style(SCE_LOX_COMMENT_LINE).ForeColor = &c7D1012
+		  c.Style(SCE_LOX_COMMENT).ForeColor = commentColor
+		  c.Style(SCE_LOX_COMMENT).BackColor = backColor
+		  c.Style(SCE_LOX_COMMENT_LINE).ForeColor = commentLineColor
+		  c.Style(SCE_LOX_COMMENT_LINE).BackColor = backColor
 		  
-		  c.Style(SCE_LOX_STRING).ForeColor = &c9D33D5
-		  c.Style(SCE_LOX_NUMBER).ForeColor = &c24B52F
-		  c.Style(SCE_LOX_OPERATOR).ForeColor = &c590000
+		  c.Style(SCE_LOX_STRING).ForeColor = stringColor
+		  c.Style(SCE_LOX_STRING).BackColor = backColor
+		  c.Style(SCE_LOX_NUMBER).ForeColor = numberColor
+		  c.Style(SCE_LOX_NUMBER).BackColor = backColor
+		  c.Style(SCE_LOX_OPERATOR).ForeColor = operatorColor
 		  c.Style(SCE_LOX_OPERATOR).bold = True
+		  c.Style(SCE_LOX_OPERATOR).BackColor = backColor
 		  'c.Style(SCE_LOX_PREPROCESSOR).ForeColor = &c595BB4
-		  c.Style(SCE_LOX_KEYWORD).ForeColor = &c0A5FFE
+		  c.Style(SCE_LOX_KEYWORD).ForeColor = keywordColor
 		  c.Style(SCE_LOX_KEYWORD).bold = True
-		  c.Style(SCE_LOX_IDENTIFIER).ForeColor = &c003700
-		  c.Style(SCE_LOX_KEYWORD2).ForeColor = &cC46200
+		  c.Style(SCE_LOX_KEYWORD).BackColor = backColor
+		  c.Style(SCE_LOX_IDENTIFIER).ForeColor = identifierColor
+		  c.Style(SCE_LOX_IDENTIFIER).BackColor = backColor
+		  c.Style(SCE_LOX_KEYWORD2).ForeColor = keyword2Color
+		  c.Style(SCE_LOX_KEYWORD2).BackColor = backColor
 		  'c.Style(SCE_LOX_ESCAPESEQ).ForeColor = &cFF0000
 		  
 		  // Line number style.
 		  c.Style(ScintillaStyleMBS.kStylesCommonLineNumber).ForeColor = &cF0F0F0
-		  c.Style(ScintillaStyleMBS.kStylesCommonLineNumber).BackColor = &c808080
+		  c.Style(ScintillaStyleMBS.kStylesCommonLineNumber).BackColor = &c3E3E40
 		  
 		  'System.DebugLog Str(c.Style(SCE_LOX_KEYWORD).ForeColor) 
 		  
-		  c.Margin(0).Type = ScintillaMarginMBS.kMarginTypeNumber
-		  c.Margin(0).Width = 35 * Factor
+		  'c.Margin(0).Width = 0
 		  
 		  // Markers.
-		  c.Margin(1).Width = 16 * Factor
-		  c.Margin(1).Sensitive = true // allow click
+		  c.Margin(0).Type = ScintillaMarginMBS.kMarginTypeSymbol
+		  c.Margin(0).Width = 16
+		  c.Margin(0).Sensitive = True // allow click
+		  c.Margin(0).Mask = Not c.kMaskFolders
+		  
+		  // line numbers
+		  c.Margin(1).Type = ScintillaMarginMBS.kMarginTypeNumber
+		  c.Margin(1).Width = 35 * Factor
+		  c.Margin(1).Mask = 0
 		  
 		  // Some special lexer properties.
 		  c.PropertyValue("fold") = "1"
@@ -150,23 +191,24 @@ End
 		  c.PropertyValue("fold.preprocessor") = "1"
 		  
 		  // Folder setup.
-		  c.Margin(2).Width = 16
+		  c.Margin(2).Type = ScintillaMarginMBS.kMarginTypeSymbol
+		  c.Margin(2).Width = 18
 		  c.Margin(2).Mask = c.kMaskFolders
 		  c.Margin(2).Sensitive = True
 		  
-		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolderOpen).Symbol = ScintillaMarkerMBS.kMarkerSymbolBoxMinus
-		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolder).Symbol = ScintillaMarkerMBS.kMarkerSymbolBoxPlus
+		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolderOpen).Symbol = ScintillaMarkerMBS.kMarkerSymbolArrowDown
+		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolder).Symbol = ScintillaMarkerMBS.kMarkerSymbolArrow
 		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolderSub).Symbol = ScintillaMarkerMBS.kMarkerSymbolVLine
 		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolderTail).Symbol = ScintillaMarkerMBS.kMarkerSymbolLCorner
-		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolderEnd).Symbol = ScintillaMarkerMBS.kMarkerSymbolBoxPlusConnected
-		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolderOpenMid).Symbol = ScintillaMarkerMBS.kMarkerSymbolBoxMinusConnected
+		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolderEnd).Symbol = ScintillaMarkerMBS.kMarkerSymbolCirclePlusConnected
+		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolderOpenMid).Symbol = ScintillaMarkerMBS.kMarkerSymbolCircleMinusConnected
 		  c.Marker(ScintillaMarkerMBS.kMarkerOutlineFolderMidTail).Symbol = ScintillaMarkerMBS.kMarkerSymbolTCorner
 		  
 		  For n As Integer = 25 To 31
 		    // Markers 25..31 are reserved for folding.
 		    
-		    c.Marker(n).ForeColor = &cFFFFFF
-		    c.Marker(n).BackColor = &c000000
+		    c.Marker(n).ForeColor = &cD7D7D700
+		    c.Marker(n).BackColor = &c16161600
 		    
 		  Next
 		  
@@ -177,20 +219,29 @@ End
 		  
 		  c.Marker(0).BackColor = &cB1151C
 		  
-		  c.SetSelBackColor(True, Color.HighlightColor)
+		  c.SetSelBackColor(True, selBackColor)
+		  'c.SetSelForeColor(True, Color.White)
+		  
+		  'c.CaretStyle= ScintillaControlMBS.kCaretStyleBlockAfter
 		  
 		  // define the marker for breakpoint
-		  c.Marker(1).ForeColor = &cFF0000
+		  c.Marker(1).ForeColor = &cFF00
 		  c.Marker(1).Symbol = ScintillaMarkerMBS.kMarkerSymbolBookmark
 		  
 		  // more possible options
 		  
 		  c.AutoCompleteIgnoreCase = True
+		  c.MultipleSelection= True
+		  c.AdditionalSelectionTyping= True
+		  
+		  c.SetFoldMarginColor(True, &c3E3E40)
+		  c.SetFoldMarginHighlightColor(True, &c3E3E40)
+		  
+		  c.CaretForeColor= caretColor
 		  
 		  c.setStatusText "Ready"
 		  
 		  RaiseEvent Ready
-		  
 		End Sub
 	#tag EndEvent
 
@@ -349,6 +400,33 @@ End
 		    End If
 		  End If
 		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MarginClick(Position as Integer, modifiers as Integer, Margin as ScintillaMarginMBS)
+		  If Margin.Margin= 0 Then // markers
+		    Const kBitMarker1= &b01 //1
+		    Const kBitMarker2= &b10 //2
+		    Dim line As Integer= Me.LineFromPosition(Position),  whichMarkers As Integer
+		    
+		    If modifiers= Me.kKeyModCtrl Then //(kKeyModShift And Me.kKeyModCtrl)
+		      whichMarkers= Me.MarkerGet(line) // bookmark
+		      If (whichMarkers And kBitMarker2)= kBitMarker2 Then // mark
+		        Call Me.MarkerDelete(line, 1)
+		      Else
+		        Call Me.MarkerAdd(line, 1)
+		      End If
+		      Return
+		    End If
+		    
+		    whichMarkers= Me.MarkerGet(line) // circle
+		    If (whichMarkers And kBitMarker1)= kBitMarker1 Then // mark
+		      Call Me.MarkerDelete(line, 0)
+		    Else
+		      Call Me.MarkerAdd(line, 0)
+		    End If
+		    
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents

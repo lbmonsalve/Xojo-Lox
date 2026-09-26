@@ -173,7 +173,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  // std
 		  mGlobals.Define "System", New Lox.Inter.Std.System
 		  mGlobals.Define "Math", New Lox.Inter.Std.Math
-		  mGlobals.Define "Text", New Lox.Inter.Std.Text
+		  mGlobals.Define "String", New Lox.Inter.Std.Text
 		  mGlobals.Define "DateTime", New Lox.Inter.Std.DateTime
 		  mGlobals.Define "RegEx", New Lox.Inter.Std.RegExLox
 		  mGlobals.Define "File", New Lox.Inter.Std.File
