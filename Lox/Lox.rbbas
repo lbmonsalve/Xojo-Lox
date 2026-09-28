@@ -703,10 +703,10 @@ Protected Module Lox
 		    For i As Integer= methods.Ubound DownTo 0
 		      Dim method As Introspection.MethodInfo= methods(i)
 		      If method.ReturnType Is Nil Then Continue
-		      Dim mathodParams() As Introspection.ParameterInfo= method.GetParameters
+		      Dim methodParams() As Introspection.ParameterInfo= method.GetParameters
 		      If method.Name.Lowercase= "tostring" And _
 		        method.ReturnType.Name.Lowercase= "string" And _
-		        mathodParams.Ubound= -1 Then
+		        methodParams.Ubound= -1 Then
 		        Dim params() As Variant
 		        Return method.Invoke(obj, params)
 		      End If
@@ -870,7 +870,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.260919", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.260928", Scope = Public
 	#tag EndConstant
 
 

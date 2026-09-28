@@ -144,9 +144,9 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Return False
 		  ElseIf callee IsA Lox.Inter.Std.SystemMethods Then
 		    Return False
-		  ElseIf callee IsA Lox.Inter.Std.Math Then
+		  ElseIf callee IsA Lox.Inter.Std.Number Then
 		    Return False
-		  ElseIf callee IsA Lox.Inter.Std.MathMethods Then
+		  ElseIf callee IsA Lox.Inter.Std.NumberMethods Then
 		    Return False
 		  ElseIf callee IsA Lox.Inter.Std.Text Then
 		    Return False
@@ -172,7 +172,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  mGlobals.Define "Range", New LoxRange
 		  // std
 		  mGlobals.Define "System", New Lox.Inter.Std.System
-		  mGlobals.Define "Math", New Lox.Inter.Std.Math
+		  mGlobals.Define "Number", New Lox.Inter.Std.Number
 		  mGlobals.Define "String", New Lox.Inter.Std.Text
 		  mGlobals.Define "DateTime", New Lox.Inter.Std.DateTime
 		  mGlobals.Define "RegEx", New Lox.Inter.Std.RegExLox

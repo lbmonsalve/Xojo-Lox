@@ -1,5 +1,5 @@
 #tag Class
-Protected Class MathMethods
+Protected Class NumberMethods
 Implements ICallable
 	#tag Method, Flags = &h0
 		Function Arity() As Integer
@@ -97,19 +97,19 @@ Implements ICallable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(methodName As String, math As Lox.Inter.Std.Math)
+		Sub Constructor(methodName As String, number As Lox.Inter.Std.Number)
 		  mMethodName= methodName
-		  mMath= math
+		  mNumber= number
 		End Sub
 	#tag EndMethod
 
 
 	#tag Property, Flags = &h21
-		Private mMath As Lox.Inter.Std.Math
+		Private mMethodName As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mMethodName As String
+		Private mNumber As Lox.Inter.Std.Number
 	#tag EndProperty
 
 

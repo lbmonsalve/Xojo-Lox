@@ -1,5 +1,5 @@
 #tag Class
-Protected Class Math
+Protected Class Number
 Inherits Lox.Inter.LoxClass
 	#tag Method, Flags = &h1000
 		Sub Constructor()
@@ -19,16 +19,16 @@ Inherits Lox.Inter.LoxClass
 		    Return 3.14159265358979323846264338327950
 		    
 		  Case "abs", "sin", "cos", "tan", "sqrt"
-		    Return New Lox.Inter.Std.MathMethods(name, Self)
+		    Return New Lox.Inter.Std.NumberMethods(name, Self)
 		    
 		  Case "acos", "asin", "atan", "atan2"
-		    Return New Lox.Inter.Std.MathMethods(name, Self)
+		    Return New Lox.Inter.Std.NumberMethods(name, Self)
 		    
 		  Case "bin", "cdbl", "ceil", "exp", "floor", "hex", "log", "max", "min", "oct", "pow"
-		    Return New Lox.Inter.Std.MathMethods(name, Self)
+		    Return New Lox.Inter.Std.NumberMethods(name, Self)
 		    
 		  Case "round", "val", "str"
-		    Return New Lox.Inter.Std.MathMethods(name, Self)
+		    Return New Lox.Inter.Std.NumberMethods(name, Self)
 		    
 		  End Select
 		End Function
@@ -36,7 +36,7 @@ Inherits Lox.Inter.LoxClass
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  Return "<class Math>"
+		  Return "<class Number>"
 		End Function
 	#tag EndMethod
 

@@ -13,7 +13,7 @@ Implements ICallable
 		    #pragma BreakOnExceptions Off
 		    Select Case mMethodName
 		    Case "osEnvVar"
-		      Return EnvVar(args(0)) // conflict in v2022
+		      Return EnvVar(Lox.Inter.Std.Text(args(0)).Value) // conflict in v2022
 		    Case "debugLog"
 		      DbgLog(Lox.Inter.Std.Text(args(0)).Value) // conflict in v2022
 		      Return mSystem
