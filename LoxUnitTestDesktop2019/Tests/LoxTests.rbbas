@@ -370,16 +370,16 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub MathTest()
-		  DoRun kMathSnippets
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub ModuleTest()
 		  // https://github.com/gkjpettet/roo
 		  
 		  DoRun kModuleSnippet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub NumberTest()
+		  DoRun kNumberSnippets
 		End Sub
 	#tag EndMethod
 
@@ -501,6 +501,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub StringTest()
+		  DoRun kStringSnippet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub TernaryTest()
 		  Dim Snippet As String= "var a=1; var b=2; var c=a>b?1:2; print c;"
 		  
@@ -538,12 +544,6 @@ Inherits TestGroup
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub TextTest()
-		  DoRun kTextSnippet
-		End Sub
-	#tag EndMethod
-
 
 	#tag Property, Flags = &h0
 		BufferError As String
@@ -554,7 +554,7 @@ Inherits TestGroup
 	#tag EndProperty
 
 
-	#tag Constant, Name = kArrayEachSnippet, Type = String, Dynamic = False, Default = \"var a\x3D Array(10);\r\rfor (var i\x3D 0; i< 10; i++) a[i]\x3D (i+1)*2;\r\ra.each(fun (e) {print e;});\r\r// expect: 2.0\r// expect: 4.0\r// expect: 6.0\r// expect: 8.0\r// expect: 10.0\r// expect: 12.0\r// expect: 14.0\r// expect: 16.0\r// expect: 18.0\r// expect: 20.0\r", Scope = Private
+	#tag Constant, Name = kArrayEachSnippet, Type = String, Dynamic = False, Default = \"var a\x3D Array(10);\r\rfor (var i\x3D 0; i< 10; i++) a[i]\x3D (i+1)*2;\r\rfor (e in a) print e;\r\r// expect: 2.0\r// expect: 4.0\r// expect: 6.0\r// expect: 8.0\r// expect: 10.0\r// expect: 12.0\r// expect: 14.0\r// expect: 16.0\r// expect: 18.0\r// expect: 20.0\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kArraysSnippet, Type = String, Dynamic = False, Default = \"var a\x3D[1\x2C2\x2C3];\rprint a.length; // expect: 3.0\rprint a.empty; // expect: false\rprint a[1]; // expect: 2.0\ra[0]\x3D4;\rprint a[0]; // expect: 4.0\r\rvar b\x3D[];\rprint b.length; // expect: 0.0\r\rvar foo\x3D [\"a\"\x2C \"b\"\x2C \"c\"];\rprint foo[2]; // // expect: c\r\rvar foo \x3D [1\x2C 1 + 1];\rprint foo; // expect: <class Array>\rprint foo[1]; // expect: 2.0\r\rfun add(a\x2Cb) { return a+ b; }\rprint foo[add(0\x2C 1)]; // expect: 2.0\r\r// pop\rvar c\x3D[4\x2C5\x2C6];\rvar elem\x3D c.pop();\rprint elem; // expect: 6.0\rprint c.length; // expect: 2.0\r\r// push\rvar b\x3D a.push(4\x2C5);\rprint a.length; // expect: 3.0\rprint b.length; // expect: 5.0\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"\x2C 1];\ra.each(fun (e) {\r  print \"<\"+ e+ \">\";\r});\r\r// expect: <a>\r// expect: <b>\r// expect: <c>\r// expect: <d>\r// expect: <1.0>\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\rvar find\x3D a.indexOf(\"c\");\rprint find; // expect: 2.0\r\r\rfun echo(e) { print e;}\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\ra.each(echo);\r\rvar b\x3D a.map(fun (e) { return e+ \"!\";});\rprint b.length;\rb.each(echo);\r\r// expect: a\r// expect: b\r// expect: c\r// expect: d\r\r// expect: 4.0\r// expect: a!\r// expect: b!\r// expect: c!\r// expect: d!\r\rvar a\x3D[11\x2C22\x2C33];\rvar s\x3Da.reduce(fun(acum\x2Ccurr){\r  return acum+\x3D curr;\r});\rprint s;\r\r// expect: 66.0\r", Scope = Private
@@ -605,10 +605,10 @@ Inherits TestGroup
 	#tag Constant, Name = kLamdaSnippet, Type = String, Dynamic = False, Default = \"// https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter10_functions.md\r\rfun whichFn(fn) {\r  fn(\"world\");\r}\r\rwhichFn(fun (a) {\r print \"hello \"+ a; // expect: hello world\r});\r\rfun named(a) { print a; }\rwhichFn(named);\r\r// expect: world\r\rfun whichFn(fn) {\r  for (var i \x3D 1; i <\x3D 3; i \x3D i + 1) {\r    fn(i);\r  }\r}\r\rwhichFn(fun (a) { print a; });\r\r// expect: 1.0\r// expect: 2.0\r// expect: 3.0\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kMathSnippets, Type = String, Dynamic = False, Default = \"print Math.abs(23.9); // expect: 23.9\r\rprint Math.abs(-23.9); // expect: 23.9\r\rprint Math.acos(0.5); // expect: 60.0\r\rprint Math.asin(0.5); // expect: 30.0\r\rprint Math.atan(1); // expect: 45.0\r\rprint Math.atan2(1\x2C0); // expect: 90.0\r\rprint Math.bin(15); // expect: 1111\rprint Math.bin(75); // expect: 1001011\rprint Math.bin(0xf); // expect: 1111\r\rprint Math.cdbl(\"12345\"); // expect: 12345.0\r//print Math.cdbl(\"12345.6789\"); // depends op system\r\rprint Math.ceil(1.234*100)/100; // expect: 1.24\r\rprint Math.cos(45); // expect: 0.707107\r\rprint Math.exp(10); // expect: 22026.465795\r\rprint Math.floor(1.234); // expect: 1.0\r\rprint Math.hex(5); // expect: 5\rprint Math.hex(75); // expect: 4B\rprint Math.hex(256); // expect: 100\r\rprint Math.log(10); // expect: 2.302585\r\rprint Math.max(3.01\x2C 4.05); // expect: 4.05\rprint Math.min(3.01\x2C 4.05); // expect: 3.01\r\rprint Math.oct(5); // expect: 5\rprint Math.oct(75); // expect: 113\rprint Math.oct(256); // expect: 400\r\rprint Math.pow(4\x2C7); // expect: 16384.0\r\rprint Math.round(1.499); // expect: 1.0\rprint Math.round(1.5); // expect: 2.0\r\rprint Math.sin(30); // expect: 0.5\r\rprint Math.sqrt(16); // expect: 4.0\r\rprint Math.tan(45); // expect: 1.0\r\rprint Math.val(\"12345\"); // expect: 12345.0\rprint Math.val(\"12345car45\"); // expect: 12345.0\rprint Math.val(\"123.45\"); // expect: 123.45\rprint Math.val(\"123 45\"); // expect: 123.0\rprint Math.val(\"car\"); // expect: 0.0\r\rprint Math.str(0); // expect: 0\rprint Math.str(12345); // expect: 12345\rprint Math.str(12345.67); // expect: 12345.67\rprint Math.str(12345.67\x2C \"###\x2C###.##\"); // expect: 12\x2C345.67\rprint Math.str(-12345.67\x2C \"###\x2C###.##\"); // expect: 12\x2C345.67\rprint Math.str(-12345.67\x2C \"-###\x2C###.##\"); // expect: -12\x2C345.67", Scope = Private
+	#tag Constant, Name = kModuleSnippet, Type = String, Dynamic = False, Default = \"module M {\r  class C {\r    parse(cc) {print cc;}\r  }\r  fun F() {print \"hello\";}\r  fun hello() {return \"hello!\";}\r}\rM.hello2\x3D \"hello2\";\r\rM.F();\rvar a\x3D M.C();\ra.parse(\"b\");\r\rvar hello\x3D M.hello();\rprint hello;\rprint M.hello2;\r\r// expect: hello\r// expect: b\r// expect: hello!\r// expect: hello2\r\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kModuleSnippet, Type = String, Dynamic = False, Default = \"module M {\r  class C {\r    parse(cc) {print cc;}\r  }\r  fun F() {print \"hello\";}\r  fun hello() {return \"hello!\";}\r}\rM.hello2\x3D \"hello2\";\r\rM.F();\rvar a\x3D M.C();\ra.parse(\"b\");\r\rvar hello\x3D M.hello();\rprint hello;\rprint M.hello2;\r\r// expect: hello\r// expect: b\r// expect: hello!\r// expect: hello2\r\r", Scope = Private
+	#tag Constant, Name = kNumberSnippets, Type = String, Dynamic = False, Default = \"print Number.abs(23.9); // expect: 23.9\r\rprint Number.abs(-23.9); // expect: 23.9\r\rprint Number.acos(0.5); // expect: 60.0\r\rprint Number.asin(0.5); // expect: 30.0\r\rprint Number.atan(1); // expect: 45.0\r\rprint Number.atan2(1\x2C0); // expect: 90.0\r\rprint Number.bin(15); // expect: 1111\rprint Number.bin(75); // expect: 1001011\rprint Number.bin(0xf); // expect: 1111\r\rprint Number.cdbl(\"12345\"); // expect: 12345.0\r//print Number.cdbl(\"12345.6789\"); // depends op system\r\rprint Number.ceil(1.234*100)/100; // expect: 1.24\r\rprint Number.cos(45); // expect: 0.707107\r\rprint Number.exp(10); // expect: 22026.465795\r\rprint Number.floor(1.234); // expect: 1.0\r\rprint Number.hex(5); // expect: 5\rprint Number.hex(75); // expect: 4B\rprint Number.hex(256); // expect: 100\r\rprint Number.log(10); // expect: 2.302585\r\rprint Number.max(3.01\x2C 4.05); // expect: 4.05\rprint Number.min(3.01\x2C 4.05); // expect: 3.01\r\rprint Number.oct(5); // expect: 5\rprint Number.oct(75); // expect: 113\rprint Number.oct(256); // expect: 400\r\rprint Number.pow(4\x2C7); // expect: 16384.0\r\rprint Number.round(1.499); // expect: 1.0\rprint Number.round(1.5); // expect: 2.0\r\rprint Number.sin(30); // expect: 0.5\r\rprint Number.sqrt(16); // expect: 4.0\r\rprint Number.tan(45); // expect: 1.0\r\rprint Number.val(\"12345\"); // expect: 12345.0\rprint Number.val(\"12345car45\"); // expect: 12345.0\rprint Number.val(\"123.45\"); // expect: 123.45\rprint Number.val(\"123 45\"); // expect: 123.0\rprint Number.val(\"car\"); // expect: 0.0\r\rprint Number.str(0); // expect: 0\rprint Number.str(12345); // expect: 12345\rprint Number.str(12345.67); // expect: 12345.67\rprint Number.str(12345.67\x2C \"###\x2C###.##\"); // expect: 12\x2C345.67\rprint Number.str(-12345.67\x2C \"###\x2C###.##\"); // expect: 12\x2C345.67\rprint Number.str(-12345.67\x2C \"-###\x2C###.##\"); // expect: -12\x2C345.67", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kPostfixSnippet, Type = String, Dynamic = False, Default = \"var a\x3D5;\rvar b\x3D a++;\rprint a; // expect: 6.0\rprint b; // expect: 5.0\r{\r  var a\x3D10;\r  var b\x3D a++;\r  print a; // expect: 11.0\r  print b; // expect: 10.0\r}\r\rvar c\x3D b--;\rprint c; // expect: 5.0\rprint b; // expect: 4.0\r", Scope = Private
@@ -641,7 +641,7 @@ Inherits TestGroup
 	#tag Constant, Name = kStringRawExpected, Type = String, Dynamic = False, Default = \"{\r    \"hello\": \"lox\"\x2C\r    \"from\": \"json\"\r}\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kTextSnippet, Type = String, Dynamic = False, Default = \"print Text.asc(\"@\"); // expect: 64.0\r\rprint Text.chr(9); // expect: \t\r\rprint Text.decodeBase64(\"dGVzdA\x3D\x3D\"); // expect: test\r\rprint Text.decodeHex(\"61\"); // expect: a\r\rprint Text.encodeBase64(\"test\"); // expect: dGVzdA\x3D\x3D\r\rprint Text.encodeHex(\"test\"); // expect: 74657374\r\rprint Text.inStr(\"hello world\"\x2C \"world\"); // expect: 7.0\r\rprint Text.left(\"hello world\"\x2C 5); // expect: hello\r\rprint Text.len(\"hello world\"); // expect: 11.0\r\rprint Text.lower(\"HELLO WORLD\"); // expect: hello world\r\rprint Text.mid(\"hello world\"\x2C 7); // expect: world\rprint Text.mid(\"hello world\"\x2C 7\x2C 1); // expect: w\r\rprint Text.nthField(\"this*is*the*end\"\x2C \"*\"\x2C 3); // expect: the\r\rprint Text.replace(\"The quick fox\"\x2C \"quick\"\x2C \"slow\"); // expect: The slow fox\r\rprint Text.replaceAll(\"xyxyxy\"\x2C \"x\"\x2C \"z\"); // expect: zyzyzy\r\rprint Text.right(\"hello world\"\x2C 5); // expect: world\r\rprint Text.titleCase(\"tHe Quick fOX\"); // expect: The Quick Fox\r\rprint Text.trim(\" tHe Quick fOX \"); // expect: The Quick Fox\r\rprint Text.upper(\"tHe Quick fOX\"); // expect: THE QUICK FOX", Scope = Private
+	#tag Constant, Name = kStringSnippet, Type = String, Dynamic = False, Default = \"print String.asc(\"@\"); // expect: 64.0\r\rprint String.chr(9); // expect: \t\r\rprint String.decodeBase64(\"dGVzdA\x3D\x3D\"); // expect: test\r\rprint String.decodeHex(\"61\"); // expect: a\r\rprint String.encodeBase64(\"test\"); // expect: dGVzdA\x3D\x3D\r\rprint String.encodeHex(\"test\"); // expect: 74657374\r\rprint String.inStr(\"hello world\"\x2C \"world\"); // expect: 7.0\r\rprint String.left(\"hello world\"\x2C 5); // expect: hello\r\rprint String.len(\"hello world\"); // expect: 11.0\r\rprint String.lower(\"HELLO WORLD\"); // expect: hello world\r\rprint String.mid(\"hello world\"\x2C 7); // expect: world\rprint String.mid(\"hello world\"\x2C 7\x2C 1); // expect: w\r\rprint String.nthField(\"this*is*the*end\"\x2C \"*\"\x2C 3); // expect: the\r\rprint String.replace(\"The quick fox\"\x2C \"quick\"\x2C \"slow\"); // expect: The slow fox\r\rprint String.replaceAll(\"xyxyxy\"\x2C \"x\"\x2C \"z\"); // expect: zyzyzy\r\rprint String.right(\"hello world\"\x2C 5); // expect: world\r\rprint String.titleCase(\"tHe Quick fOX\"); // expect: The Quick Fox\r\rprint String.trim(\" tHe Quick fOX \"); // expect: The Quick Fox\r\rprint String.upper(\"tHe Quick fOX\"); // expect: THE QUICK FOX\r", Scope = Private
 	#tag EndConstant
 
 
