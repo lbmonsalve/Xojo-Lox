@@ -501,6 +501,12 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub StringTest()
+		  DoRun kStringSnippet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub TernaryTest()
 		  Dim Snippet As String= "var a=1; var b=2; var c=a>b?1:2; print c;"
 		  
@@ -538,12 +544,6 @@ Inherits TestGroup
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub TextTest()
-		  DoRun kTextSnippet
-		End Sub
-	#tag EndMethod
-
 
 	#tag Property, Flags = &h0
 		BufferError As String
@@ -554,7 +554,7 @@ Inherits TestGroup
 	#tag EndProperty
 
 
-	#tag Constant, Name = kArrayEachSnippet, Type = String, Dynamic = False, Default = \"var a\x3D Array(10);\r\rfor (var i\x3D 0; i< 10; i++) a[i]\x3D (i+1)*2;\r\ra.each(fun (e) {print e;});\r\r// expect: 2.0\r// expect: 4.0\r// expect: 6.0\r// expect: 8.0\r// expect: 10.0\r// expect: 12.0\r// expect: 14.0\r// expect: 16.0\r// expect: 18.0\r// expect: 20.0\r", Scope = Private
+	#tag Constant, Name = kArrayEachSnippet, Type = String, Dynamic = False, Default = \"var a\x3D Array(10);\r\rfor (var i\x3D 0; i< 10; i++) a[i]\x3D (i+1)*2;\r\rfor (e in a) print e;\r\r// expect: 2.0\r// expect: 4.0\r// expect: 6.0\r// expect: 8.0\r// expect: 10.0\r// expect: 12.0\r// expect: 14.0\r// expect: 16.0\r// expect: 18.0\r// expect: 20.0\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kArraysSnippet, Type = String, Dynamic = False, Default = \"var a\x3D[1\x2C2\x2C3];\rprint a.length; // expect: 3.0\rprint a.empty; // expect: false\rprint a[1]; // expect: 2.0\ra[0]\x3D4;\rprint a[0]; // expect: 4.0\r\rvar b\x3D[];\rprint b.length; // expect: 0.0\r\rvar foo\x3D [\"a\"\x2C \"b\"\x2C \"c\"];\rprint foo[2]; // // expect: c\r\rvar foo \x3D [1\x2C 1 + 1];\rprint foo; // expect: <class Array>\rprint foo[1]; // expect: 2.0\r\rfun add(a\x2Cb) { return a+ b; }\rprint foo[add(0\x2C 1)]; // expect: 2.0\r\r// pop\rvar c\x3D[4\x2C5\x2C6];\rvar elem\x3D c.pop();\rprint elem; // expect: 6.0\rprint c.length; // expect: 2.0\r\r// push\rvar b\x3D a.push(4\x2C5);\rprint a.length; // expect: 3.0\rprint b.length; // expect: 5.0\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"\x2C 1];\ra.each(fun (e) {\r  print \"<\"+ e+ \">\";\r});\r\r// expect: <a>\r// expect: <b>\r// expect: <c>\r// expect: <d>\r// expect: <1.0>\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\rvar find\x3D a.indexOf(\"c\");\rprint find; // expect: 2.0\r\r\rfun echo(e) { print e;}\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\ra.each(echo);\r\rvar b\x3D a.map(fun (e) { return e+ \"!\";});\rprint b.length;\rb.each(echo);\r\r// expect: a\r// expect: b\r// expect: c\r// expect: d\r\r// expect: 4.0\r// expect: a!\r// expect: b!\r// expect: c!\r// expect: d!\r\rvar a\x3D[11\x2C22\x2C33];\rvar s\x3Da.reduce(fun(acum\x2Ccurr){\r  return acum+\x3D curr;\r});\rprint s;\r\r// expect: 66.0\r", Scope = Private
@@ -641,7 +641,7 @@ Inherits TestGroup
 	#tag Constant, Name = kStringRawExpected, Type = String, Dynamic = False, Default = \"{\r    \"hello\": \"lox\"\x2C\r    \"from\": \"json\"\r}\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kTextSnippet, Type = String, Dynamic = False, Default = \"print Text.asc(\"@\"); // expect: 64.0\r\rprint Text.chr(9); // expect: \t\r\rprint Text.decodeBase64(\"dGVzdA\x3D\x3D\"); // expect: test\r\rprint Text.decodeHex(\"61\"); // expect: a\r\rprint Text.encodeBase64(\"test\"); // expect: dGVzdA\x3D\x3D\r\rprint Text.encodeHex(\"test\"); // expect: 74657374\r\rprint Text.inStr(\"hello world\"\x2C \"world\"); // expect: 7.0\r\rprint Text.left(\"hello world\"\x2C 5); // expect: hello\r\rprint Text.len(\"hello world\"); // expect: 11.0\r\rprint Text.lower(\"HELLO WORLD\"); // expect: hello world\r\rprint Text.mid(\"hello world\"\x2C 7); // expect: world\rprint Text.mid(\"hello world\"\x2C 7\x2C 1); // expect: w\r\rprint Text.nthField(\"this*is*the*end\"\x2C \"*\"\x2C 3); // expect: the\r\rprint Text.replace(\"The quick fox\"\x2C \"quick\"\x2C \"slow\"); // expect: The slow fox\r\rprint Text.replaceAll(\"xyxyxy\"\x2C \"x\"\x2C \"z\"); // expect: zyzyzy\r\rprint Text.right(\"hello world\"\x2C 5); // expect: world\r\rprint Text.titleCase(\"tHe Quick fOX\"); // expect: The Quick Fox\r\rprint Text.trim(\" tHe Quick fOX \"); // expect: The Quick Fox\r\rprint Text.upper(\"tHe Quick fOX\"); // expect: THE QUICK FOX", Scope = Private
+	#tag Constant, Name = kStringSnippet, Type = String, Dynamic = False, Default = \"print String.asc(\"@\"); // expect: 64.0\r\rprint String.chr(9); // expect: \t\r\rprint String.decodeBase64(\"dGVzdA\x3D\x3D\"); // expect: test\r\rprint String.decodeHex(\"61\"); // expect: a\r\rprint String.encodeBase64(\"test\"); // expect: dGVzdA\x3D\x3D\r\rprint String.encodeHex(\"test\"); // expect: 74657374\r\rprint String.inStr(\"hello world\"\x2C \"world\"); // expect: 7.0\r\rprint String.left(\"hello world\"\x2C 5); // expect: hello\r\rprint String.len(\"hello world\"); // expect: 11.0\r\rprint String.lower(\"HELLO WORLD\"); // expect: hello world\r\rprint String.mid(\"hello world\"\x2C 7); // expect: world\rprint String.mid(\"hello world\"\x2C 7\x2C 1); // expect: w\r\rprint String.nthField(\"this*is*the*end\"\x2C \"*\"\x2C 3); // expect: the\r\rprint String.replace(\"The quick fox\"\x2C \"quick\"\x2C \"slow\"); // expect: The slow fox\r\rprint String.replaceAll(\"xyxyxy\"\x2C \"x\"\x2C \"z\"); // expect: zyzyzy\r\rprint String.right(\"hello world\"\x2C 5); // expect: world\r\rprint String.titleCase(\"tHe Quick fOX\"); // expect: The Quick Fox\r\rprint String.trim(\" tHe Quick fOX \"); // expect: The Quick Fox\r\rprint String.upper(\"tHe Quick fOX\"); // expect: THE QUICK FOX\r", Scope = Private
 	#tag EndConstant
 
 

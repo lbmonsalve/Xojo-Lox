@@ -246,7 +246,7 @@ Begin Window UnitTestWindow Implements Writeable
          Password        =   ""
          ReadOnly        =   False
          Scope           =   0
-         TabIndex        =   1
+         TabIndex        =   0
          TabPanelIndex   =   2
          TabStop         =   True
          Text            =   ""
@@ -480,50 +480,50 @@ Begin Window UnitTestWindow Implements Writeable
          Visible         =   True
          Width           =   130
       End
-   End
-   Begin BevelButton PushButton8
-      AcceptFocus     =   ""
-      AutoDeactivate  =   True
-      BackColor       =   ""
-      Bevel           =   4
-      Bold            =   ""
-      ButtonType      =   ""
-      Caption         =   "Load..."
-      CaptionAlign    =   2
-      CaptionDelta    =   2
-      CaptionPlacement=   0
-      Enabled         =   True
-      HasBackColor    =   ""
-      HasMenu         =   0
-      Height          =   30
-      HelpTag         =   ""
-      Icon            =   ""
-      IconAlign       =   0
-      IconDX          =   ""
-      IconDY          =   ""
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   ""
-      Left            =   20
-      LockBottom      =   ""
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   ""
-      LockTop         =   True
-      MenuValue       =   ""
-      Scope           =   0
-      TabIndex        =   0
-      TabPanelIndex   =   0
-      TabStop         =   True
-      TextColor       =   ""
-      TextFont        =   "System"
-      TextSize        =   16
-      TextUnit        =   0
-      Top             =   50
-      Underline       =   ""
-      Value           =   ""
-      Visible         =   True
-      Width           =   80
+      Begin BevelButton PushButton8
+         AcceptFocus     =   ""
+         AutoDeactivate  =   True
+         BackColor       =   ""
+         Bevel           =   4
+         Bold            =   ""
+         ButtonType      =   ""
+         Caption         =   "Load..."
+         CaptionAlign    =   2
+         CaptionDelta    =   2
+         CaptionPlacement=   0
+         Enabled         =   True
+         HasBackColor    =   ""
+         HasMenu         =   0
+         Height          =   30
+         HelpTag         =   ""
+         Icon            =   ""
+         IconAlign       =   0
+         IconDX          =   ""
+         IconDY          =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   ""
+         Left            =   20
+         LockBottom      =   ""
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   ""
+         LockTop         =   True
+         MenuValue       =   ""
+         Scope           =   0
+         TabIndex        =   10
+         TabPanelIndex   =   2
+         TabStop         =   True
+         TextColor       =   ""
+         TextFont        =   "System"
+         TextSize        =   16
+         TextUnit        =   0
+         Top             =   50
+         Underline       =   ""
+         Value           =   ""
+         Visible         =   True
+         Width           =   80
+      End
    End
 End
 #tag EndWindow

@@ -16,7 +16,12 @@ Implements ICallable
 		      Dim ti As TextInputStream= TextInputStream.Open(mFile.FileItem)
 		      Return ti.ReadAll(Encodings.UTF8)
 		    Case "write"
-		      Dim source As String= args(0)
+		      Dim source As String
+		      If args(0) IsA Lox.Inter.Std.Text Then
+		        source= Lox.Inter.Std.Text(args(0)).Value
+		      Else
+		        source= args(0)
+		      End If
 		      If source.Len= 0 Then Return mFile
 		      
 		      Dim tt As TextOutputStream= TextOutputStream.Create(mFile.FileItem)
@@ -27,7 +32,7 @@ Implements ICallable
 		      Return New Lox.Inter.Std.File(item)
 		      
 		    Case "child"
-		      Dim item As FolderItem= mFile.FileItem.Child(args(0).StringValue)
+		      Dim item As FolderItem= mFile.FileItem.Child(Lox.Inter.Std.Text(args(0)).Value)
 		      Return New Lox.Inter.Std.File(item)
 		      
 		    End Select

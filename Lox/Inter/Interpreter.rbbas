@@ -92,7 +92,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  If left.IsNull Then Return False
 		  If left.Type<> right.Type Then Return False
 		  
-		  Return left.Equals(right)
+		  Return left.EqualsLox(right)
 		End Function
 	#tag EndMethod
 
@@ -670,6 +670,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  // Remember, we use the raw value of RooText, RooNumber and RooBoolean objects as
 		  // the key. For other types, we use the actual object.
 		  Dim key As Variant= Evaluate(expr.Key)
+		  If key IsA Lox.Inter.Std.Text Then key= Lox.Inter.Std.Text(key).Value
 		  
 		  Dim current As Variant
 		  
@@ -740,6 +741,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  
 		  // Evaluate the key.
 		  keyValue= Evaluate(expr.Key)
+		  If keyValue IsA Lox.Inter.Std.Text Then keyValue= Lox.Inter.Std.Text(keyValue).Value
 		  
 		  // Return the requested value or Nothing if it doesn't exist.
 		  // Try a speedy object lookup first.
@@ -758,6 +760,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  Dim entry As Lox.Misc.CSDictionary= expr.HashMap
 		  For i As Integer= 0 To entry.Count- 1
 		    key= Evaluate(entry.Key(i))
+		    If key IsA Lox.Inter.Std.Text Then key= Lox.Inter.Std.Text(key).Value
+		    
 		    value= Evaluate(entry.Value(entry.Key(i)))
 		    
 		    h.HashMap.Value(key)= value
@@ -824,6 +828,10 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h0
 		Function VisitLiteral(expr As Lox.Ast.Literal) As Variant
+		  If expr.Value.Type= Variant.TypeString Then
+		    Return New Lox.Inter.Std.Text(expr.Value.StringValue)
+		  End If
+		  
 		  Return expr.Value
 		End Function
 	#tag EndMethod

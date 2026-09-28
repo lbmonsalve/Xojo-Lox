@@ -9,66 +9,97 @@ Implements ICallable
 
 	#tag Method, Flags = &h0
 		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
+		  Dim hasValue As Boolean= mText.Value.Len> 0
+		  
 		  Try
 		    #pragma BreakOnExceptions Off
+		    
 		    Select Case mMethodName
 		    Case "asc"
-		      Return Asc(args(0).StringValue)
+		      Return Asc(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "chr"
 		      Return Encodings.UTF8.Chr(args(0).IntegerValue)
 		      
 		    Case "decodeBase64"
-		      Return DecodeBase64(args(0).StringValue)
+		      Return DecodeBase64(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "decodeHex"
-		      Return DecodeHex(args(0).StringValue)
+		      Return DecodeHex(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "encodeBase64"
-		      Return EncodeBase64(args(0).StringValue, 0)
+		      Return EncodeBase64(Lox.Inter.Std.Text(args(0)).Value, 0)
 		      
 		    Case "encodeHex"
-		      Return EncodeHex(args(0).StringValue)
+		      Return EncodeHex(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "inStr"
-		      Return InStr(args(0).StringValue, args(1).StringValue)
+		      Dim arg0 As String= Lox.Inter.Std.Text(args(0)).Value
+		      
+		      If hasValue Then Return mText.Value.InStr(arg0)
+		      Return InStr(arg0, Lox.Inter.Std.Text(args(1)).Value)
 		      
 		    Case "left"
-		      Return Left(args(0).StringValue, args(1).IntegerValue)
+		      Dim arg0 As String= Lox.Inter.Std.Text(args(0)).Value
+		      
+		      If hasValue Then Return mText.Value.Left(args(0).IntegerValue)
+		      Return Left(arg0, args(1).IntegerValue)
 		      
 		    Case "len"
-		      Return Len(args(0).StringValue)
+		      Return Len(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "lower"
-		      Return Lowercase(args(0).StringValue)
+		      Return Lowercase(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "mid"
+		      Dim arg0 As String= Lox.Inter.Std.Text(args(0)).Value
+		      
+		      If hasValue Then
+		        If args.Ubound= 0 Then
+		          Return mText.Value.Mid(args(0).IntegerValue)
+		        ElseIf args.Ubound= 1 Then
+		          Return mText.Value.Mid(args(0).IntegerValue, args(1).IntegerValue)
+		        End If
+		      End If
+		      
 		      If args.Ubound= 1 Then
-		        Return Mid(args(0).StringValue, args(1).IntegerValue)
+		        Return Mid(arg0, args(1).IntegerValue)
 		      ElseIf args.Ubound= 2 Then
-		        Return Mid(args(0).StringValue, args(1).IntegerValue, args(2).IntegerValue)
+		        Return Mid(arg0, args(1).IntegerValue, args(2).IntegerValue)
 		      End If
 		      
 		    Case "nthField"
-		      Return NthField(args(0).StringValue, args(1).StringValue, args(2).IntegerValue)
+		      Dim arg0 As String= Lox.Inter.Std.Text(args(0)).Value
+		      
+		      If hasValue Then Return mText.Value.NthField(arg0, args(1).IntegerValue)
+		      Return NthField(arg0, Lox.Inter.Std.Text(args(1)).Value, args(2).IntegerValue)
 		      
 		    Case "replace"
-		      Return Replace(args(0).StringValue, args(1).StringValue, args(2).StringValue)
+		      Dim arg0 As String= Lox.Inter.Std.Text(args(0)).Value
+		      
+		      If hasValue Then Return mText.Value.Replace(arg0, Lox.Inter.Std.Text(args(1)).Value)
+		      Return Replace(arg0, Lox.Inter.Std.Text(args(1)).Value, Lox.Inter.Std.Text(args(2)).Value)
 		      
 		    Case "replaceAll"
-		      Return ReplaceAll(args(0).StringValue, args(1).StringValue, args(2).StringValue)
+		      Dim arg0 As String= Lox.Inter.Std.Text(args(0)).Value
+		      
+		      If hasValue Then Return mText.Value.ReplaceAll(arg0, Lox.Inter.Std.Text(args(1)).Value)
+		      Return ReplaceAll(arg0, Lox.Inter.Std.Text(args(1)).Value, Lox.Inter.Std.Text(args(2)).Value)
 		      
 		    Case "right"
-		      Return Right(args(0).StringValue, args(1).IntegerValue)
+		      Dim arg0 As String= Lox.Inter.Std.Text(args(0)).Value
+		      
+		      If hasValue Then Return mText.Value.Right(args(0).IntegerValue)
+		      Return Right(arg0, args(1).IntegerValue)
 		      
 		    Case "titleCase"
-		      Return Titlecase(args(0).StringValue)
+		      Return Titlecase(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "trim"
-		      Return Trim(args(0).StringValue)
+		      Return Trim(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "upper"
-		      Return Uppercase(args(0).StringValue)
+		      Return Uppercase(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "eol"
 		      Dim eol As String= EndOfLine

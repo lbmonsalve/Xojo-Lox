@@ -11,11 +11,14 @@ Implements ICallable
 		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Try
 		    #pragma BreakOnExceptions Off
+		    Dim key As Variant= args(0)
+		    If key IsA Lox.Inter.Std.Text Then key= Lox.Inter.Std.Text(key).Value
+		    
 		    Select Case MethodName
 		    Case "delete"
 		      Try
-		        Dim value As Variant= Owner.HashMap.Lookup(args(0), Nil)
-		        Owner.HashMap.Remove args(0)
+		        Dim value As Variant= Owner.HashMap.Lookup(key, Nil)
+		        Owner.HashMap.Remove key
 		        Return value
 		      Catch exc As KeyNotFoundException
 		        inter.HadRuntimeError= True
@@ -27,9 +30,9 @@ Implements ICallable
 		      Call DoEach(inter, args, tok)
 		      Return Owner
 		    Case "value"
-		      Return Owner.HashMap.Lookup(args(0), Nil)
+		      Return Owner.HashMap.Lookup(key, Nil)
 		    Case "put"
-		      Owner.HashMap.Value(args(0))= args(1)
+		      Owner.HashMap.Value(key)= args(1)
 		      Return Owner
 		    End Select
 		  Catch

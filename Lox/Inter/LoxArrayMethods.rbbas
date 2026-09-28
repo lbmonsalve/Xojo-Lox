@@ -27,7 +27,7 @@ Implements ICallable
 		      Dim search As Variant= args(0)
 		      Dim idxFound As Integer
 		      For i As Integer= 0 To elems.Ubound
-		        If search.Equals(elems(i)) Then
+		        If search.EqualsLox(elems(i)) Then
 		          idxFound= i
 		          Exit
 		        End If

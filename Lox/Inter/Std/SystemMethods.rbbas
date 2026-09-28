@@ -15,11 +15,11 @@ Implements ICallable
 		    Case "osEnvVar"
 		      Return EnvVar(args(0)) // conflict in v2022
 		    Case "debugLog"
-		      DbgLog(args(0)) // conflict in v2022
+		      DbgLog(Lox.Inter.Std.Text(args(0)).Value) // conflict in v2022
 		      Return mSystem
 		    Case "assert"
 		      Dim eval As Variant= args(0)
-		      Dim mess As String= args(1).StringValue
+		      Dim mess As String= Lox.Inter.Std.Text(args(1)).Value
 		      
 		      If eval.IsNull Then
 		        #pragma BreakOnExceptions Off

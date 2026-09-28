@@ -85,6 +85,23 @@ Protected Module Lox
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function EqualsLox(Extends obj As Variant, rhs As Variant) As Boolean
+		  If obj.Type<> rhs.Type Then Return False
+		  
+		  // TODO: implement operator_compare on LoxInstance
+		  If obj IsA Lox.Inter.Std.Text And rhs IsA Lox.Inter.Std.Text Then
+		    If Lox.Inter.Std.Text(obj).Value= Lox.Inter.Std.Text(rhs).Value Then
+		      Return True
+		    Else
+		      Return False
+		    End If
+		  End If
+		  
+		  Return obj.Equals(rhs)
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Sub Error(line As Integer, message As String)
 		  Report line, "", message

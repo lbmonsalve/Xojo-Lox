@@ -46,7 +46,7 @@ Implements ICallable
 		      Return bin(args(0).DoubleValue)
 		      
 		    Case "cdbl"
-		      Return CDbl(args(0).StringValue)
+		      Return CDbl(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "ceil"
 		      Return Ceil(args(0).DoubleValue)
@@ -79,13 +79,13 @@ Implements ICallable
 		      Return Round(args(0).DoubleValue)
 		      
 		    Case "val"
-		      Return val(args(0).StringValue)
+		      Return val(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    Case "str"
 		      If args.Ubound= 0 Then
 		        Return str(args(0).DoubleValue)
 		      ElseIf args.Ubound= 1 Then
-		        Return str(args(0).DoubleValue, args(1).StringValue)
+		        Return str(args(0).DoubleValue, Lox.Inter.Std.Text(args(1)).Value)
 		      End If
 		      
 		    End Select

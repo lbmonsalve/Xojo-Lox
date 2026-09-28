@@ -16,7 +16,7 @@ Inherits Lox.Inter.LoxClass
 		      Return New Lox.Inter.Std.File
 		      
 		    Case 0
-		      Return New Lox.Inter.Std.File(args(0).StringValue)
+		      Return New Lox.Inter.Std.File(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    End Select
 		  Catch

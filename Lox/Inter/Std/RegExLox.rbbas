@@ -13,7 +13,7 @@ Inherits Lox.Inter.LoxClass
 		    #pragma BreakOnExceptions Off
 		    Select Case args.Ubound
 		    Case 0
-		      Return New Lox.Inter.Std.RegExLox(args(0).StringValue)
+		      Return New Lox.Inter.Std.RegExLox(Lox.Inter.Std.Text(args(0)).Value)
 		      
 		    End Select
 		  Catch

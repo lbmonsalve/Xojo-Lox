@@ -11,7 +11,7 @@ Implements ICallable
 		Function Call_(inter As Interpreter, args() As Variant, tok As Token) As Variant
 		  Try
 		    #pragma BreakOnExceptions Off
-		    Dim match As RegExMatch= mRegEx.Search(args(0))
+		    Dim match As RegExMatch= mRegEx.Search(Lox.Inter.Std.Text(args(0)).Value)
 		    If match Is Nil Then Return Nil
 		    
 		    Dim result() As Variant
