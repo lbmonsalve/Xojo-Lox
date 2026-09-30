@@ -30,6 +30,9 @@ Inherits Lox.Inter.LoxClass
 		  Case "round", "val", "str"
 		    Return New Lox.Inter.Std.NumberMethods(name, Self)
 		    
+		  Case "equal"
+		    Return New Lox.Inter.Std.NumberMethods(name, Self)
+		    
 		  End Select
 		End Function
 	#tag EndMethod

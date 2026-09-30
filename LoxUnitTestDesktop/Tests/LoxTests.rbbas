@@ -290,8 +290,8 @@ Inherits TestGroup
 		    
 		    For Each file As FolderItem In files
 		      // skip files:
-		      If file.DisplayName= "get_on_class.lox" Then Continue // Static?
-		      If file.DisplayName= "set_on_class.lox" Then Continue // Static?
+		      'If file.DisplayName= "get_on_class.lox" Then Continue // Static?
+		      'If file.DisplayName= "set_on_class.lox" Then Continue // Static?
 		      
 		      BufferPrint= ""
 		      BufferError= ""

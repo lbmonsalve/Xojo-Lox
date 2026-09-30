@@ -88,6 +88,16 @@ Implements ICallable
 		        Return str(args(0).DoubleValue, Lox.Inter.Std.Text(args(1)).Value)
 		      End If
 		      
+		    Case "equal"
+		      Dim diff As Double= args(0).DoubleValue- args(1).DoubleValue
+		      If args.Ubound= 1 Then
+		        If Abs(diff)<= 0.000001 Then Return True
+		      ElseIf args.Ubound= 2 Then
+		        Dim tolerance As Double= args(2).DoubleValue
+		        If Abs(diff)<= tolerance Then Return True
+		      End If
+		      Return False
+		      
 		    End Select
 		  Catch
 		    #pragma BreakOnExceptions Off

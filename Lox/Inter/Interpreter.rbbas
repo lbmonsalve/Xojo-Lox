@@ -197,7 +197,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 
 	#tag Method, Flags = &h21
 		Private Function Stringify(obj As Variant) As String
-		  If obj.Type= 8 Then
+		  If obj.Type= Variant.TypeString Then
 		    If obj.StringValue.InStr("${")= 0 Then Return obj.ToStringLox
 		  Else
 		    Return obj.ToStringLox

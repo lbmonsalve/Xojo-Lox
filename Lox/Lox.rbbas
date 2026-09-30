@@ -98,6 +98,12 @@ Protected Module Lox
 		    End If
 		  End If
 		  
+		  // special case for lox:
+		  If obj.Type= Variant.TypeDouble And rhs.Type= Variant.TypeDouble Then
+		    If obj.StringValue.InStr("#IN")> 0 And rhs.StringValue.InStr("#IN")> 0 Then Return False
+		    Return obj.DoubleValue.Equals(rhs.DoubleValue)
+		  End If
+		  
 		  Return obj.Equals(rhs)
 		End Function
 	#tag EndMethod
@@ -429,7 +435,7 @@ Protected Module Lox
 
 	#tag Method, Flags = &h0
 		Function IsBooleanLox(Extends vart As Variant) As Boolean
-		  If vart.Type= 11 Then Return True
+		  If vart.Type= Variant.TypeBoolean Then Return True
 		  Return False
 		End Function
 	#tag EndMethod
@@ -455,7 +461,7 @@ Protected Module Lox
 
 	#tag Method, Flags = &h0
 		Function IsStringLox(Extends vart As Variant) As Boolean
-		  If vart.Type= 8 Then Return True
+		  If vart.Type= Variant.TypeString Then Return True
 		  Return False
 		End Function
 	#tag EndMethod
@@ -870,7 +876,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.260928", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.260930", Scope = Public
 	#tag EndConstant
 
 
