@@ -3,10 +3,10 @@
 .456
 123.
 
-// expect: NUMBER 123 123.0
+// expect: NUMBER 123 123
 // expect: NUMBER 123.456 123.456
 // expect: DOT . nil
-// expect: NUMBER 456 456.0
-// expect: NUMBER 123 123.0
+// expect: NUMBER 456 456
+// expect: NUMBER 123 123
 // expect: DOT . nil
 // expect: EOF  nil

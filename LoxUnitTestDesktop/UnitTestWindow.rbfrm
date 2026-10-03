@@ -764,7 +764,7 @@ End
 		    " "+ token.Literal.ToStringLox+ EndOfLine
 		  Next
 		  
-		  TextArea2.AppendText Join(lines)+ EndOfLine
+		  TextArea2.AppendText Join(lines, "")+ EndOfLine
 		End Sub
 	#tag EndEvent
 #tag EndEvents

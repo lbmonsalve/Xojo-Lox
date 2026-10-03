@@ -83,9 +83,9 @@ Implements ICallable
 		      
 		    Case "str"
 		      If args.Ubound= 0 Then
-		        Return str(args(0).DoubleValue)
+		        Return Str(args(0).DoubleValue)
 		      ElseIf args.Ubound= 1 Then
-		        Return str(args(0).DoubleValue, Lox.Inter.Std.Text(args(1)).Value)
+		        Return Str(args(0).DoubleValue, Lox.Inter.Std.Text(args(1)).Value)
 		      End If
 		      
 		    Case "equal"

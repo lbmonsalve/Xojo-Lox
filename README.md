@@ -396,16 +396,16 @@ statement      → exprStmt
                | block ;
 
 exprStmt       → expression ";" ;
+printStmt      → "print" expression ";" ;
+ifStmt         → "if" "(" expression ")" statement
+               ( "or" "(" expression ")" statement )*
+               ( "else" statement )? ;
+whileStmt      → "while" "(" expression ")" statement ;
 forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
                    expression? ";"
                    expression? ")" statement
                  | "for" "(" IDENTIFIER "in" range ")" statement ;
-ifStmt         → "if" "(" expression ")" statement
-               ( "or" "(" expression ")" statement )*
-               ( "else" statement )? ;
-printStmt      → "print" expression ";" ;
 returnStmt     → "return" expression? ";" ;
-whileStmt      → "while" "(" expression ")" statement ;
 breakStmt      → "break" ";" ;
 continueStmt   → "continue" ";" ;
 block          → "{" declaration* "}";
@@ -446,7 +446,7 @@ pair           → elvis ":" expression ;
 range          → NUMBER ".." NUMBER | NUMBER ".<" NUMBER | elvis ;
 
 // lexical grammar:
-NUMBER         → DIGIT+ ( "." DIGIT+ )? | HEX | OCT | BIN | "_" ;
+NUMBER         → DIGIT+ ( "." DIGIT+ )? | HEX | OCT | BIN ;
 STRING         → "\"" <any char except "\"">* "\"" ;
 IDENTIFIER     → ALPHA ( ALPHA | DIGIT )* ;
 ALPHA          → "a" ... "z" 
@@ -463,10 +463,10 @@ ALPHA          → "a" ... "z"
                | "\uhfdf0" ... "\ufffd" 
                | "\u1f600" ... "\u1f64f" // emojis
                | "_" ;
-DIGIT          → "0" ... "9" ;
-HEX            → "0x" [a-fA-F0-9]* ;
-OCT            → "0o" [0-7]* ;
-BIN            → "0b" [01]* ;
+DIGIT          → "0" ... "9" | "_" ;
+HEX            → "0x" [a-fA-F0-9_]* ;
+OCT            → "0o" [0-7_]* ;
+BIN            → "0b" [01_]* ;
 
 LINE_COMMENT   → '//' ~[\r\n]* ;
 BLOCK_COMMENT  → '/*' .*? '*/' ;

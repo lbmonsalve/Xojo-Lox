@@ -696,7 +696,7 @@ Protected Module Lox
 		  Case 0
 		    Return "nil"
 		  Case 2, 3, 4, 5, 6 // number
-		    Return Str(obj.DoubleValue, PrintFormatNumber)
+		    Return CStr(obj)//.DoubleValue, PrintFormatNumber)
 		  Case 7 // date
 		    Return obj.DateValue.SQLDateTime
 		  Case 8, 16
@@ -832,7 +832,7 @@ Protected Module Lox
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mPrintFormatNumber As String = "-###########0.0#####"
+		Private mPrintFormatNumber As String = "-###########0.0#######"
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
