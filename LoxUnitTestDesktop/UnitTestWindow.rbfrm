@@ -786,7 +786,7 @@ End
 		    lines.Append stmt+ EndOfLine
 		  Next
 		  
-		  TextArea2.AppendText Join(lines)
+		  TextArea2.AppendText Join(lines, "")
 		End Sub
 	#tag EndEvent
 #tag EndEvents
