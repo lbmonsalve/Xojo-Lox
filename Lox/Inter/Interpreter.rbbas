@@ -446,6 +446,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		      Return left.DoubleValue+ right.DoubleValue
 		    ElseIf left.IsNull Or right.IsNull Then
 		    ElseIf left.IsBooleanLox Or right.IsBooleanLox Then
+		    ElseIf left IsA Lox.Inter.Std.Text And right IsA Lox.Inter.Std.Text Then
+		      Return New Lox.Inter.Std.Text(left.ToStringLox+ right.ToStringLox)
 		    Else // otherwise returns string
 		      Return left.ToStringLox+ right.ToStringLox
 		    End If
