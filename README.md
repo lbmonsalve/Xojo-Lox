@@ -104,7 +104,7 @@ print after - before;
 #### Identifiers extended. emoji's friendly.
 
 ```swift
-var año=2024; print año; // expect: 2024.0
+var año=2024; print año; // expect: 2024
 var Σ= "sigma"; print Σ; // expect: sigma
 var 😃= "smileyface";
 print 😃; // expect: smileyface
@@ -166,10 +166,10 @@ print json; // string without first EOL.
 #### Bitwise.
 
 ```swift
-print 7 & 5;
-print 7 | 5;
-print 7 << 2;
-print 40 >> 2;
+print 7 & 5;    // expect: 5
+print 7 | 5;    // expect: 7
+print 7 << 2;   // expect: 28
+print 40 >> 2;  // expect: 10
 ```
 
 #### Compound assingnment.
@@ -177,11 +177,11 @@ print 40 >> 2;
 ```swift
 var a=5;
 a+=5;
-print a; // expect: 10.0
+print a; // expect: 10
 a-=3;
-print a; // expect: 7.0
+print a; // expect: 7
 a*=5;
-print a; // expect: 35.0
+print a; // expect: 35
 a/=2;
 print a; // expect: 17.5
 ```
@@ -190,16 +190,19 @@ print a; // expect: 17.5
 
 ```swift
 var i=1; i++;
-print i;
+print i; // expect: 2
 
 i--;
-print i;
+print i; // expect: 1
 ```
 
 #### Ternary.
 
 ```swift
-a>b ? 1 : 2
+var a=5; var b=6;
+print a>b ? 1 : 2; // expect: 2
+a=7;
+print a>b?1:2; // expect: 1
 ```
 
 #### Elvis operator.
@@ -220,7 +223,7 @@ while (true) {
   if (bb==10) break;
   bb++;
 }
-print bb; // expect: 10.0
+print bb; // expect: 10
 
 var a = 0;
 while (a < 10) {
@@ -267,14 +270,14 @@ print hello;
 print M.hello2;
 ```
 
-#### Datetime, arrays, Dictionary, regex.
+#### List, Map, Datetime, regex.
 
 ```c
+var a= [1,2,3]; // list
+
+var map= {"a": 1,"b": 2, "c": 100}; // map
+
 var d= DateTime();
-
-var a= [1,2,3]; // array
-
-var dict= {"a": 1,"b": 2, "c": 100}; // dictionary
 
 var r= RegEx("\d+");
 print r.caseSensitive; // expect: false
@@ -319,7 +322,7 @@ print appdata.count;
 
 ```swift
 var name="luis";
-print "welcome ${name}!"; // expect: "welcome luis"
+print "welcome %(name)!"; // expect: "welcome luis"
 ```
 
 #### Random.

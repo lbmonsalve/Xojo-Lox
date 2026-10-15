@@ -606,6 +606,11 @@ End
 
 
 	#tag Note, Name = Snippets
+		var m={"one":1, "two":2};
+		print m["two"];
+		m{"tree"}=3;
+		print m["tree"];
+		
 		
 		var a= Array(10);
 		var i= 0;

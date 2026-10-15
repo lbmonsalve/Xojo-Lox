@@ -52,7 +52,7 @@ Inherits Lox.Inter.LoxClass
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  Return "<class Dict>"
+		  Return "<class Map>"
 		End Function
 	#tag EndMethod
 

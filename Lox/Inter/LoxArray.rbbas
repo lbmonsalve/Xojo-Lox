@@ -63,7 +63,7 @@ Inherits Lox.Inter.LoxClass
 
 	#tag Method, Flags = &h0
 		Function ToString() As String
-		  Return "<class Array>"
+		  Return "<class List>"
 		End Function
 	#tag EndMethod
 

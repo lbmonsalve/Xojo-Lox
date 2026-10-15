@@ -594,9 +594,9 @@ Protected Class Parser
 		    
 		    If Match(TokenType.STRING_INTERPOLATION) Then
 		      expressions.Append New Lox.Ast.Literal(Previous.Literal)
-		    ElseIf Match(TokenType.LEFT_BRACE) Then
+		    ElseIf Match(TokenType.LEFT_PAREN) Then
 		      expressions.Append expression
-		      Call consume TokenType.RIGHT_BRACE, "Expect '}' after elements."
+		      Call consume TokenType.RIGHT_PAREN, "Expect ')' after elements."
 		    ElseIf Match(TokenType.STRING_) Then
 		      expressions.Append New Lox.Ast.Literal(Previous.Literal)
 		      Exit

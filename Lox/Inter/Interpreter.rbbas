@@ -90,7 +90,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Private Function IsEqual(left As Variant, right As Variant) As Boolean
 		  If left.IsNull And right.IsNull Then Return True
 		  If left.IsNull Then Return False
-		  If left.Type<> right.Type Then Return False
+		  'If left.Type<> right.Type Then Return False
 		  
 		  Return left.EqualsLox(right)
 		End Function
@@ -167,8 +167,8 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		Sub Reset()
 		  mGlobals= New Environment
 		  mGlobals.Define "clock", New LoxClock
-		  mGlobals.Define "Array", New LoxArray
-		  mGlobals.Define "Dict", New LoxHashMap
+		  mGlobals.Define "List", New LoxArray
+		  mGlobals.Define "Map", New LoxHashMap
 		  mGlobals.Define "Range", New LoxRange
 		  // std
 		  mGlobals.Define "System", New Lox.Inter.Std.System
@@ -237,8 +237,6 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  // compound assignment is permitted (+=, -=, /=, *=, %=) as well as simple assignment (=).
 		  
 		  Dim current, newValue, assigneeVariant As Variant
-		  Dim index As Integer
-		  Dim assignee As LoxArray
 		  
 		  // Get the array we are assigning to.
 		  Dim distance As Integer= mLocals.Lookup(expr.Name, -1)
@@ -255,79 +253,141 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  // Evaluate the right hand side of the assignment.
 		  newValue= Evaluate(expr.Value)
 		  
-		  // Help the Xojo compiler by telling it that we're working with a RooArray, not a Variant.
-		  assignee= LoxArray(assigneeVariant)
-		  
-		  Try
-		    index= Evaluate(expr.Index)
-		  Catch err
-		    Raise New RuntimeError(expr.Name, _
-		    "Expected an integer index value for the element to assign to.")
-		  End Try
-		  
-		  // Is there an element at this index?
-		  If index< 0 Then
-		    Raise New RuntimeError(expr.Name, "Expected an integer index >= 0.")
-		  ElseIf index<= assignee.Elements.Ubound Then
-		    current= assignee.Elements(index)
-		  Else
-		    current= Nil
-		  End If
-		  
-		  // Prohibit the compound assignment operators with non-existent elements.
-		  If current.IsNull And expr.Operator.TypeToken<> TokenType.EQUAL Then
-		    Raise New RuntimeError(expr.Name, "Cannot use a compound assigment operator on Nothing.")
-		  End If
-		  
-		  // What type of assignment is this?
-		  Select Case expr.Operator.TypeToken
-		  Case TokenType.PLUS_EQUAL
-		    If current.IsNumberLox And newValue.IsNumberLox Then
-		      // Arithmetic addition.
-		      newValue= current+ newValue
-		    Else // Text concatenation.
-		      newValue= current.StringValue+ newValue.StringValue
+		  If assigneeVariant IsA Lox.Inter.LoxArray Then
+		    Dim index As Integer
+		    
+		    Try
+		      index= Evaluate(expr.Index)
+		    Catch err
+		      Raise New RuntimeError(expr.Name, _
+		      "Expected an integer index value for the element to assign to.")
+		    End Try
+		    
+		    Dim assignee As LoxArray
+		    // Help the Xojo compiler by telling it that we're working with a RooArray, not a Variant.
+		    assignee= LoxArray(assigneeVariant)
+		    
+		    // Is there an element at this index?
+		    If index< 0 Then
+		      Raise New RuntimeError(expr.Name, "Expected an integer index >= 0.")
+		    ElseIf index<= assignee.Elements.Ubound Then
+		      current= assignee.Elements(index)
+		    Else
+		      current= Nil
 		    End If
 		    
-		  Case TokenType.MINUS_EQUAL // Compound subtraction (-=).
-		    AssertAreNumbers expr.Operator, current, newValue
-		    newValue= current- newValue
+		    // Prohibit the compound assignment operators with non-existent elements.
+		    If current.IsNull And expr.Operator.TypeToken<> TokenType.EQUAL Then
+		      Raise New RuntimeError(expr.Name, "Cannot use a compound assigment operator on Nothing.")
+		    End If
 		    
-		  Case TokenType.SLASH_EQUAL // Compound division (/=).
-		    AssertAreNumbers expr.Operator, current, newValue
-		    If newValue= 0 Then Raise New RuntimeError(expr.Operator, "Division by zero")
-		    newValue= current/ newValue
+		    // What type of assignment is this?
+		    Select Case expr.Operator.TypeToken
+		    Case TokenType.PLUS_EQUAL
+		      If current.IsNumberLox And newValue.IsNumberLox Then
+		        // Arithmetic addition.
+		        newValue= current+ newValue
+		      Else // Text concatenation.
+		        newValue= current.StringValue+ newValue.StringValue
+		      End If
+		      
+		    Case TokenType.MINUS_EQUAL // Compound subtraction (-=).
+		      AssertAreNumbers expr.Operator, current, newValue
+		      newValue= current- newValue
+		      
+		    Case TokenType.SLASH_EQUAL // Compound division (/=).
+		      AssertAreNumbers expr.Operator, current, newValue
+		      If newValue= 0 Then Raise New RuntimeError(expr.Operator, "Division by zero")
+		      newValue= current/ newValue
+		      
+		    Case TokenType.STAR_EQUAL // Compound multiplication (*=).
+		      AssertAreNumbers expr.Operator, current, newValue
+		      newValue= current* newValue
+		      
+		      'Case Roo.TokenType.PERCENT_EQUAL // Compound modulo (%=).
+		      'Roo.AssertAreNumbers(expr.Operator, current, newValue)
+		      'If RooNumber(newValue).Value = 0 Then Raise New RooRuntimeError(expr.Operator, "Modulo with zero")
+		      'newValue = New RooNumber(RooNumber(current).Value Mod RooNumber(newValue).Value)
+		    End Select
 		    
-		  Case TokenType.STAR_EQUAL // Compound multiplication (*=).
-		    AssertAreNumbers expr.Operator, current, newValue
-		    newValue= current* newValue
+		    // Assign the new value to the correct element.
+		    If index> assignee.Elements.Ubound Then
+		      // Increase the size of this array to accomodate this new element, filling the
+		      // preceding elements with Nothing.
+		      Dim numNothings As Integer= index- assignee.Elements.Ubound
+		      For i As Integer= 1 To numNothings
+		        assignee.Elements.Append Nil
+		      Next i
+		    End If
+		    assignee.Elements(index)= newValue
 		    
-		    'Case Roo.TokenType.PERCENT_EQUAL // Compound modulo (%=).
-		    'Roo.AssertAreNumbers(expr.Operator, current, newValue)
-		    'If RooNumber(newValue).Value = 0 Then Raise New RooRuntimeError(expr.Operator, "Modulo with zero")
-		    'newValue = New RooNumber(RooNumber(current).Value Mod RooNumber(newValue).Value)
-		  End Select
-		  
-		  // Assign the new value to the correct element.
-		  If index> assignee.Elements.Ubound Then
-		    // Increase the size of this array to accomodate this new element, filling the
-		    // preceding elements with Nothing.
-		    Dim numNothings As Integer= index- assignee.Elements.Ubound
-		    For i As Integer= 1 To numNothings
-		      assignee.Elements.Append Nil
-		    Next i
+		    // Assign the newly updated array to the correct environment.
+		    If distance= -1 Then // Global variable.
+		      Globals.Assign expr.Name, assignee
+		    Else // Locally scoped variable.
+		      Environment.AssignAt distance, expr.Name, assignee
+		    End If
+		    
+		    // Return the value we assigned to the element to allow nesting (e.g: `print(a[2] = "hi")`)
+		    Return newValue
+		    
+		  ElseIf assigneeVariant IsA Lox.Inter.LoxHashMap Then
+		    
+		    // Cast to a LoxHash to help the Xojo IDE with autocompletion, etc.
+		    Dim h As Lox.Inter.LoxHashMap= Lox.Inter.LoxHashMap(assigneeVariant)
+		    
+		    // Get the key to assign to.
+		    // Remember, we use the raw value of RooText, RooNumber and RooBoolean objects as
+		    // the key. For other types, we use the actual object.
+		    Dim key As Variant= Evaluate(expr.Index)
+		    If key IsA Lox.Inter.Std.Text Then key= Lox.Inter.Std.Text(key).Value
+		    
+		    // Does this key exist? If so, get the current value of it.
+		    If h.HashMap.HasKey(key) Then current= h.HashMap.Value(key) Else current= Nil
+		    
+		    // Prevent the use of the compound assignment operators (+', -=, /=, *=) on non-existent keys.
+		    If current.IsNull And expr.Operator.TypeToken<> TokenType.EQUAL Then
+		      Raise New RuntimeError(expr.name, "Cannot use a compound assigment operator on Nothing.")
+		    end if
+		    
+		    // What type of assignment is this?
+		    Select Case expr.Operator.TypeToken
+		    Case TokenType.PLUS_EQUAL
+		      If current.IsNumberLox And newValue.IsNumberLox Then
+		        // Arithmetic addition.
+		        newValue= current+ newValue
+		      Else // Text concatenation.
+		        newValue= current.StringValue+ newValue.StringValue
+		      End If
+		      
+		    Case TokenType.MINUS_EQUAL // Compound subtraction (-=).
+		      AssertAreNumbers(expr.Operator, current, newValue)
+		      newValue= current- newValue
+		      
+		    Case TokenType.SLASH_EQUAL // Compound division (/=).
+		      AssertAreNumbers(expr.Operator, current, newValue)
+		      If newValue= 0 Then Raise New RuntimeError(expr.Operator, "Division by zero")
+		      newValue= current/ newValue
+		      
+		    Case TokenType.STAR_EQUAL // Compound multiplication (*=).
+		      AssertAreNumbers(expr.Operator, current, newValue)
+		      newValue= current* newValue
+		      
+		    End Select
+		    
+		    // Assign the new value to this key.
+		    h.HashMap.Value(key)= newValue
+		    
+		    // Assign the newly updated hash to the correct environment.
+		    If distance= -1 Then
+		      Globals.Assign(expr.Name, h)
+		    Else
+		      Environment.AssignAt(distance, expr.Name, h)
+		    End If
+		    
+		    // Return the value we assigned to the key to allow nesting (e.g: `print(h{"name"} = "Garry")`)
+		    Return newValue
 		  End If
-		  assignee.Elements(index)= newValue
-		  
-		  // Assign the newly updated array to the correct environment.
-		  If distance= -1 Then // Global variable.
-		    Globals.Assign expr.Name, assignee
-		  Else // Locally scoped variable.
-		    Environment.AssignAt distance, expr.Name, assignee
-		  End If
-		  
-		  // Return the value we assigned to the element to allow nesting (e.g: `print(a[2] = "hi")`)
-		  Return newValue
 		End Function
 	#tag EndMethod
 
@@ -338,7 +398,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		  // The index of the element to return is the result of evaluating expr.Index
 		  
 		  Dim index As Variant
-		  Dim arr As LoxArray
+		  Dim arr As LoxClass
 		  
 		  // Get the requested array.
 		  Try
@@ -357,19 +417,31 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		    Raise New RuntimeError(expr.Name, "Integer array index expected")
 		  End Try
 		  
-		  // Ensure that an integer index has been passed.
-		  If Not index.IsUIntegerLox Then
-		    #pragma BreakOnExceptions Off
-		    Raise New RuntimeError(expr.Name, "Array indices must be integers, not fractional numbers.")
+		  If arr IsA Lox.Inter.LoxArray Then
+		    // Ensure that an integer index has been passed.
+		    If Not index.IsUIntegerLox Then
+		      #pragma BreakOnExceptions Off
+		      Raise New RuntimeError(expr.Name, "Array indices must be integers, not fractional numbers.")
+		    End If
+		    
+		    // Return the correct element or Nothing if out of bounds.
+		    Try
+		      #pragma BreakOnExceptions Off
+		      Return Lox.Inter.LoxArray(arr).Elements(index)
+		    Catch OutOfBoundsException
+		      Return Nil
+		    End Try
+		    
+		  ElseIf arr IsA Lox.Inter.LoxHashMap Then
+		    If index IsA Lox.Inter.Std.Text Then index= Lox.Inter.Std.Text(index).Value
+		    
+		    // Return the requested value or Nothing if it doesn't exist.
+		    // Try a speedy object lookup first.
+		    Dim hash As Lox.Inter.LoxHashMap= Lox.Inter.LoxHashMap(arr)
+		    If hash.HashMap.HasKey(index) Then Return hash.HashMap.Value(index)
+		  Else
+		    Break
 		  End If
-		  
-		  // Return the correct element or Nothing if out of bounds.
-		  Try
-		    #pragma BreakOnExceptions Off
-		    Return arr.Elements(index)
-		  Catch OutOfBoundsException
-		    Return Nil
-		  End Try
 		End Function
 	#tag EndMethod
 
@@ -694,7 +766,7 @@ Implements Lox.Ast.IExprVisitor,Lox.Ast.IStmtVisitor
 		      value= current.StringValue+ value.StringValue
 		    End If
 		    
-		  Case TokenType.PLUS_EQUAL // Compound subtraction (-=).
+		  Case TokenType.MINUS_EQUAL // Compound subtraction (-=).
 		    AssertAreNumbers(expr.Operator, current, value)
 		    value= current- value
 		    

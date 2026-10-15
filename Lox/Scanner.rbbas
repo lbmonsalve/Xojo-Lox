@@ -272,14 +272,14 @@ Protected Class Scanner
 		    AddToken TokenType.LEFT_PAREN
 		  Case ")"
 		    AddToken TokenType.RIGHT_PAREN
-		  Case "{"
-		    AddToken TokenType.LEFT_BRACE
-		  Case "}"
-		    AddToken TokenType.RIGHT_BRACE
 		    If mInterpolationStr> 0 Then
 		      mInterpolationStr= mInterpolationStr- 1
 		      StringsInterpolated
 		    End If
+		  Case "{"
+		    AddToken TokenType.LEFT_BRACE
+		  Case "}"
+		    AddToken TokenType.RIGHT_BRACE
 		  Case "["
 		    AddToken TokenType.LEFT_BRACKET
 		  Case "]"
@@ -471,7 +471,7 @@ Protected Class Scanner
 		  While Peek<> """" And Not IsAtEnd
 		    If Peek= Chr(EOL) Then
 		      mLine= mLine+ 1
-		    ElseIf Peek= "$" And PeekNext= "{" Then
+		    ElseIf Peek= "%" And PeekNext= "(" Then
 		      Call Advance
 		      AddToken TokenType.STRING_INTERPOLATION, mSource.SubstringLox(mStart+ 1, mCurrent- 1)
 		      mInterpolationStr= mInterpolationStr+ 1

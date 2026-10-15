@@ -10,18 +10,6 @@ Inherits TestGroup
 
 
 	#tag Method, Flags = &h0
-		Sub ArrayEachTest()
-		  DoRun kArrayEachSnippet
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub ArraysTest()
-		  DoRun kArraysSnippet
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub BitwiseTest()
 		  DoRun kBitwiseSnippet
 		End Sub
@@ -370,6 +358,18 @@ Inherits TestGroup
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ListEachTest()
+		  DoRun kListEachSnippet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ListsTest()
+		  DoRun kListsSnippet
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub ModuleTest()
 		  // https://github.com/gkjpettet/roo
 		  
@@ -554,12 +554,6 @@ Inherits TestGroup
 	#tag EndProperty
 
 
-	#tag Constant, Name = kArrayEachSnippet, Type = String, Dynamic = False, Default = \"var a\x3D Array(10);\r\rfor (var i\x3D 0; i< 10; i++) a[i]\x3D (i+1)*2;\r\rfor (e in a) print e;\r\r// expect: 2\r// expect: 4\r// expect: 6\r// expect: 8\r// expect: 10\r// expect: 12\r// expect: 14\r// expect: 16\r// expect: 18\r// expect: 20\r", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = kArraysSnippet, Type = String, Dynamic = False, Default = \"var a\x3D[1\x2C2\x2C3];\rprint a.length; // expect: 3\rprint a.empty; // expect: false\rprint a[1]; // expect: 2\ra[0]\x3D4;\rprint a[0]; // expect: 4\r\rvar b\x3D[];\rprint b.length; // expect: 0\r\rvar foo\x3D [\"a\"\x2C \"b\"\x2C \"c\"];\rprint foo[2]; // // expect: c\r\rvar foo \x3D [1\x2C 1 + 1];\rprint foo; // expect: <class Array>\rprint foo[1]; // expect: 2\r\rfun add(a\x2Cb) { return a+ b; }\rprint foo[add(0\x2C 1)]; // expect: 2\r\r// pop\rvar c\x3D[4\x2C5\x2C6];\rvar elem\x3D c.pop();\rprint elem; // expect: 6\rprint c.length; // expect: 2\r\r// push\rvar b\x3D a.push(4\x2C5);\rprint a.length; // expect: 3\rprint b.length; // expect: 5\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"\x2C 1];\ra.each(fun (e) {\r  print \"<\"+ e+ \">\";\r});\r\r// expect: <a>\r// expect: <b>\r// expect: <c>\r// expect: <d>\r// expect: <1>\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\rvar find\x3D a.indexOf(\"c\");\rprint find; // expect: 2\r\r\rfun echo(e) { print e;}\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\ra.each(echo);\r\rvar b\x3D a.map(fun (e) { return e+ \"!\";});\rprint b.length;\rb.each(echo);\r\r// expect: a\r// expect: b\r// expect: c\r// expect: d\r\r// expect: 4\r// expect: a!\r// expect: b!\r// expect: c!\r// expect: d!\r\rvar a\x3D[11\x2C22\x2C33];\rvar s\x3Da.reduce(fun(acum\x2Ccurr){\r  return acum+\x3D curr;\r});\rprint s;\r\r// expect: 66\r", Scope = Private
-	#tag EndConstant
-
 	#tag Constant, Name = kBitwiseSnippet, Type = String, Dynamic = False, Default = \"print 7 & 5;\rprint 7 | 5;\rprint 7 << 2;\rprint 40 >> 2;\r\r // expect: 5\r // expect: 7\r // expect: 28\r // expect: 10\r", Scope = Private
 	#tag EndConstant
 
@@ -593,7 +587,7 @@ Inherits TestGroup
 	#tag Constant, Name = kFunctionsSnippet, Type = String, Dynamic = False, Default = \"fun count(n) {\r  if (n > 1) count(n - 1);\r  print n;\r}\rcount(3);\r// expect: 1\r// expect: 2\r// expect: 3\r\r\rfun add(a\x2C b\x2C c) {\r  print a + b + c;\r}\radd(1\x2C 2\x2C 3); // expect: 6\r\r\rfun add(a\x2C b) {\r  print a + b;\r}\rprint add; // expect: <fn add>\r\r\rfun sayHi(first\x2C last) {\r  print \"Hi\x2C \" + first + \" \" + last + \"!\";\r}\rsayHi(\"Dear\"\x2C \"Reader\"); // expect: Hi\x2C Dear Reader!\r\r\rfun procedure() {\r  print \"don\'t return anything\"; // expect: don\'t return anything\r}\rvar result \x3D procedure();\rprint result; // expect: nil\r\rfun makeCounter() {\r  var i \x3D 0;\r  fun count() {\r    i \x3D i + 1;\r    print i;\r  }\r\r  return count;\r}\r\rvar counter \x3D makeCounter();\rcounter(); // expect: 1\rcounter(); // expect: 2", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kHashMapSnippet, Type = String, Dynamic = False, Default = \"var hm\x3D {\"a\":1\x2C\"b\":2\x2C \"c\":100};\rprint hm{\"b\"}; // expect: 2\r\rhm{\"a\"}\x3D 3;\rprint hm{\"a\"}; // expect: 3\r\rvar a\x3D hm.delete(\"a\");\r\rprint a; // expect: 3\rprint hm.length; // expect: 2\r\rprint hm.value(\"b\"); // expect: 2\rprint hm.value(\"c\"); // expect: 100\rprint hm.value(\"d\"); // expect: nil\r\rhm.put(1\x2C 200);\r\rvar one\x3D hm.value(1);\rprint one; // expect: 200\r\rhm.each(fun (k\x2Cv) { print k; print v; });\r\r// expect: c\r// expect: 100\r// expect: b\r// expect: 2\r// expect: 1\r// expect: 200", Scope = Private
+	#tag Constant, Name = kHashMapSnippet, Type = String, Dynamic = False, Default = \"var hm\x3D {\"a\":1\x2C\"b\":2\x2C \"c\":100};\rprint hm[\"b\"]; // expect: 2\r\rhm[\"a\"]\x3D 3;\rprint hm[\"a\"]; // expect: 3\r\rvar a\x3D hm.delete(\"a\");\r\rprint a; // expect: 3\rprint hm.length; // expect: 2\r\rprint hm.value(\"b\"); // expect: 2\rprint hm.value(\"c\"); // expect: 100\rprint hm.value(\"d\"); // expect: nil\r\rhm.put(1\x2C 200);\r\rvar one\x3D hm.value(1);\rprint one; // expect: 200\r\rhm.each(fun (k\x2Cv) { print k; print v; });\r\r// expect: c\r// expect: 100\r// expect: b\r// expect: 2\r// expect: 1\r// expect: 200\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kIfOrElseSnippet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private
@@ -603,6 +597,12 @@ Inherits TestGroup
 	#tag EndConstant
 
 	#tag Constant, Name = kLamdaSnippet, Type = String, Dynamic = False, Default = \"// https://github.com/munificent/craftinginterpreters/blob/master/note/answers/chapter10_functions.md\r\rfun whichFn(fn) {\r  fn(\"world\");\r}\r\rwhichFn(fun (a) {\r print \"hello \"+ a; // expect: hello world\r});\r\rfun named(a) { print a; }\rwhichFn(named);\r\r// expect: world\r\rfun whichFn(fn) {\r  for (var i \x3D 1; i <\x3D 3; i \x3D i + 1) {\r    fn(i);\r  }\r}\r\rwhichFn(fun (a) { print a; });\r\r// expect: 1\r// expect: 2\r// expect: 3\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kListEachSnippet, Type = String, Dynamic = False, Default = \"var a\x3D List(10);\r\rfor (var i\x3D 0; i< 10; i++) a[i]\x3D (i+1)*2;\r\rfor (e in a) print e;\r\r// expect: 2\r// expect: 4\r// expect: 6\r// expect: 8\r// expect: 10\r// expect: 12\r// expect: 14\r// expect: 16\r// expect: 18\r// expect: 20\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kListsSnippet, Type = String, Dynamic = False, Default = \"var a\x3D[1\x2C2\x2C3];\rprint a.length; // expect: 3\rprint a.empty; // expect: false\rprint a[1]; // expect: 2\ra[0]\x3D4;\rprint a[0]; // expect: 4\r\rvar b\x3D[];\rprint b.length; // expect: 0\r\rvar foo\x3D [\"a\"\x2C \"b\"\x2C \"c\"];\rprint foo[2]; // // expect: c\r\rvar foo \x3D [1\x2C 1 + 1];\rprint foo; // expect: <class List>\rprint foo[1]; // expect: 2\r\rfun add(a\x2Cb) { return a+ b; }\rprint foo[add(0\x2C 1)]; // expect: 2\r\r// pop\rvar c\x3D[4\x2C5\x2C6];\rvar elem\x3D c.pop();\rprint elem; // expect: 6\rprint c.length; // expect: 2\r\r// push\rvar b\x3D a.push(4\x2C5);\rprint a.length; // expect: 3\rprint b.length; // expect: 5\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"\x2C 1];\ra.each(fun (e) {\r  print \"<\"+ e+ \">\";\r});\r\r// expect: <a>\r// expect: <b>\r// expect: <c>\r// expect: <d>\r// expect: <1>\r\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\rvar find\x3D a.indexOf(\"c\");\rprint find; // expect: 2\r\r\rfun echo(e) { print e;}\r\rvar a\x3D[\"a\"\x2C \"b\"\x2C \"c\"\x2C \"d\"];\ra.each(echo);\r\rvar b\x3D a.map(fun (e) { return e+ \"!\";});\rprint b.length;\rb.each(echo);\r\r// expect: a\r// expect: b\r// expect: c\r// expect: d\r\r// expect: 4\r// expect: a!\r// expect: b!\r// expect: c!\r// expect: d!\r\rvar a\x3D[11\x2C22\x2C33];\rvar s\x3Da.reduce(fun(acum\x2Ccurr){\r  return acum+\x3D curr;\r});\rprint s;\r\r// expect: 66\r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kModuleSnippet, Type = String, Dynamic = False, Default = \"module M {\r  class C {\r    parse(cc) {print cc;}\r  }\r  fun F() {print \"hello\";}\r  fun hello() {return \"hello!\";}\r}\rM.hello2\x3D \"hello2\";\r\rM.F();\rvar a\x3D M.C();\ra.parse(\"b\");\r\rvar hello\x3D M.hello();\rprint hello;\rprint M.hello2;\r\r// expect: hello\r// expect: b\r// expect: hello!\r// expect: hello2\r\r", Scope = Private
@@ -632,7 +632,7 @@ Inherits TestGroup
 	#tag Constant, Name = kStringEscaping, Type = String, Dynamic = False, Default = \"var s2\x3D \"\\\"\"; print s2;  // expect: \"\rvar s3\x3D \"\\\\\"; print s3;  // expect: \\\rvar s4\x3D \"\\%\"; print s4;  // expect: %\r\rvar s13\x3D \"\\x48\"; print s13; // expect: H\rvar s14\x3D \"\\u0041\"; print s14; // expect: A\rvar s15\x3D \"\\U0001F64A\\U0001F680\"; print s15; // expect: \xF0\x9F\x99\x8A\xF0\x9F\x9A\x80\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kStringInterpolationSnippet, Type = String, Dynamic = False, Default = \"var name\x3D\"luis\";\rprint \"welcome ${name}!\";\r\r// expect: welcome luis!\r\rprint \"one plus two times tree: ${1+2*3}.\";\r\r// expect: one plus two times tree: 7.", Scope = Private
+	#tag Constant, Name = kStringInterpolationSnippet, Type = String, Dynamic = False, Default = \"var name\x3D\"luis\";\rprint \"welcome %(name)!\";\r\r// expect: welcome luis!\r\rprint \"one plus two times tree: %(1+2*3).\";\r\r// expect: one plus two times tree: 7.", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kStringRaw, Type = String, Dynamic = False, Default = \"var json\x3D \"\"\"\r{\r    \"hello\": \"lox\"\x2C\r    \"from\": \"json\"\r}\r\"\"\";\rprint json;\r", Scope = Private
