@@ -407,7 +407,7 @@ whileStmt      → "while" "(" expression ")" statement ;
 forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
                    expression? ";"
                    expression? ")" statement
-                 | "for" "(" IDENTIFIER "in" range ")" statement ;
+               | "for" "(" IDENTIFIER "in" range ")" statement ;
 returnStmt     → "return" expression? ";" ;
 breakStmt      → "break" ";" ;
 continueStmt   → "continue" ";" ;
@@ -437,7 +437,7 @@ call           → suscript ( "(" arguments? ")" | "." IDENTIFIER )* ;
 suscript       → primary ( "[" elvis "]" )? ;
 primary        → "true" | "false" | "nil" | "this" | "fun" "(" parameters? ")" block
                | NUMBER | IDENTIFIER | "(" expression ")"
-               | STRING ( "${" expression "}" STRING? )*
+               | STRING ( "%(" expression ")" STRING? )*
                | "super" "." IDENTIFIER | "[" elvis "]" | "{" pairs "}" ;
 
 // utility rules:

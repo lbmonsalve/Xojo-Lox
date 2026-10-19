@@ -606,6 +606,19 @@ End
 
 
 	#tag Note, Name = Snippets
+		var a="aa"; print "\"a\"= %(a)"; // expect: "a"= aa
+		
+		var PHI= ((1 + Number.sqrt(5))/2);
+		
+		fun fib(n) {
+		  return (Number.pow(PHI, n) - Number.pow(1 - PHI, n))/ Number.sqrt(5);
+		}
+		
+		var before = clock();
+		print fib(35); // expect: 9.227465e+6
+		print clock() - before;
+		
+		
 		var m={"one":1, "two":2};
 		print m["two"];
 		m{"tree"}=3;

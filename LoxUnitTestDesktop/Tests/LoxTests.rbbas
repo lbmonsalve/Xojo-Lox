@@ -629,7 +629,7 @@ Inherits TestGroup
 	#tag Constant, Name = kStaticMethodsSnippet, Type = String, Dynamic = False, Default = \"class Math {\r  class square(n) {\r    return n * n;\r  }\r}\r\rprint Math.square(3); // expect: 9", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kStringEscaping, Type = String, Dynamic = False, Default = \"var s2\x3D \"\\\"\"; print s2;  // expect: \"\rvar s3\x3D \"\\\\\"; print s3;  // expect: \\\rvar s4\x3D \"\\%\"; print s4;  // expect: %\r\rvar s13\x3D \"\\x48\"; print s13; // expect: H\rvar s14\x3D \"\\u0041\"; print s14; // expect: A\rvar s15\x3D \"\\U0001F64A\\U0001F680\"; print s15; // expect: \xF0\x9F\x99\x8A\xF0\x9F\x9A\x80\r", Scope = Private
+	#tag Constant, Name = kStringEscaping, Type = String, Dynamic = False, Default = \"var s2\x3D \"\\\"\"; print s2;  // expect: \"\rvar s3\x3D \"\\\\\"; print s3;  // expect: \\\rvar s4\x3D \"\\%\"; print s4;  // expect: %\r\rvar s13\x3D \"\\x48\"; print s13; // expect: H\rvar s14\x3D \"\\u0041\"; print s14; // expect: A\rvar s15\x3D \"\\U0001F64A\\U0001F680\"; print s15; // expect: \xF0\x9F\x99\x8A\xF0\x9F\x9A\x80\r\rvar a\x3D\"aa\"; print \"\\\"a\\\"\x3D %(a)\"; // expect: \"a\"\x3D aa", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kStringInterpolationSnippet, Type = String, Dynamic = False, Default = \"var name\x3D\"luis\";\rprint \"welcome %(name)!\";\r\r// expect: welcome luis!\r\rprint \"one plus two times tree: %(1+2*3).\";\r\r// expect: one plus two times tree: 7.", Scope = Private

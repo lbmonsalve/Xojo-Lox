@@ -87,8 +87,6 @@ Protected Module Lox
 
 	#tag Method, Flags = &h21
 		Private Function EqualsLox(Extends obj As Variant, rhs As Variant) As Boolean
-		  'If obj.Type<> rhs.Type Then Return False
-		  
 		  // TODO: implement operator_compare on LoxInstance
 		  If obj IsA Lox.Inter.Std.Text And rhs IsA Lox.Inter.Std.Text Then
 		    If Lox.Inter.Std.Text(obj).Value= Lox.Inter.Std.Text(rhs).Value Then
@@ -99,10 +97,12 @@ Protected Module Lox
 		  End If
 		  
 		  // special case for lox:
-		  If obj.Type= Variant.TypeDouble And rhs.Type= Variant.TypeDouble Then
+		  If obj.IsNumeric And rhs.IsNumeric Then
 		    If obj.StringValue.InStr("#IN")> 0 And rhs.StringValue.InStr("#IN")> 0 Then Return False
 		    Return obj.DoubleValue.Equals(rhs.DoubleValue)
 		  End If
+		  
+		  If obj.Type<> rhs.Type Then Return False
 		  
 		  Return obj.Equals(rhs)
 		End Function
@@ -876,7 +876,7 @@ Protected Module Lox
 	#tag EndComputedProperty
 
 
-	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.261014", Scope = Public
+	#tag Constant, Name = Version, Type = String, Dynamic = False, Default = \"0.0.261019", Scope = Public
 	#tag EndConstant
 
 
