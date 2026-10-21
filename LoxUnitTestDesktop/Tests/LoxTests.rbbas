@@ -590,7 +590,7 @@ Inherits TestGroup
 	#tag Constant, Name = kHashMapSnippet, Type = String, Dynamic = False, Default = \"var hm\x3D {\"a\":1\x2C\"b\":2\x2C \"c\":100};\rprint hm[\"b\"]; // expect: 2\r\rhm[\"a\"]\x3D 3;\rprint hm[\"a\"]; // expect: 3\r\rvar a\x3D hm.delete(\"a\");\r\rprint a; // expect: 3\rprint hm.length; // expect: 2\r\rprint hm.value(\"b\"); // expect: 2\rprint hm.value(\"c\"); // expect: 100\rprint hm.value(\"d\"); // expect: nil\r\rhm.put(1\x2C 200);\r\rvar one\x3D hm.value(1);\rprint one; // expect: 200\r\rhm.each(fun (k\x2Cv) { print k; print v; });\r\r// expect: c\r// expect: 100\r// expect: b\r// expect: 2\r// expect: 1\r// expect: 200\r", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kIfOrElseSnippet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else", Scope = Private
+	#tag Constant, Name = kIfOrElseSnippet, Type = String, Dynamic = False, Default = \"if (false) {print \"if\";}\r  or (true) {print \"or\";} // expect: or\r  else {print \"else\";} \r\rif (false) {print \"if\";}\r or (false) {print \"or\";}\r  else {print \"else\";} // expect: else\r\rvar a\x3D\"12\";\r\rif (a\x3D\x3D1.2) {print \"1\";}\ror (a\x3D\x3D\"11\") print \"11\";\ror (a\x3D\x3D\"10\") print \"10\";\ror (a\x3D\x3D\"12\") print \"12\"; // expect: 12\relse {print \"else\";} \r", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kImportSnippet, Type = String, Dynamic = False, Default = \"import \"a\";\r\r// expect: a.lox\r// expect: b.lox\r", Scope = Private

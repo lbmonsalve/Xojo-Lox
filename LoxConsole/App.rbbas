@@ -108,8 +108,44 @@ Inherits ConsoleApplication
 		  Dim multiLine As Boolean
 		  Dim source As String
 		  
+		  'Dim RED As String= Chr(27) + "[31m"
+		  Dim GREEN As String
+		  'Dim YELLOW As String= Chr(27) + "[33m"
+		  Dim RESET As String
+		  
+		  // Enable ANSI escape sequences in Windows console
+		  #If TargetWin32 Then
+		    Dim osVersionNum As Integer= Lox.GetOSVersion(True).Left(2).Val
+		    If osVersionNum= 10 Then
+		      
+		      // Declare Windows API to enable virtual terminal processing
+		      Declare Function GetStdHandle Lib "Kernel32" (nStdHandle As Integer) As Integer
+		      Declare Function GetConsoleMode Lib "Kernel32" (hConsoleHandle As Integer, ByRef lpMode As Integer) As Boolean
+		      Declare Function SetConsoleMode Lib "Kernel32" (hConsoleHandle As Integer, dwMode As Integer) As Boolean
+		      
+		      Const STD_OUTPUT_HANDLE = -11
+		      Const ENABLE_VIRTUAL_TERMINAL_PROCESSING = &h0004
+		      
+		      Dim hOut As Integer = GetStdHandle(STD_OUTPUT_HANDLE)
+		      Dim mode As Integer
+		      If GetConsoleMode(hOut, mode) Then
+		        Call SetConsoleMode(hOut, mode Or ENABLE_VIRTUAL_TERMINAL_PROCESSING)
+		      End If
+		      
+		      'Dim RED As String= Chr(27) + "[31m"
+		      GREEN= Chr(27) + "[32m"
+		      'Dim YELLOW As String= Chr(27) + "[33m"
+		      RESET= Chr(27) + "[0m"
+		    End If
+		  #else
+		    'Dim RED As String= Chr(27) + "[31m"
+		    GREEN= Chr(27) + "[32m"
+		    'Dim YELLOW As String= Chr(27) + "[33m"
+		    RESET= Chr(27) + "[0m"
+		  #EndIf
+		  
 		  Do
-		    If Not multiLine Then StdOut.Write "lox> "
+		    If Not multiLine Then StdOut.Write GREEN+ "lox"+ RESET+ "> "
 		    
 		    #if TargetWin32
 		      Dim line As String= Input.DefineEncoding(Encodings.DOSLatin1)._

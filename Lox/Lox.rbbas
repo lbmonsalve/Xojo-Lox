@@ -157,8 +157,8 @@ Protected Module Lox
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Function GetOSVersion(AsNumber As Boolean = False) As String
+	#tag Method, Flags = &h1
+		Protected Function GetOSVersion(AsNumber As Boolean = False) As String
 		  If AsNumber Then
 		    If mOSVersionNumber<> "" Then Return mOSVersionNumber
 		  Else
